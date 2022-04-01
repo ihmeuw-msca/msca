@@ -11,9 +11,9 @@ __all__ = [
     "__copyright__",
 ]
 
-__title__ = "template"
-__summary__ = ""
-__uri__ = "https://github.com/ihmeuw-msca/template"
+__title__ = "msca"
+__summary__ = "Mathematical sciences and computational algorithms"
+__uri__ = "https://github.com/ihmeuw-msca/msca"
 __version__ = "0.0.0"
 __author__ = "IHME Math Sciences"
 __email__ = "ihme.math.sciences@gmail.com"

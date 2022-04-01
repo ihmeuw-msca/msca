@@ -15,9 +15,9 @@
 # sys.path.insert(0, os.path.abspath("."))
 from pathlib import Path
 
-import template
+import msca
 
-base_dir = Path(template.__file__).parent
+base_dir = Path(msca.__file__).parent
 
 about = {}
 with (base_dir / "__about__.py").open() as f:

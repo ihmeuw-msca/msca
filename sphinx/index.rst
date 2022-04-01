@@ -1,7 +1,7 @@
-This is a template package
-==========================
+This is a msca package
+======================
 
-Welcome to template's documentation!
+Welcome to msca's documentation!
 To get started please check section :ref:`User's Guide`.
 And the full reference is provided in section :ref:`Interface Reference`.
 

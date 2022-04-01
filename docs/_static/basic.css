@@ -634,7 +634,7 @@ dl.citation > dd:after {
 
 dl.field-list {
     display: grid;
-    grid-template-columns: fit-content(30%) auto;
+    grid-msca-columns: fit-content(30%) auto;
 }
 
 dl.field-list > dt {
