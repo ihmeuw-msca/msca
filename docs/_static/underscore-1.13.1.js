@@ -838,15 +838,15 @@
   // Function for unescaping strings from HTML interpolation.
   var _unescape = createEscaper(unescapeMap);
 
-  // By default, Underscore uses ERB-style msca delimiters. Change the
-  // following msca settings to use alternative delimiters.
-  var mscaSettings = _$1.mscaSettings = {
+  // By default, Underscore uses ERB-style template delimiters. Change the
+  // following template settings to use alternative delimiters.
+  var templateSettings = _$1.templateSettings = {
     evaluate: /<%([\s\S]+?)%>/g,
     interpolate: /<%=([\s\S]+?)%>/g,
     escape: /<%-([\s\S]+?)%>/g
   };
 
-  // When customizing `_.mscaSettings`, if you don't want to define an
+  // When customizing `_.templateSettings`, if you don't want to define an
   // interpolation, evaluation or escaping regex, we need one that is
   // guaranteed not to match.
   var noMatch = /(.)^/;
@@ -869,7 +869,7 @@
   }
 
   // In order to prevent third-party code injection through
-  // `_.mscaSettings.variable`, we test it against the following regular
+  // `_.templateSettings.variable`, we test it against the following regular
   // expression. It is intentionally a bit more liberal than just matching valid
   // identifiers, but still prevents possible loopholes through defaults or
   // destructuring assignment.
@@ -879,9 +879,9 @@
   // Underscore templating handles arbitrary delimiters, preserves whitespace,
   // and correctly escapes quotes within interpolated code.
   // NB: `oldSettings` only exists for backwards compatibility.
-  function msca(text, settings, oldSettings) {
+  function template(text, settings, oldSettings) {
     if (!settings && oldSettings) settings = oldSettings;
-    settings = defaults({}, settings, _$1.mscaSettings);
+    settings = defaults({}, settings, _$1.templateSettings);
 
     // Combine delimiters into one regular expression via alternation.
     var matcher = RegExp([
@@ -890,7 +890,7 @@
       (settings.evaluate || noMatch).source
     ].join('|') + '|$', 'g');
 
-    // Compile the msca source, escaping string literals appropriately.
+    // Compile the template source, escaping string literals appropriately.
     var index = 0;
     var source = "__p+='";
     text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
@@ -934,14 +934,14 @@
       throw e;
     }
 
-    var msca = function(data) {
+    var template = function(data) {
       return render.call(this, data, _$1);
     };
 
     // Provide the compiled source as a convenience for precompilation.
-    msca.source = 'function(' + argument + '){\n' + source + '}';
+    template.source = 'function(' + argument + '){\n' + source + '}';
 
-    return msca;
+    return template;
   }
 
   // Traverses the children of `obj` along `path`. If a child is a function, it
@@ -1939,8 +1939,8 @@
     now: now,
     escape: _escape,
     unescape: _unescape,
-    mscaSettings: mscaSettings,
-    msca: msca,
+    templateSettings: templateSettings,
+    template: template,
     result: result,
     uniqueId: uniqueId,
     chain: chain,

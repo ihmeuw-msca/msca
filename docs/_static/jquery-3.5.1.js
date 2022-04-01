@@ -3379,9 +3379,9 @@ jQuery.each( {
 		}
 
 		// Support: IE 9 - 11 only, iOS 7 only, Android Browser <=4.3 only
-		// Treat the msca element as a regular one in browsers that
+		// Treat the template element as a regular one in browsers that
 		// don't support it.
-		if ( nodeName( elem, "msca" ) ) {
+		if ( nodeName( elem, "template" ) ) {
 			elem = elem.content || elem;
 		}
 

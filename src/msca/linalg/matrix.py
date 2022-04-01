@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Protocol
+from abc import ABC, abstractmethod
+from typing import Any, Dict, Tuple, Type
 
 import numpy
 from numpy.typing import ArrayLike, NDArray
@@ -8,37 +9,96 @@ from scipy.sparse import csc_matrix, csr_matrix, spdiags
 from scipy.sparse.linalg import spsolve
 
 
-class Matrix(Protocol):
+class Matrix(ABC):
+    """A matrix wrapper class that unifies the interfaces for different types
+    of array.
 
+    Raises
+    ------
+    ValueError
+        Raised when the number of dimension is not two.
+
+    """
+
+    def __init__(self):
+        if self.ndim != 2:
+            raise ValueError("Matrix must be two dimensional.")
+
+    @abstractmethod
     def scale_rows(self, x: ArrayLike) -> Matrix:
         """Scale rows of the matrix.
 
-        """
+        Parameters
+        ----------
+        x
+            A vector that contains scalings for rows of the matrix. The size of
+            the vector should align with the number of rows of the matrix.
 
+        Returns
+        -------
+        Matrix
+            The scaled matrix.
+
+        """
+        pass
+
+    @abstractmethod
     def scale_cols(self, x: ArrayLike) -> Matrix:
         """Scale columns of the matrix.
 
-        """
+        Parameters
+        ----------
+        x
+            A vector that contains scalings for columns of the matrix. The size
+            of the vector should align with the number of columns of the matrix.
 
+        Returns
+        -------
+        Matrix
+            The scaled matrix.
+
+        """
+        pass
+
+    @abstractmethod
     def solve(self, x: ArrayLike) -> NDArray:
         """Solve the linear system.
 
-        """
+        Parameters
+        ----------
+        x
+            A vector that represent the right hand side of the linear equation.
+            The size of the vector should align with the number of rows of the
+            matrix.
 
+        Returns
+        -------
+        NDArray
+            The solution of the linear system.
+
+        """
+        pass
+
+    @abstractmethod
     def to_numpy(self) -> NDArray:
         """Convert to a numpy array.
 
+        Returns
+        -------
+        NDArray
+            A numpy representation of the matrix.
+
         """
+        pass
 
 
-class NumpyMatrix(numpy.ndarray):
+class NumpyMatrix(numpy.ndarray, Matrix):
 
     def __new__(cls, *args, **kwargs):
         return numpy.asarray(*args, **kwargs).view(cls)
 
     def __init__(self, *args, **kwargs):
-        if self.ndim != 2:
-            raise ValueError("Matrix must be two dimensional.")
+        super(Matrix, self).__init__()
 
     def scale_rows(self, x: ArrayLike) -> NumpyMatrix:
         return numpy.asarray(x)[:, numpy.newaxis] * self
@@ -56,12 +116,11 @@ class NumpyMatrix(numpy.ndarray):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-class CSRMatrix(csr_matrix):
+class CSRMatrix(csr_matrix, Matrix):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.ndim != 2:
-            raise ValueError("Matrix must be two dimensional.")
+        super(csr_matrix, self).__init__(*args, **kwargs)
+        super(Matrix, self).__init__()
 
     @property
     def T(self) -> CSCMatrix:
@@ -88,12 +147,11 @@ class CSRMatrix(csr_matrix):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-class CSCMatrix(csc_matrix):
+class CSCMatrix(csc_matrix, Matrix):
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.ndim != 2:
-            raise ValueError("Matrix must be two dimensional.")
+        super(csc_matrix, self).__init__(*args, **kwargs)
+        super(Matrix, self).__init__()
 
     @property
     def T(self) -> CSRMatrix:
@@ -120,20 +178,50 @@ class CSCMatrix(csc_matrix):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-matrix_classes = (
+matrix_classes: Tuple[Type] = (
     NumpyMatrix,
     CSCMatrix,
     CSRMatrix,
 )
+"""A collection of all matrix classes.
 
+:meta hide-value:
 
-matrix_class_dict = {
+"""
+
+matrix_class_dict: Dict[Type, Type] = {
     matrix_class.__base__: matrix_class
     for matrix_class in matrix_classes
 }
+"""Matrix classes organize in a dictionary, with key as their parent class and
+value as the matrix class.
+
+:meta hide-value:
+
+"""
 
 
 def asmatrix(data: Any) -> Matrix:
+    """Convert data into an instance of the matrix class based on its type.
+
+    Parameters
+    ----------
+    data
+        Given data, it should be compatible with the matrix classes. If data is
+        an instance of :py:class:`Matrix` already, it will be returned as it is.
+
+    Raises
+    ------
+    TypeError
+        Raised when the type of the data is not compatible with the matrix
+        classes.
+
+    Returns
+    -------
+    Matrix
+        The converted matrix.
+
+    """
     if isinstance(data, matrix_classes):
         return data
     if type(data) not in matrix_class_dict.keys():
