@@ -50,6 +50,10 @@ extensions = [
     "sphinx.ext.napoleon",
 ]
 autodoc_typehints = "description"
+autodoc_type_aliases = {
+    "ArrayLike": "ArrayLike",
+    "NDArray": "NDArray",
+}
 autodoc_member_order = "bysource"
 
 # Add any paths that contain templates here, relative to this directory.
