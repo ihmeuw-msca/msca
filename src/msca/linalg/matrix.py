@@ -62,11 +62,10 @@ class CSRMatrix(csr_matrix):
         super().__init__(*args, **kwargs)
         if self.ndim != 2:
             raise ValueError("Matrix must be two dimensional.")
-        self._self = csr_matrix(self)
 
     @property
     def T(self) -> CSCMatrix:
-        return CSCMatrix(self._self.T)
+        return CSCMatrix(self.transpose())
 
     def scale_rows(self, x: NDArray) -> CSRMatrix:
         x = numpy.asarray(x)
@@ -95,11 +94,10 @@ class CSCMatrix(csc_matrix):
         super().__init__(*args, **kwargs)
         if self.ndim != 2:
             raise ValueError("Matrix must be two dimensional.")
-        self._self = csc_matrix(self)
 
     @property
     def T(self) -> CSRMatrix:
-        return CSRMatrix(self._self.T)
+        return CSRMatrix(self.transpose())
 
     def scale_rows(self, x: NDArray) -> CSCMatrix:
         x = numpy.asarray(x)
@@ -130,7 +128,7 @@ matrix_classes = (
 
 
 matrix_class_dict = {
-    super(matrix_class): matrix_class
+    matrix_class.__base__: matrix_class
     for matrix_class in matrix_classes
 }
 
