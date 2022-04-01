@@ -124,7 +124,31 @@ class CSRMatrix(csr_matrix, Matrix):
 
     @property
     def T(self) -> CSCMatrix:
+        """Transpose of the matrix. It will be an instance of the
+        :py:class:`CSCMatrix`.
+
+        """
         return CSCMatrix(self.transpose())
+
+    def dot(self, x: ArrayLike) -> NDArray | Matrix:
+        """Dot product operator for the matrix.
+
+        Parameters
+        ----------
+        x
+            Give vector or matrix.
+
+        Returns
+        -------
+        NDArray | Matrix
+            Results of the dot product. If the result is two dimensional it will
+            be an instance of the :py:class:`Matrix` class.
+
+        """
+        result = super(csr_matrix, self).dot(x)
+        if result.ndim == 1:
+            return result
+        return asmatrix(result)
 
     def scale_rows(self, x: NDArray) -> CSRMatrix:
         x = numpy.asarray(x)
@@ -155,7 +179,31 @@ class CSCMatrix(csc_matrix, Matrix):
 
     @property
     def T(self) -> CSRMatrix:
+        """Transpose of the matrix. It will be an instance of the
+        :py:class:`CSRMatrix`.
+
+        """
         return CSRMatrix(self.transpose())
+
+    def dot(self, x: ArrayLike) -> Matrix:
+        """Dot product operator for the matrix.
+
+        Parameters
+        ----------
+        x
+            Give vector or matrix.
+
+        Returns
+        -------
+        NDArray | Matrix
+            Results of the dot product. If the result is two dimensional it will
+            be an instance of the :py:class:`Matrix` class.
+
+        """
+        result = super(csc_matrix, self).dot(x)
+        if result.ndim == 1:
+            return result
+        return asmatrix(result)
 
     def scale_rows(self, x: NDArray) -> CSCMatrix:
         x = numpy.asarray(x)

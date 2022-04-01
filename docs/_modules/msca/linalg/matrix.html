@@ -335,7 +335,31 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">T</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CSCMatrix</span><span class="p">:</span>
+        <span class="sd">"""Transpose of the matrix. It will be an instance of the</span>
+<span class="sd">        :py:class:`CSCMatrix`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">CSCMatrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+
+<div class="viewcode-block" id="CSRMatrix.dot"><a class="viewcode-back" href="../../../api_reference/msca.linalg.html#msca.linalg.matrix.CSRMatrix.dot">[docs]</a>    <span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span> <span class="o">|</span> <span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">"""Dot product of the matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x</span>
+<span class="sd">            Give vector or matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NDArray | Matrix</span>
+<span class="sd">            Results of the dot product. If the result is two dimensional it will</span>
+<span class="sd">            be an instance of the :py:class:`Matrix` class.</span>
+
+<span class="sd">        """</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">csr_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">asmatrix</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CSRMatrix.scale_rows"><a class="viewcode-back" href="../../../api_reference/msca.linalg.html#msca.linalg.matrix.CSRMatrix.scale_rows">[docs]</a>    <span class="k">def</span> <span class="nf">scale_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CSRMatrix</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -366,7 +390,31 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">T</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CSRMatrix</span><span class="p">:</span>
+        <span class="sd">"""Transpose of the matrix. It will be an instance of the</span>
+<span class="sd">        :py:class:`CSRMatrix`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">CSRMatrix</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transpose</span><span class="p">())</span>
+
+<div class="viewcode-block" id="CSCMatrix.dot"><a class="viewcode-back" href="../../../api_reference/msca.linalg.html#msca.linalg.matrix.CSCMatrix.dot">[docs]</a>    <span class="k">def</span> <span class="nf">dot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">ArrayLike</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Matrix</span><span class="p">:</span>
+        <span class="sd">"""Dot product of the matrix.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x</span>
+<span class="sd">            Give vector or matrix.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        NDArray | Matrix</span>
+<span class="sd">            Results of the dot product. If the result is two dimensional it will</span>
+<span class="sd">            be an instance of the :py:class:`Matrix` class.</span>
+
+<span class="sd">        """</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">csc_matrix</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">return</span> <span class="n">asmatrix</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="CSCMatrix.scale_rows"><a class="viewcode-back" href="../../../api_reference/msca.linalg.html#msca.linalg.matrix.CSCMatrix.scale_rows">[docs]</a>    <span class="k">def</span> <span class="nf">scale_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CSCMatrix</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
