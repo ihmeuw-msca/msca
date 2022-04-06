@@ -46,6 +46,22 @@ class IPSolver:
                  hess: Callable,
                  cmat: Matrix,
                  cvec: NDArray):
+        """Interior point solver.
+
+        Parameters
+        ----------
+        fun
+            The optimization objective function.
+        grad
+            The optimization gradient function.
+        hess
+            The optimization hessian function.
+        cmat
+            The constraint linear mapping.
+        cvec
+            The constraint bounds.
+
+        """
         self.fun = fun
         self.grad = grad
         self.hess = hess
@@ -154,8 +170,8 @@ class IPSolver:
 
         Returns
         -------
-        NDArray
-            Solution vector.
+        IPResult
+            The result of the solver.
 
         """
 

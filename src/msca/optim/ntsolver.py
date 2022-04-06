@@ -34,6 +34,18 @@ class NTResult:
 
 
 class NTSolver:
+    """Newton's solver.
+
+    Parameters
+    ----------
+    fun
+        Optimization objective function
+    grad
+        Optimization gradient function
+    hess
+        Optimization hessian function
+
+    """
 
     def __init__(self, fun: Callable, grad: Callable, hess: Callable):
         self.fun = fun
@@ -94,8 +106,8 @@ class NTSolver:
 
         Returns
         -------
-        NDArray
-            Solution vector.
+        NTResult
+            Result of the solver.
 
         """
 
