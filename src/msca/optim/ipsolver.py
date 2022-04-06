@@ -1,8 +1,41 @@
+from dataclasses import dataclass
 from typing import Callable, List, Tuple
 
 import numpy as np
 from msca.linalg.matrix import Matrix
 from numpy.typing import NDArray
+
+
+@dataclass
+class IPResult:
+    x: NDArray
+    """The solution of the optimization.
+    
+    """
+    success: bool
+    """Wether or not the optimizer exited successfully.
+
+    """
+    fun: float
+    """The objective function value.
+
+    """
+    grad: NDArray
+    """Gradient of the objective function.
+
+    """
+    hess: NDArray
+    """Hessian of the objective function.
+
+    """
+    niter: int
+    """Number of iterations.
+
+    """
+    maxcv: float
+    """The maximum constraint violation.
+
+    """
 
 
 class IPSolver:
@@ -135,16 +168,16 @@ class IPSolver:
         gnorm = np.max(np.abs(np.hstack(f)))
         xdiff = 1.0
         step = 1.0
-        counter = 0
+        niter = 0
+        success = False
 
         if verbose:
             print(f"{type(self).__name__}:")
-            print(f"{counter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, "
+            print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, "
                   f"{mu=:.2e}")
 
-        while ((gnorm > gtol and xdiff > xtol and counter < max_iter) or
-               (mu > mtol)):
-            counter += 1
+        while not success:
+            niter += 1
 
             # cache convenient variables
             sv_vec = p[2] / p[1]
@@ -163,7 +196,7 @@ class IPSolver:
             step, p = self.update_params(p, dp, mu)
 
             # update mu
-            if counter % update_mu_every == 0:
+            if niter % update_mu_every == 0:
                 mu = max(scale_mu*mu, 0.1*p[1].dot(p[2])/len(p[1]))
 
             # update f and gnorm
@@ -172,7 +205,21 @@ class IPSolver:
             xdiff = step*np.max(np.abs(dp[0]))
 
             if verbose:
-                print(f"{counter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, "
+                print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, "
                       f"{step=:.2e}, {mu=:.2e}")
+            success = (
+                (gnorm > gtol and xdiff > xtol and niter < max_iter) or
+                (mu > mtol)
+            )
 
-        return p[0]
+        result = IPResult(
+            x=p[0],
+            success=success,
+            fun=np.nan,
+            grad=self.grad(p[0]),
+            hess=self.hess(p[0]),
+            niter=niter,
+            maxcv=np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max()
+        )
+
+        return result
