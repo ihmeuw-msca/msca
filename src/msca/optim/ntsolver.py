@@ -7,30 +7,30 @@ from numpy.typing import NDArray
 
 @dataclass
 class NTResult:
+    """Newton's solver result.
+
+    Parameters
+    ----------
+    x
+        The solution of the optimization.
+    success
+        Whether or not the optimizer exited successfully.
+    fun
+        The objective function value.
+    grad
+        Gradient of the objective function.
+    hess
+        Hessian of the objective function.
+    niter
+        Number of iterations.
+
+    """
     x: NDArray
-    """The solution of the optimization.
-    
-    """
     success: bool
-    """Wether or not the optimizer exited successfully.
-
-    """
     fun: float
-    """The objective function value.
-
-    """
     grad: NDArray
-    """Gradient of the objective function.
-
-    """
     hess: NDArray
-    """Hessian of the objective function.
-
-    """
     niter: int
-    """Number of iterations.
-
-    """
 
 
 class NTSolver:

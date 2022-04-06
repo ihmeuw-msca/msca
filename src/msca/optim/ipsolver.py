@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import Callable, List, Tuple
 
@@ -8,37 +10,52 @@ from numpy.typing import NDArray
 
 @dataclass
 class IPResult:
+    """Interior point solver result.
+
+    Parameters
+    ----------
+    x
+        The solution of the optimization.
+    success
+        Whether or not the optimizer exited successfully.
+    fun
+        The objective function value.
+    grad
+        Gradient of the objective function.
+    hess
+        Hessian of the objective function.
+    niter
+        Number of iterations.
+    maxcv
+        The maximum constraint violation.
+
+    """
     x: NDArray
-    """The solution of the optimization.
-    
-    """
     success: bool
-    """Wether or not the optimizer exited successfully.
-
-    """
     fun: float
-    """The objective function value.
-
-    """
     grad: NDArray
-    """Gradient of the objective function.
-
-    """
     hess: NDArray
-    """Hessian of the objective function.
-
-    """
     niter: int
-    """Number of iterations.
-
-    """
     maxcv: float
-    """The maximum constraint violation.
-
-    """
 
 
 class IPSolver:
+    """Interior point solver.
+
+    Parameters
+    ----------
+    fun
+        The optimization objective function.
+    grad
+        The optimization gradient function.
+    hess
+        The optimization hessian function.
+    cmat
+        The constraint linear mapping.
+    cvec
+        The constraint bounds.
+
+    """
 
     def __init__(self,
                  fun: Callable,
@@ -46,22 +63,6 @@ class IPSolver:
                  hess: Callable,
                  cmat: Matrix,
                  cvec: NDArray):
-        """Interior point solver.
-
-        Parameters
-        ----------
-        fun
-            The optimization objective function.
-        grad
-            The optimization gradient function.
-        hess
-            The optimization hessian function.
-        cmat
-            The constraint linear mapping.
-        cvec
-            The constraint bounds.
-
-        """
         self.fun = fun
         self.grad = grad
         self.hess = hess
@@ -73,7 +74,7 @@ class IPSolver:
 
         Parameters
         ----------
-        p
+        p : List[NDArray]
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
         mu
@@ -101,10 +102,10 @@ class IPSolver:
 
         Parameters
         ----------
-        p
+        p : List[NDArray]
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
-        dp
+        dp : List[NDArray]
             A list of direction for the parameters.
         mu
             Interior point method barrier variable.
