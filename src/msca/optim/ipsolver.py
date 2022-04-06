@@ -110,7 +110,7 @@ class IPSolver:
         f_curr = self.get_kkt(p, mu)
         gnorm_curr = np.max(np.abs(np.hstack(f_curr)))
 
-        for i in range(100):
+        for _ in range(100):
             p_next = [v.copy() for v in p]
             for i in range(len(p)):
                 p_next[i] += a * dp[i]
