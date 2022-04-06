@@ -176,7 +176,7 @@ class IPSolver:
         if verbose:
             fun = self.fun(p[0])
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
+            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
                   f"{step=:.2e}, {mu=:.2e}")
 
         while (not success) and (niter < max_iter):
@@ -209,7 +209,7 @@ class IPSolver:
 
             if verbose:
                 fun = self.fun(p[0])
-                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
+                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
                       f"{step=:.2e}, {mu=:.2e}")
             success = (gnorm <= gtol or xdiff <= xtol) and (mu <= mtol)
 

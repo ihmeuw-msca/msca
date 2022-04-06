@@ -112,14 +112,14 @@ class NTSolver:
         if verbose:
             fun = self.fun(x)
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
+            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
                   f"{step=:.2e}")
 
         while (not success) and (niter < max_iter):
             niter += 1
 
             # compute all directions
-            dx = self.hess(x).solve(g)
+            dx = -self.hess(x).solve(g)
 
             # get step size
             step, x = self.update_params(x, dx)
@@ -131,7 +131,7 @@ class NTSolver:
 
             if verbose:
                 fun = self.fun(x)
-                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
+                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
                       f"{step=:.2e}")
             success = gnorm <= gtol or xdiff <= xtol
 
