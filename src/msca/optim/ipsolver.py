@@ -41,10 +41,12 @@ class IPResult:
 class IPSolver:
 
     def __init__(self,
+                 fun: Callable,
                  grad: Callable,
                  hess: Callable,
                  cmat: Matrix,
                  cvec: NDArray):
+        self.fun = fun
         self.grad = grad
         self.hess = hess
         self.cmat = cmat
@@ -172,9 +174,10 @@ class IPSolver:
         success = False
 
         if verbose:
+            fun = self.fun(p[0])
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, "
-                  f"{mu=:.2e}")
+            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
+                  f"{step=:.2e}, {mu=:.2e}")
 
         while (not success) and (niter < max_iter):
             niter += 1
@@ -205,18 +208,19 @@ class IPSolver:
             xdiff = step*np.max(np.abs(dp[0]))
 
             if verbose:
-                print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, "
+                fun = self.fun(p[0])
+                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e},"
                       f"{step=:.2e}, {mu=:.2e}")
             success = (gnorm <= gtol or xdiff <= xtol) and (mu <= mtol)
 
         result = IPResult(
             x=p[0],
             success=success,
-            fun=np.nan,
+            fun=self.fun(p[0]),
             grad=self.grad(p[0]),
             hess=self.hess(p[0]),
             niter=niter,
-            maxcv=np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max()
+            maxcv=float(np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max())
         )
 
         return result
