@@ -176,7 +176,7 @@ class IPSolver:
             print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, "
                   f"{mu=:.2e}")
 
-        while not success:
+        while (not success) and (niter < max_iter):
             niter += 1
 
             # cache convenient variables
@@ -207,10 +207,7 @@ class IPSolver:
             if verbose:
                 print(f"{niter=:3d}, {gnorm=:.2e}, {xdiff=:.2e}, "
                       f"{step=:.2e}, {mu=:.2e}")
-            success = (
-                (gnorm > gtol and xdiff > xtol and niter < max_iter) or
-                (mu > mtol)
-            )
+            success = (gnorm <= gtol or xdiff <= xtol) and (mu <= mtol)
 
         result = IPResult(
             x=p[0],
