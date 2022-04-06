@@ -100,6 +100,26 @@ class NumpyMatrix(numpy.ndarray, Matrix):
     def __init__(self, *args, **kwargs):
         super(Matrix, self).__init__()
 
+    def dot(self, x: ArrayLike) -> NDArray | Matrix:
+        """Dot product operator for the matrix.
+
+        Parameters
+        ----------
+        x
+            Give vector or matrix.
+
+        Returns
+        -------
+        NDArray | Matrix
+            Results of the dot product. If the result is two dimensional it will
+            be an instance of the :py:class:`Matrix` class.
+
+        """
+        result = numpy.dot(self, x)
+        if result.ndim == 1:
+            return numpy.asarray(result)
+        return result
+
     def scale_rows(self, x: ArrayLike) -> NumpyMatrix:
         return numpy.asarray(x)[:, numpy.newaxis] * self
 

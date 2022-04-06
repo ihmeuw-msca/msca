@@ -296,6 +296,23 @@ matrix.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">NumpyMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">msca.linalg.matrix.Matrix</span></code></a></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.dot">
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.dot" title="Permalink to this definition">#</a></dt>
+<dd><p>Dot product operator for the matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – Give vector or matrix.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Results of the dot product. If the result is two dimensional it will
+be an instance of the <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> class.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NDArray | <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
+</dd>
+</dl>
+</dd></dl>
+<dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.scale_rows">
 <span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.scale_rows" title="Permalink to this definition">#</a></dt>
 <dd><p>Scale rows of the matrix.</p>
