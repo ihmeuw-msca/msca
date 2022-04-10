@@ -1,3 +1,28 @@
+"""Continuously twice differentiable function. The instance of this class
+provides the function and the derivative and the second derivative of the
+function. It also contains the inverse of the function.
+
+Example
+-------
+.. code-block:: python
+
+    from msca.c2fun import exp
+
+    x = [1, 2, 3]
+
+    # exponential function
+    y = exp(x)
+
+    # derivative of the exponential function
+    dy = exp(x, order=1)
+
+    # second order derivative of the exponential function
+    d2y = exp(x, order=2)
+
+    # inverse function of the exponential function which is the log function
+    z = exp.inv(x)
+
+"""
 from __future__ import annotations
 
 from abc import ABC, abstractproperty, abstractstaticmethod
@@ -8,12 +33,16 @@ from numpy.typing import NDArray
 
 
 class C2Fun(ABC):
-    """Continuously twice differentiable function.
+    """Abstract class that defines the interface for twice continuous function.
+    It is callable and has an attribute :code:`inv` for the inverse function.
 
     """
 
     @abstractproperty
     def inv(self) -> C2Fun:
+        """The inverse of the function such that :code:`x = fun.inv(fun(x))`.
+
+        """
         pass
 
     @abstractstaticmethod
@@ -29,6 +58,26 @@ class C2Fun(ABC):
         pass
 
     def __call__(self, x: NDArray, order: int = 0) -> NDArray:
+        """
+        Parameters
+        ----------
+        x
+            Provided independent variables.
+        order
+            Order of differentiation. This value has to be choose from 0, 1, or
+            2. Default is 0.
+
+        Returns
+        -------
+        NDArray
+            The function, the derivative or the second derivative values.
+
+        Raises
+        ------
+        ValueError
+            Raised when the order is not 0, or 1, or 2.
+
+        """
         if order == 0:
             return self._fun(x)
         if order == 1:
@@ -41,10 +90,7 @@ class C2Fun(ABC):
         return f"{type(self).__name__}()"
 
 
-class Identity(C2Fun):
-    """Identity function.
-
-    """
+class _Identity(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
@@ -66,10 +112,7 @@ class Identity(C2Fun):
         return np.zeros(x.size, dtype=x.dtype)
 
 
-class Exp(C2Fun):
-    """Exponential function.
-
-    """
+class _Exp(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
@@ -88,10 +131,7 @@ class Exp(C2Fun):
         return np.exp(x)
 
 
-class Log(C2Fun):
-    """Log function.
-
-    """
+class _Log(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
@@ -112,10 +152,7 @@ class Log(C2Fun):
         return -1 / x**2
 
 
-class Expit(C2Fun):
-    """Expit function.
-
-    """
+class _Expit(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
@@ -137,10 +174,7 @@ class Expit(C2Fun):
         return (z**2 - z) / (1 + z)**3
 
 
-class Logit(C2Fun):
-    """Logit function.
-
-    """
+class _Logit(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
@@ -161,11 +195,163 @@ class Logit(C2Fun):
         return (2*x - 1) / (x * (1 - x))**2
 
 
-identity = Identity()
-exp = Exp()
-log = Log()
-expit = Expit()
-logit = Logit()
+identity: C2Fun = _Identity()
+"""Identity function. The inverse of the identity function is the identity
+itself.
+
+.. math::
+
+    f(x) = x, \quad
+    f'(x) = 1, \quad
+    f''(x) = 0
+
+Parameters
+----------
+x
+    Provided independent variables.
+order
+    Order of differentiation. This value has to be choose from 0, 1, or
+    2. Default is 0.
+
+Returns
+-------
+NDArray
+    The function, the derivative or the second derivative values.
+
+Raises
+------
+ValueError
+    Raised when the order is not 0, or 1, or 2.
+
+
+:meta hide-value:
+
+"""
+exp: C2Fun = _Exp()
+"""Exponential function. The inverse of the exponential function is
+:data:`log`.
+
+.. math::
+
+    f(x) = \exp(x), \quad
+    f'(x) = \exp(x), \quad
+    f''(x) = \exp(x)
+
+Parameters
+----------
+x
+    Provided independent variables.
+order
+    Order of differentiation. This value has to be choose from 0, 1, or
+    2. Default is 0.
+
+Returns
+-------
+NDArray
+    The function, the derivative or the second derivative values.
+
+Raises
+------
+ValueError
+    Raised when the order is not 0, or 1, or 2.
+
+
+:meta hide-value:
+
+"""
+log: C2Fun = _Log()
+"""Log function. The inverse of the log function is the :data:`exp`.
+
+.. math::
+
+    f(x) = \log(x), \quad
+    f'(x) = \\frac{1}{x}, \quad
+    f''(x) = -\\frac{1}{x^2}
+
+Parameters
+----------
+x
+    Provided independent variables.
+order
+    Order of differentiation. This value has to be choose from 0, 1, or
+    2. Default is 0.
+
+Returns
+-------
+NDArray
+    The function, the derivative or the second derivative values.
+
+Raises
+------
+ValueError
+    Raised when the order is not 0, or 1, or 2.
+
+
+:meta hide-value:
+
+"""
+expit: C2Fun = _Expit()
+"""Expit function. The inverse of the expit function is the :data:`logit`.
+
+.. math::
+
+    f(x) = \\frac{1}{1 + \exp(-x)}, \quad
+    f'(x) = \\frac{\exp(-x)}{(1 + \exp(-x))^2}, \quad
+    f''(x) = -\\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x))^3}
+
+Parameters
+----------
+x
+    Provided independent variables.
+order
+    Order of differentiation. This value has to be choose from 0, 1, or
+    2. Default is 0.
+
+Returns
+-------
+NDArray
+    The function, the derivative or the second derivative values.
+
+Raises
+------
+ValueError
+    Raised when the order is not 0, or 1, or 2.
+
+
+:meta hide-value:
+
+"""
+logit: C2Fun = _Logit()
+"""Logit function. The inverse of the logit function is the :data:`expit`.
+
+.. math::
+
+    f(x) = \log\\left(\\frac{x}{1 - x}\\right), \quad
+    f'(x) = \\frac{1}{x(1 - x)}, \quad
+    f''(x) = \\frac{2x - 1}{x^2(1 - x)^2}
+
+Parameters
+----------
+x
+    Provided independent variables.
+order
+    Order of differentiation. This value has to be choose from 0, 1, or
+    2. Default is 0.
+
+Returns
+-------
+NDArray
+    The function, the derivative or the second derivative values.
+
+Raises
+------
+ValueError
+    Raised when the order is not 0, or 1, or 2.
+
+
+:meta hide-value:
+
+"""
 
 
 c2fun_dict: Dict[str, C2Fun] = {
@@ -175,3 +361,8 @@ c2fun_dict: Dict[str, C2Fun] = {
     "expit": expit,
     "logit": logit,
 }
+"""A dictionary that map function names with the function instances.
+
+:meta hide-value:
+
+"""
