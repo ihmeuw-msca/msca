@@ -22,6 +22,13 @@ Example
     # inverse function of the exponential function which is the log function
     z = exp.inv(x)
 
+Note
+----
+All the concrete classes listed below already have module-level instance created
+in this module. We suggest user to directly use these instances rather than
+create new instances from the class. You can also access the instances from the
+model-level variable :data:`c2fun_dict`.
+
 """
 from __future__ import annotations
 
@@ -34,7 +41,13 @@ from numpy.typing import NDArray
 
 class C2Fun(ABC):
     """Abstract class that defines the interface for twice continuous function.
-    It is callable and has an attribute :code:`inv` for the inverse function.
+    To inherit this class, user much provide :meth:`fun`, :meth:`dfun` and
+    :meth:`d2fun`. And if inverse of the function is defined and implemented
+    please override :attr:`inv`, otherwise please raise
+    :code:`NotImplementedError`.
+
+    The instance of :class:`C2Fun` is callable, with the signature defined in
+    the :meth:`__call__` function.
 
     """
 
@@ -46,15 +59,39 @@ class C2Fun(ABC):
         pass
 
     @abstractstaticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """Implementation of the function.
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         pass
 
     @abstractstaticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """Implementation of the derivative of the function.
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         pass
 
     @abstractstaticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """Implementation of the second order derivative of the function.
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         pass
 
     def __call__(self, x: NDArray, order: int = 0) -> NDArray:
@@ -79,11 +116,11 @@ class C2Fun(ABC):
 
         """
         if order == 0:
-            return self._fun(x)
+            return self.fun(x)
         if order == 1:
-            return self._dfun(x)
+            return self.dfun(x)
         if order == 2:
-            return self._d2fun(x)
+            return self.d2fun(x)
         raise ValueError("Order has to be selected from 0, 1 or 2.")
 
     def __repr__(self) -> str:
@@ -91,16 +128,6 @@ class C2Fun(ABC):
 
 
 class Identity(C2Fun):
-    """Identity function.
-
-    .. math::
-
-        f(x) = x, \\quad
-        f'(x) = 1, \\quad
-        f''(x) = 0
-
-
-    """
 
     @property
     def inv(self) -> C2Fun:
@@ -110,32 +137,55 @@ class Identity(C2Fun):
         return self
 
     @staticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = x
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return x
 
     @staticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f'(x) = 1
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return np.ones(x.size, dtype=x.dtype)
 
     @staticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f''(x) = 0
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return np.zeros(x.size, dtype=x.dtype)
 
 
 class Exp(C2Fun):
-    """Exponential function.
-
-    .. math::
-
-        f(x) = \\exp(x), \\quad
-        f'(x) = \\exp(x), \\quad
-        f''(x) = \\exp(x)
-
-
-    """
 
     @property
     def inv(self) -> C2Fun:
@@ -145,29 +195,52 @@ class Exp(C2Fun):
         return log
 
     @staticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = \\exp(x)
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         return np.exp(x)
 
     @staticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f'(x) = \\exp(x)
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         return np.exp(x)
 
     @staticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f''(x) = \\exp(x)
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         return np.exp(x)
 
 
 class Log(C2Fun):
-    """Log function.
-
-    .. math::
-
-        f(x) = \\log(x), \\quad
-        f'(x) = \\frac{1}{x}, \\quad
-        f''(x) = -\\frac{1}{x ^ 2}
-
-
-    """
 
     @property
     def inv(self) -> C2Fun:
@@ -177,37 +250,57 @@ class Log(C2Fun):
         return exp
 
     @staticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = \\log(x)
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         return np.log(x)
 
     @staticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = \\frac{1}{x}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return 1 / x
 
     @staticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = -\\frac{1}{x^2}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return -1 / x**2
 
 
 class Expit(C2Fun):
-    """Expit function.
-
-    .. math::
-
-        f(x) = \\frac{1}{1 + \\exp(-x)}, \\quad
-        f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}, \\quad
-        f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}
-
-    Alternative form can be written as,
-
-    .. math::
-
-        f(x) = \\frac{\\exp(x)}{1 + \\exp(x)}, \\quad
-        f'(x) = \\frac{\\exp(x)}{(1 + \\exp(x))^2}, \\quad
-        f''(x) = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}
-
+    """
+    Note
+    ----
     We use the form with :math:`\\exp(-x)` when :math:`x > 0`, and the form
     with :math:`\\exp(x)` when :math:`x \\le 0`.
 
@@ -221,7 +314,17 @@ class Expit(C2Fun):
         return logit
 
     @staticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+            f(x) = \\frac{1}{1 + \\exp(-x)} = \\frac{\\exp(x)}{1 + \\exp(x)}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         y = np.zeros(x.size, dtype=x.dtype)
 
@@ -236,7 +339,18 @@ class Expit(C2Fun):
         return y
 
     @staticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """
+        .. math::
+            f(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}
+            = \\frac{\\exp(x)}{(1 + \\exp(x))^2}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         y = np.zeros(x.size, dtype=x.dtype)
 
@@ -251,7 +365,18 @@ class Expit(C2Fun):
         return y
 
     @staticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+            f(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}
+            = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         y = np.zeros(x.size, dtype=x.dtype)
 
@@ -267,16 +392,6 @@ class Expit(C2Fun):
 
 
 class Logit(C2Fun):
-    """Logit function.
-
-    .. math::
-
-        f(x) = \\log\\left(\\frac{x}{1 - x}\\right), \\quad
-        f'(x) = \\frac{1}{x(1 - x)}, \\quad
-        f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}
-
-
-    """
 
     @property
     def inv(self) -> C2Fun:
@@ -286,16 +401,49 @@ class Logit(C2Fun):
         return expit
 
     @staticmethod
-    def _fun(x: NDArray) -> NDArray:
+    def fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f(x) = \\log\\left(\\frac{x}{1 - x}\\right)
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         return np.log(x / (1 - x))
 
     @staticmethod
-    def _dfun(x: NDArray) -> NDArray:
+    def dfun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f'(x) = \\frac{1}{x(1 - x)}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return 1 / (x * (1 - x))
 
     @staticmethod
-    def _d2fun(x: NDArray) -> NDArray:
+    def d2fun(x: NDArray) -> NDArray:
+        """
+        .. math::
+
+            f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}
+
+        Parameters
+        ----------
+        x
+            Provided independent variable.
+
+        """
         x = np.asarray(x)
         return (2*x - 1) / (x * (1 - x))**2
 
@@ -322,12 +470,6 @@ You can access the instances of :class:`C2Fun` through this dictionary.
     from msca.c2fun import c2fun_dict
 
     exp = c2fun_dict['exp']
-
-Or directly import the function.
-
-.. code-block:: python
-
-    from msca.c2fun import exp
 
 
 """
