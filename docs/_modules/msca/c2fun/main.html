@@ -303,10 +303,23 @@
         <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span></div>
 
 
-<span class="k">class</span> <span class="nc">_Identity</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Identity function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = x, \quad</span>
+<span class="sd">        f'(x) = 1, \quad</span>
+<span class="sd">        f''(x) = 0</span>
+
+
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the identity function is the identity itself.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="nd">@staticmethod</span>
@@ -322,13 +335,26 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">_Exp</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<div class="viewcode-block" id="Exp"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp">[docs]</a><span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Exponential function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = \exp(x), \quad</span>
+<span class="sd">        f'(x) = \exp(x), \quad</span>
+<span class="sd">        f''(x) = \exp(x)</span>
+
+
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the exponential function is :class:`Log`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">log</span>
 
     <span class="nd">@staticmethod</span>
@@ -341,13 +367,26 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">_Log</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<div class="viewcode-block" id="Log"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log">[docs]</a><span class="k">class</span> <span class="nc">Log</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Log function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = \log(x), \quad</span>
+<span class="sd">        f'(x) = \\frac{1}{x}, \quad</span>
+<span class="sd">        f''(x) = -\\frac{1}{x ^ 2}</span>
+
+
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the log function is the :class:`Exp`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">exp</span>
 
     <span class="nd">@staticmethod</span>
@@ -362,13 +401,26 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<span class="k">class</span> <span class="nc">_Expit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<div class="viewcode-block" id="Expit"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit">[docs]</a><span class="k">class</span> <span class="nc">Expit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Expit function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = \\frac{1}{1 + \exp(-x)}, \quad</span>
+<span class="sd">        f'(x) = \\frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}, \quad</span>
+<span class="sd">        f''(x) = -\\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}</span>
+
+
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the expit function is the :class:`Logit`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">logit</span>
 
     <span class="nd">@staticmethod</span>
@@ -384,13 +436,26 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">z</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span></div>
 
 
-<span class="k">class</span> <span class="nc">_Logit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<div class="viewcode-block" id="Logit"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit">[docs]</a><span class="k">class</span> <span class="nc">Logit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Logit function.</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = \log\\left(\\frac{x}{1 - x}\\right), \quad</span>
+<span class="sd">        f'(x) = \\frac{1}{x(1 - x)}, \quad</span>
+<span class="sd">        f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}</span>
+
+
+<span class="sd">    """</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the logit function is the :class:`Expit`.</span>
+
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="n">expit</span>
 
     <span class="nd">@staticmethod</span>
@@ -405,167 +470,14 @@
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span></div>
 
 
-<span class="n">identity</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">_Identity</span><span class="p">()</span>
-<span class="sd">"""Identity function. The inverse of the identity function is the identity</span>
-<span class="sd">itself.</span>
-
-<span class="sd">.. math::</span>
-
-<span class="sd">    f(x) = x, \quad</span>
-<span class="sd">    f'(x) = 1, \quad</span>
-<span class="sd">    f''(x) = 0</span>
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">x</span>
-<span class="sd">    Provided independent variables.</span>
-<span class="sd">order</span>
-<span class="sd">    Order of differentiation. This value has to be choose from 0, 1, or</span>
-<span class="sd">    2. Default is 0.</span>
-
-<span class="sd">Returns</span>
-<span class="sd">-------</span>
-<span class="sd">NDArray</span>
-<span class="sd">    The function, the derivative or the second derivative values.</span>
-
-<span class="sd">Raises</span>
-<span class="sd">------</span>
-<span class="sd">ValueError</span>
-<span class="sd">    Raised when the order is not 0, or 1, or 2.</span>
-
-
-<span class="sd">:meta hide-value:</span>
-
-<span class="sd">"""</span>
-<span class="n">exp</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">_Exp</span><span class="p">()</span>
-<span class="sd">"""Exponential function. The inverse of the exponential function is</span>
-<span class="sd">:data:`log`.</span>
-
-<span class="sd">.. math::</span>
-
-<span class="sd">    f(x) = \exp(x), \quad</span>
-<span class="sd">    f'(x) = \exp(x), \quad</span>
-<span class="sd">    f''(x) = \exp(x)</span>
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">x</span>
-<span class="sd">    Provided independent variables.</span>
-<span class="sd">order</span>
-<span class="sd">    Order of differentiation. This value has to be choose from 0, 1, or</span>
-<span class="sd">    2. Default is 0.</span>
-
-<span class="sd">Returns</span>
-<span class="sd">-------</span>
-<span class="sd">NDArray</span>
-<span class="sd">    The function, the derivative or the second derivative values.</span>
-
-<span class="sd">Raises</span>
-<span class="sd">------</span>
-<span class="sd">ValueError</span>
-<span class="sd">    Raised when the order is not 0, or 1, or 2.</span>
-
-
-<span class="sd">:meta hide-value:</span>
-
-<span class="sd">"""</span>
-<span class="n">log</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">_Log</span><span class="p">()</span>
-<span class="sd">"""Log function. The inverse of the log function is the :data:`exp`.</span>
-
-<span class="sd">.. math::</span>
-
-<span class="sd">    f(x) = \log(x), \quad</span>
-<span class="sd">    f'(x) = \\frac{1}{x}, \quad</span>
-<span class="sd">    f''(x) = -\\frac{1}{x^2}</span>
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">x</span>
-<span class="sd">    Provided independent variables.</span>
-<span class="sd">order</span>
-<span class="sd">    Order of differentiation. This value has to be choose from 0, 1, or</span>
-<span class="sd">    2. Default is 0.</span>
-
-<span class="sd">Returns</span>
-<span class="sd">-------</span>
-<span class="sd">NDArray</span>
-<span class="sd">    The function, the derivative or the second derivative values.</span>
-
-<span class="sd">Raises</span>
-<span class="sd">------</span>
-<span class="sd">ValueError</span>
-<span class="sd">    Raised when the order is not 0, or 1, or 2.</span>
-
-
-<span class="sd">:meta hide-value:</span>
-
-<span class="sd">"""</span>
-<span class="n">expit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">_Expit</span><span class="p">()</span>
-<span class="sd">"""Expit function. The inverse of the expit function is the :data:`logit`.</span>
-
-<span class="sd">.. math::</span>
-
-<span class="sd">    f(x) = \\frac{1}{1 + \exp(-x)}, \quad</span>
-<span class="sd">    f'(x) = \\frac{\exp(-x)}{(1 + \exp(-x))^2}, \quad</span>
-<span class="sd">    f''(x) = -\\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x))^3}</span>
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">x</span>
-<span class="sd">    Provided independent variables.</span>
-<span class="sd">order</span>
-<span class="sd">    Order of differentiation. This value has to be choose from 0, 1, or</span>
-<span class="sd">    2. Default is 0.</span>
-
-<span class="sd">Returns</span>
-<span class="sd">-------</span>
-<span class="sd">NDArray</span>
-<span class="sd">    The function, the derivative or the second derivative values.</span>
-
-<span class="sd">Raises</span>
-<span class="sd">------</span>
-<span class="sd">ValueError</span>
-<span class="sd">    Raised when the order is not 0, or 1, or 2.</span>
-
-
-<span class="sd">:meta hide-value:</span>
-
-<span class="sd">"""</span>
-<span class="n">logit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">_Logit</span><span class="p">()</span>
-<span class="sd">"""Logit function. The inverse of the logit function is the :data:`expit`.</span>
-
-<span class="sd">.. math::</span>
-
-<span class="sd">    f(x) = \log\\left(\\frac{x}{1 - x}\\right), \quad</span>
-<span class="sd">    f'(x) = \\frac{1}{x(1 - x)}, \quad</span>
-<span class="sd">    f''(x) = \\frac{2x - 1}{x^2(1 - x)^2}</span>
-
-<span class="sd">Parameters</span>
-<span class="sd">----------</span>
-<span class="sd">x</span>
-<span class="sd">    Provided independent variables.</span>
-<span class="sd">order</span>
-<span class="sd">    Order of differentiation. This value has to be choose from 0, 1, or</span>
-<span class="sd">    2. Default is 0.</span>
-
-<span class="sd">Returns</span>
-<span class="sd">-------</span>
-<span class="sd">NDArray</span>
-<span class="sd">    The function, the derivative or the second derivative values.</span>
-
-<span class="sd">Raises</span>
-<span class="sd">------</span>
-<span class="sd">ValueError</span>
-<span class="sd">    Raised when the order is not 0, or 1, or 2.</span>
-
-
-<span class="sd">:meta hide-value:</span>
-
-<span class="sd">"""</span>
-
+<span class="n">identity</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">()</span>
+<span class="n">exp</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">()</span>
+<span class="n">log</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Log</span><span class="p">()</span>
+<span class="n">expit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Expit</span><span class="p">()</span>
+<span class="n">logit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Logit</span><span class="p">()</span>
 
 <span class="n">c2fun_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">C2Fun</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"identity"</span><span class="p">:</span> <span class="n">identity</span><span class="p">,</span>
@@ -576,7 +488,20 @@
 <span class="p">}</span>
 <span class="sd">"""A dictionary that map function names with the function instances.</span>
 
-<span class="sd">:meta hide-value:</span>
+<span class="sd">You can access the instances of :class:`C2Fun` through this dictionary.</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from msca.c2fun import c2fun_dict</span>
+
+<span class="sd">    exp = c2fun_dict['exp']</span>
+
+<span class="sd">Or directly import the function.</span>
+
+<span class="sd">.. code-block:: python</span>
+
+<span class="sd">    from msca.c2fun import exp</span>
+
 
 <span class="sd">"""</span>
 </pre></div>
