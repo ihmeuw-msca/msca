@@ -321,7 +321,14 @@ f''(x) = -\frac{1}{x ^ 2}\]</div></div>
 <div class="math-wrapper"><div class="math notranslate nohighlight">
 \[f(x) = \frac{1}{1 + \exp(-x)}, \quad
 f'(x) = \frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}, \quad
-f''(x) = -\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}\]</div></div>
+f''(x) = \frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}\]</div></div>
+<p>Alternative form can be written as,</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[f(x) = \frac{\exp(x)}{1 + \exp(x)}, \quad
+f'(x) = \frac{\exp(x)}{(1 + \exp(x))^2}, \quad
+f''(x) = \frac{\exp(x) - \exp(2x)}{(1 + \exp(x))^3}\]</div></div>
+<p>We use the form with <span class="math notranslate nohighlight">\(\exp(-x)\)</span> when <span class="math notranslate nohighlight">\(x &gt; 0\)</span>, and the form
+with <span class="math notranslate nohighlight">\(\exp(x)\)</span> when <span class="math notranslate nohighlight">\(x \le 0\)</span>.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="msca.c2fun.main.Expit.inv">
 <em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">inv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#msca.c2fun.main.C2Fun" title="msca.c2fun.main.C2Fun"><span class="pre">msca.c2fun.main.C2Fun</span></a></em><a class="headerlink" href="#msca.c2fun.main.Expit.inv" title="Permalink to this definition">#</a></dt>

@@ -308,8 +308,8 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x) = x, \quad</span>
-<span class="sd">        f'(x) = 1, \quad</span>
+<span class="sd">        f(x) = x, \\quad</span>
+<span class="sd">        f'(x) = 1, \\quad</span>
 <span class="sd">        f''(x) = 0</span>
 
 
@@ -343,9 +343,9 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x) = \exp(x), \quad</span>
-<span class="sd">        f'(x) = \exp(x), \quad</span>
-<span class="sd">        f''(x) = \exp(x)</span>
+<span class="sd">        f(x) = \\exp(x), \\quad</span>
+<span class="sd">        f'(x) = \\exp(x), \\quad</span>
+<span class="sd">        f''(x) = \\exp(x)</span>
 
 
 <span class="sd">    """</span>
@@ -375,8 +375,8 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x) = \log(x), \quad</span>
-<span class="sd">        f'(x) = \\frac{1}{x}, \quad</span>
+<span class="sd">        f(x) = \\log(x), \\quad</span>
+<span class="sd">        f'(x) = \\frac{1}{x}, \\quad</span>
 <span class="sd">        f''(x) = -\\frac{1}{x ^ 2}</span>
 
 
@@ -409,10 +409,20 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x) = \\frac{1}{1 + \exp(-x)}, \quad</span>
-<span class="sd">        f'(x) = \\frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}, \quad</span>
-<span class="sd">        f''(x) = -\\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}</span>
+<span class="sd">        f(x) = \\frac{1}{1 + \\exp(-x)}, \\quad</span>
+<span class="sd">        f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}, \\quad</span>
+<span class="sd">        f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}</span>
 
+<span class="sd">    Alternative form can be written as,</span>
+
+<span class="sd">    .. math::</span>
+
+<span class="sd">        f(x) = \\frac{\\exp(x)}{1 + \\exp(x)}, \\quad</span>
+<span class="sd">        f'(x) = \\frac{\\exp(x)}{(1 + \\exp(x))^2}, \\quad</span>
+<span class="sd">        f''(x) = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}</span>
+
+<span class="sd">    We use the form with :math:`\\exp(-x)` when :math:`x &gt; 0`, and the form</span>
+<span class="sd">    with :math:`\\exp(x)` when :math:`x \\le 0`.</span>
 
 <span class="sd">    """</span>
 
@@ -425,8 +435,18 @@
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="n">pos_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">pos_indices</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">pos_indices</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="n">neg_indices</span> <span class="o">=</span> <span class="o">~</span><span class="n">pos_indices</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">neg_indices</span><span class="p">])</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">neg_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">y</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
@@ -444,8 +464,8 @@
 
 <span class="sd">    .. math::</span>
 
-<span class="sd">        f(x) = \log\\left(\\frac{x}{1 - x}\\right), \quad</span>
-<span class="sd">        f'(x) = \\frac{1}{x(1 - x)}, \quad</span>
+<span class="sd">        f(x) = \\log\\left(\\frac{x}{1 - x}\\right), \\quad</span>
+<span class="sd">        f'(x) = \\frac{1}{x(1 - x)}, \\quad</span>
 <span class="sd">        f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}</span>
 
 

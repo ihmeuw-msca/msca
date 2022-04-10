@@ -95,8 +95,8 @@ class Identity(C2Fun):
 
     .. math::
 
-        f(x) = x, \quad
-        f'(x) = 1, \quad
+        f(x) = x, \\quad
+        f'(x) = 1, \\quad
         f''(x) = 0
 
 
@@ -130,9 +130,9 @@ class Exp(C2Fun):
 
     .. math::
 
-        f(x) = \exp(x), \quad
-        f'(x) = \exp(x), \quad
-        f''(x) = \exp(x)
+        f(x) = \\exp(x), \\quad
+        f'(x) = \\exp(x), \\quad
+        f''(x) = \\exp(x)
 
 
     """
@@ -162,8 +162,8 @@ class Log(C2Fun):
 
     .. math::
 
-        f(x) = \log(x), \quad
-        f'(x) = \\frac{1}{x}, \quad
+        f(x) = \\log(x), \\quad
+        f'(x) = \\frac{1}{x}, \\quad
         f''(x) = -\\frac{1}{x ^ 2}
 
 
@@ -196,10 +196,20 @@ class Expit(C2Fun):
 
     .. math::
 
-        f(x) = \\frac{1}{1 + \exp(-x)}, \quad
-        f'(x) = \\frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}, \quad
-        f''(x) = -\\frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}
+        f(x) = \\frac{1}{1 + \\exp(-x)}, \\quad
+        f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}, \\quad
+        f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}
 
+    Alternative form can be written as,
+
+    .. math::
+
+        f(x) = \\frac{\\exp(x)}{1 + \\exp(x)}, \\quad
+        f'(x) = \\frac{\\exp(x)}{(1 + \\exp(x))^2}, \\quad
+        f''(x) = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}
+
+    We use the form with :math:`\\exp(-x)` when :math:`x > 0`, and the form
+    with :math:`\\exp(x)` when :math:`x \\le 0`.
 
     """
 
@@ -212,18 +222,48 @@ class Expit(C2Fun):
 
     @staticmethod
     def _fun(x: NDArray) -> NDArray:
-        z = np.exp(-x)
-        return 1 / (1 + z)
+        x = np.asarray(x)
+        y = np.zeros(x.size, dtype=x.dtype)
+
+        pos_indices = x > 0
+        z = np.exp(-x[pos_indices])
+        y[pos_indices] = 1 / (1 + z)
+
+        neg_indices = ~pos_indices
+        z = np.exp(x[neg_indices])
+        y[neg_indices] = z / (1 + z)
+
+        return y
 
     @staticmethod
     def _dfun(x: NDArray) -> NDArray:
-        z = np.exp(-x)
-        return z / (1 + z)**2
+        x = np.asarray(x)
+        y = np.zeros(x.size, dtype=x.dtype)
+
+        pos_indices = x > 0
+        z = np.exp(-x[pos_indices])
+        y[pos_indices] = z / (1 + z)**2
+
+        neg_indices = ~pos_indices
+        z = np.exp(x[neg_indices])
+        y[neg_indices] = z / (1 + z)**2
+
+        return y
 
     @staticmethod
     def _d2fun(x: NDArray) -> NDArray:
-        z = np.exp(-x)
-        return (z**2 - z) / (1 + z)**3
+        x = np.asarray(x)
+        y = np.zeros(x.size, dtype=x.dtype)
+
+        pos_indices = x > 0
+        z = np.exp(-x[pos_indices])
+        y[pos_indices] = (z**2 - z) / (1 + z)**3
+
+        neg_indices = ~pos_indices
+        z = np.exp(x[neg_indices])
+        y[neg_indices] = (z - z**2) / (1 + z)**3
+
+        return y
 
 
 class Logit(C2Fun):
@@ -231,8 +271,8 @@ class Logit(C2Fun):
 
     .. math::
 
-        f(x) = \log\\left(\\frac{x}{1 - x}\\right), \quad
-        f'(x) = \\frac{1}{x(1 - x)}, \quad
+        f(x) = \\log\\left(\\frac{x}{1 - x}\\right), \\quad
+        f'(x) = \\frac{1}{x(1 - x)}, \\quad
         f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}
 
 
