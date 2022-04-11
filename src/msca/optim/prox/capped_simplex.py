@@ -3,10 +3,10 @@ from numpy.typing import NDArray
 from scipy.optimize import brentq
 
 
-def capped_simplex(x: NDArray,
-                   s: float,
-                   lb: float | NDArray = 0.0,
-                   ub: float | NDArray = 1.0) -> NDArray:
+def proj_capped_simplex(x: NDArray,
+                        s: float,
+                        lb: float | NDArray = 0.0,
+                        ub: float | NDArray = 1.0) -> NDArray:
     x = np.asarray(x)
     if np.isscalar(lb):
         lb = np.repeat(lb, x.size)
@@ -19,8 +19,8 @@ def capped_simplex(x: NDArray,
     def f(z):
         return np.sum(np.maximum(np.minimum(x - z, ub), lb)) - s
 
-    a = x.min() - lb.min()
-    b = x.max() + ub.max()
+    a = (x - ub).min()
+    b = (x - lb).max()
 
     z = brentq(f, a, b)
     return np.maximum(np.minimum(x - z, ub), lb)
