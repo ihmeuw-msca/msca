@@ -3,10 +3,10 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="msca.linalg" href="msca.linalg.html" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="msca.optim.prox" href="msca.optim.prox.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>msca.optim - msca 0.0.2</title>
+        <title>msca.optim.solver - msca 0.0.3</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -134,7 +134,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">msca 0.0.2</div></a>
+      <a href="../index.html"><div class="brand">msca 0.0.3</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -161,7 +161,7 @@
     <img class="sidebar-logo only-dark" src="../_static/logo/logo-dark.png" alt="Dark Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">msca 0.0.2</span>
+  <span class="sidebar-brand-text">msca 0.0.3</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -176,7 +176,8 @@
 <li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a></li>
 <li class="toctree-l2"><a class="reference internal" href="msca.linalg.html">msca.linalg</a></li>
-<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">msca.optim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.prox.html">msca.optim.prox</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">msca.optim.solver</a></li>
 </ul>
 </li>
 </ul>
@@ -205,19 +206,17 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
         </div>
         <article role="main">
-          <section id="msca-optim">
-<h1>msca.optim<a class="headerlink" href="#msca-optim" title="Permalink to this headline">#</a></h1>
-<section id="module-msca.optim.ipsolver">
-<span id="msca-optim-ipsolver"></span><h2>msca.optim.ipsolver<a class="headerlink" href="#module-msca.optim.ipsolver" title="Permalink to this headline">#</a></h2>
+          <section id="module-msca.optim.solver.ipsolver">
+<span id="msca-optim-solver"></span><h1>msca.optim.solver<a class="headerlink" href="#module-msca.optim.solver.ipsolver" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.ipsolver.</span></span><span class="sig-name descname"><span class="pre">IPResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxcv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ipsolver.html#IPResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ipsolver.IPResult" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.solver.ipsolver.</span></span><span class="sig-name descname"><span class="pre">IPResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxcv</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interior point solver result.</p>
 <dl class="field-list simple">
@@ -237,37 +236,37 @@
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.x" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.x" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.success">
-<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.success" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.success" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.fun">
-<span class="sig-name descname"><span class="pre">fun</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.fun" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.fun">
+<span class="sig-name descname"><span class="pre">fun</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.fun" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.grad">
-<span class="sig-name descname"><span class="pre">grad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.grad" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.grad">
+<span class="sig-name descname"><span class="pre">grad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.grad" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.hess">
-<span class="sig-name descname"><span class="pre">hess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.hess" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.hess">
+<span class="sig-name descname"><span class="pre">hess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">NDArray</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.hess" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.niter">
-<span class="sig-name descname"><span class="pre">niter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.niter" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.niter">
+<span class="sig-name descname"><span class="pre">niter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.niter" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPResult.maxcv">
-<span class="sig-name descname"><span class="pre">maxcv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.ipsolver.IPResult.maxcv" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPResult.maxcv">
+<span class="sig-name descname"><span class="pre">maxcv</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.solver.ipsolver.IPResult.maxcv" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPSolver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.ipsolver.</span></span><span class="sig-name descname"><span class="pre">IPSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ipsolver.html#IPSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ipsolver.IPSolver" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.solver.ipsolver.</span></span><span class="sig-name descname"><span class="pre">IPSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cvec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Interior point solver.</p>
 <dl class="field-list simple">
@@ -282,8 +281,8 @@
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPSolver.get_kkt">
-<span class="sig-name descname"><span class="pre">get_kkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ipsolver.html#IPSolver.get_kkt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ipsolver.IPSolver.get_kkt" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.get_kkt">
+<span class="sig-name descname"><span class="pre">get_kkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.get_kkt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.get_kkt" title="Permalink to this definition">#</a></dt>
 <dd><p>Get the KKT system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -302,8 +301,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPSolver.update_params">
-<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ipsolver.html#IPSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ipsolver.IPSolver.update_params" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.update_params">
+<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.update_params" title="Permalink to this definition">#</a></dt>
 <dd><p>Update parameters with line search.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -323,8 +322,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.ipsolver.IPSolver.minimize">
-<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_mu_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ipsolver.html#IPSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ipsolver.IPSolver.minimize" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_mu_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.minimize" title="Permalink to this definition">#</a></dt>
 <dd><p>Minimize optimization objective over constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -344,17 +343,14 @@ variable and v is the dual variable for the constraints.</p></li>
 <dd class="field-even"><p>The result of the solver.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#msca.optim.ipsolver.IPResult" title="msca.optim.ipsolver.IPResult">IPResult</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#msca.optim.solver.ipsolver.IPResult" title="msca.optim.solver.ipsolver.IPResult">IPResult</a></p>
 </dd>
 </dl>
 </dd></dl>
 </dd></dl>
-</section>
-<section id="module-msca.optim.ntsolver">
-<span id="msca-optim-ntsolver"></span><h2>msca.optim.ntsolver<a class="headerlink" href="#module-msca.optim.ntsolver" title="Permalink to this headline">#</a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.ntsolver.</span></span><span class="sig-name descname"><span class="pre">NTResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ntsolver.html#NTResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ntsolver.NTResult" title="Permalink to this definition">#</a></dt>
+<span class="target" id="module-msca.optim.solver.ntsolver"></span><dl class="py class">
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.solver.ntsolver.</span></span><span class="sig-name descname"><span class="pre">NTResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">niter</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Newton’s solver result.</p>
 <dl class="field-list simple">
@@ -373,33 +369,33 @@ variable and v is the dual variable for the constraints.</p></li>
 </dd>
 </dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.x" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.x">
+<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.x" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.success">
-<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.success" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.success" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.fun">
-<span class="sig-name descname"><span class="pre">fun</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.fun" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.fun">
+<span class="sig-name descname"><span class="pre">fun</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.fun" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.grad">
-<span class="sig-name descname"><span class="pre">grad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.grad" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.grad">
+<span class="sig-name descname"><span class="pre">grad</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.grad" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.hess">
-<span class="sig-name descname"><span class="pre">hess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.hess" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.hess">
+<span class="sig-name descname"><span class="pre">hess</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">numpy.dtype</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.typing._generic_alias.ScalarType</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.hess" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTResult.niter">
-<span class="sig-name descname"><span class="pre">niter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#msca.optim.ntsolver.NTResult.niter" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTResult.niter">
+<span class="sig-name descname"><span class="pre">niter</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#msca.optim.solver.ntsolver.NTResult.niter" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 </dd></dl>
 <dl class="py class">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTSolver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.ntsolver.</span></span><span class="sig-name descname"><span class="pre">NTSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ntsolver.html#NTSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ntsolver.NTSolver" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTSolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.optim.solver.ntsolver.</span></span><span class="sig-name descname"><span class="pre">NTSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fun</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hess</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Newton’s solver.</p>
 <dl class="field-list simple">
@@ -412,8 +408,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTSolver.update_params">
-<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ntsolver.html#NTSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ntsolver.NTSolver.update_params" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTSolver.update_params">
+<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver.update_params" title="Permalink to this definition">#</a></dt>
 <dd><p>Update parameters with line search.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -432,8 +428,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.ntsolver.NTSolver.minimize">
-<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/ntsolver.html#NTSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.ntsolver.NTSolver.minimize" title="Permalink to this definition">#</a></dt>
+<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTSolver.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver.minimize" title="Permalink to this definition">#</a></dt>
 <dd><p>Minimize optimization objective over constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -449,12 +445,11 @@ variable and v is the dual variable for the constraints.</p></li>
 <dd class="field-even"><p>Result of the solver.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><a class="reference internal" href="#msca.optim.ntsolver.NTResult" title="msca.optim.ntsolver.NTResult">NTResult</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#msca.optim.solver.ntsolver.NTResult" title="msca.optim.solver.ntsolver.NTResult">NTResult</a></p>
 </dd>
 </dl>
 </dd></dl>
 </dd></dl>
-</section>
 </section>
 
         </article>
@@ -463,14 +458,14 @@ variable and v is the dual variable for the constraints.</p></li>
         
         <div class="related-pages">
           
-          <a class="prev-page" href="msca.linalg.html">
+          <a class="prev-page" href="msca.optim.prox.html">
               <svg><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
                 </div>
                 
-                <div class="title">msca.linalg</div>
+                <div class="title">msca.optim.prox</div>
                 
               </div>
             </a>
@@ -494,28 +489,8 @@ variable and v is the dual variable for the constraints.</p></li>
         
       </footer>
     </div>
-    <aside class="toc-drawer">
+    <aside class="toc-drawer no-toc">
       
-      
-      <div class="toc-sticky toc-scroll">
-        <div class="toc-title-container">
-          <span class="toc-title">
-            Contents
-          </span>
-        </div>
-        <div class="toc-tree-container">
-          <div class="toc-tree">
-            <ul>
-<li><a class="reference internal" href="#">msca.optim</a><ul>
-<li><a class="reference internal" href="#module-msca.optim.ipsolver">msca.optim.ipsolver</a></li>
-<li><a class="reference internal" href="#module-msca.optim.ntsolver">msca.optim.ntsolver</a></li>
-</ul>
-</li>
-</ul>
-
-          </div>
-        </div>
-      </div>
       
       
     </aside>

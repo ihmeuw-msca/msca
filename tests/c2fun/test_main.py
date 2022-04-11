@@ -30,3 +30,10 @@ def test_c2fun(name, x):
     assert np.allclose(fun(x, order=1), ad_dfun(partial(fun, order=0), x))
     assert np.allclose(fun(x, order=2), ad_dfun(partial(fun, order=1), x))
     assert np.allclose(x, fun.inv(fun(x)))
+
+
+@pytest.mark.parametrize(("name", "x"), [("logerfc", x())])
+def test_logerfc(name, x):
+    fun = c2fun_dict[name]
+    assert np.allclose(fun(x, order=1), ad_dfun(partial(fun, order=0), x))
+    assert np.allclose(fun(x, order=2), ad_dfun(partial(fun, order=1), x))
