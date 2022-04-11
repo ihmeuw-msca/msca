@@ -1,13 +1,10 @@
 import numpy as np
-import pytest
 from msca.linalg.matrix import asmatrix
-from msca.optim.ipsolver import IPSolver
+from msca.optim.solver import NTSolver
 
 np.random.seed(123)
 mat = asmatrix(np.eye(5))
 vec = np.random.randn(5)
-cmat = asmatrix(np.eye(5))
-cvec = np.zeros(5)
 
 
 def objective(x):
@@ -24,16 +21,14 @@ def hessian(x):
     return mat.T.dot(mat)
 
 
-def test_ipsolver():
-    solver = IPSolver(
+def test_ntsolver():
+    solver = NTSolver(
         objective,
         gradient,
         hessian,
-        cmat,
-        cvec
     )
     result = solver.minimize(
-        x0=np.zeros(5), gtol=1e-10, xtol=0.0, mtol=1e-10, update_mu_every=1
+        x0=np.zeros(5), gtol=1e-10, xtol=0.0,
     )
     assert result.success
-    assert np.allclose(result.x, np.minimum(0, vec))
+    assert np.allclose(result.x, vec)

@@ -174,7 +174,8 @@
 <li class="toctree-l1 has-children"><a class="reference internal" href="api_reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/msca.c2fun.html">msca.c2fun</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api_reference/msca.linalg.html">msca.linalg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api_reference/msca.optim.html">msca.optim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/msca.optim.prox.html">msca.optim.prox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api_reference/msca.optim.solver.html">msca.optim.solver</a></li>
 </ul>
 </li>
 </ul>
@@ -212,7 +213,7 @@
           
 <section class="genindex-section">
   <h1 id="index">Index</h1>
-  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#X"><strong>X</strong></a></div>
+  <div class="genindex-jumpbox"><a href="#_"><strong>_</strong></a> | <a href="#A"><strong>A</strong></a> | <a href="#C"><strong>C</strong></a> | <a href="#D"><strong>D</strong></a> | <a href="#E"><strong>E</strong></a> | <a href="#F"><strong>F</strong></a> | <a href="#G"><strong>G</strong></a> | <a href="#H"><strong>H</strong></a> | <a href="#I"><strong>I</strong></a> | <a href="#L"><strong>L</strong></a> | <a href="#M"><strong>M</strong></a> | <a href="#N"><strong>N</strong></a> | <a href="#P"><strong>P</strong></a> | <a href="#S"><strong>S</strong></a> | <a href="#T"><strong>T</strong></a> | <a href="#U"><strong>U</strong></a> | <a href="#X"><strong>X</strong></a></div>
 </section>
 <section id="_" class="genindex-section">
   <h2>_</h2>
@@ -320,10 +321,10 @@
   <h2>F</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.fun">fun (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.fun">fun (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.fun">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.fun">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
         <li><a href="api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.fun">fun() (msca.c2fun.main.C2Fun static method)</a>
@@ -350,14 +351,14 @@
   <h2>G</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPSolver.get_kkt">get_kkt() (msca.optim.ipsolver.IPSolver method)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPSolver.get_kkt">get_kkt() (msca.optim.solver.ipsolver.IPSolver method)</a>
 </li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.grad">grad (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.grad">grad (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.grad">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.grad">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -368,10 +369,10 @@
   <h2>H</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.hess">hess (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.hess">hess (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.hess">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.hess">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -402,9 +403,9 @@
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult">IPResult (class in msca.optim.ipsolver)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult">IPResult (class in msca.optim.solver.ipsolver)</a>
 </li>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPSolver">IPSolver (class in msca.optim.ipsolver)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPSolver">IPSolver (class in msca.optim.solver.ipsolver)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -436,12 +437,12 @@
 </li>
         <li><a href="api_reference/msca.linalg.html#msca.linalg.matrix.matrix_classes">matrix_classes (in module msca.linalg.matrix)</a>
 </li>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.maxcv">maxcv (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.maxcv">maxcv (msca.optim.solver.ipsolver.IPResult attribute)</a>
 </li>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPSolver.minimize">minimize() (msca.optim.ipsolver.IPSolver method)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPSolver.minimize">minimize() (msca.optim.solver.ipsolver.IPSolver method)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTSolver.minimize">(msca.optim.ntsolver.NTSolver method)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTSolver.minimize">(msca.optim.solver.ntsolver.NTSolver method)</a>
 </li>
         </ul></li>
         <li>
@@ -452,9 +453,9 @@
 </li>
           <li><a href="api_reference/msca.linalg.html#module-msca.linalg.matrix">msca.linalg.matrix</a>
 </li>
-          <li><a href="api_reference/msca.optim.html#module-msca.optim.ipsolver">msca.optim.ipsolver</a>
+          <li><a href="api_reference/msca.optim.solver.html#module-msca.optim.solver.ipsolver">msca.optim.solver.ipsolver</a>
 </li>
-          <li><a href="api_reference/msca.optim.html#module-msca.optim.ntsolver">msca.optim.ntsolver</a>
+          <li><a href="api_reference/msca.optim.solver.html#module-msca.optim.solver.ntsolver">msca.optim.solver.ntsolver</a>
 </li>
         </ul></li>
     </ul></td>
@@ -474,17 +475,17 @@
 </li>
         </ul></li>
         <li>
-    msca.optim.ipsolver
+    msca.optim.solver.ipsolver
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#module-msca.optim.ipsolver">module</a>
+          <li><a href="api_reference/msca.optim.solver.html#module-msca.optim.solver.ipsolver">module</a>
 </li>
         </ul></li>
         <li>
-    msca.optim.ntsolver
+    msca.optim.solver.ntsolver
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#module-msca.optim.ntsolver">module</a>
+          <li><a href="api_reference/msca.optim.solver.html#module-msca.optim.solver.ntsolver">module</a>
 </li>
         </ul></li>
     </ul></td>
@@ -495,19 +496,29 @@
   <h2>N</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.niter">niter (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.niter">niter (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.niter">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.niter">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
     </ul></td>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult">NTResult (class in msca.optim.ntsolver)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult">NTResult (class in msca.optim.solver.ntsolver)</a>
 </li>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTSolver">NTSolver (class in msca.optim.ntsolver)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTSolver">NTSolver (class in msca.optim.solver.ntsolver)</a>
 </li>
         <li><a href="api_reference/msca.linalg.html#msca.linalg.matrix.NumpyMatrix">NumpyMatrix (class in msca.linalg.matrix)</a>
+</li>
+    </ul></td>
+  </tr></table>
+</section>
+
+<section id="P" class="genindex-section">
+  <h2>P</h2>
+  <table style="width: 100%" class="indextable genindextable"><tr>
+    <td style="width: 33%; vertical-align: top;"><ul>
+        <li><a href="api_reference/msca.optim.prox.html#msca.optim.prox.proj_capped_simplex">proj_capped_simplex() (in module msca.optim.prox)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -549,10 +560,10 @@
           <li><a href="api_reference/msca.linalg.html#msca.linalg.matrix.NumpyMatrix.solve">(msca.linalg.matrix.NumpyMatrix method)</a>
 </li>
         </ul></li>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.success">success (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.success">success (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.success">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.success">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -587,10 +598,10 @@
   <h2>U</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPSolver.update_params">update_params() (msca.optim.ipsolver.IPSolver method)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPSolver.update_params">update_params() (msca.optim.solver.ipsolver.IPSolver method)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTSolver.update_params">(msca.optim.ntsolver.NTSolver method)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTSolver.update_params">(msca.optim.solver.ntsolver.NTSolver method)</a>
 </li>
         </ul></li>
     </ul></td>
@@ -601,10 +612,10 @@
   <h2>X</h2>
   <table style="width: 100%" class="indextable genindextable"><tr>
     <td style="width: 33%; vertical-align: top;"><ul>
-        <li><a href="api_reference/msca.optim.html#msca.optim.ipsolver.IPResult.x">x (msca.optim.ipsolver.IPResult attribute)</a>
+        <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult.x">x (msca.optim.solver.ipsolver.IPResult attribute)</a>
 
         <ul>
-          <li><a href="api_reference/msca.optim.html#msca.optim.ntsolver.NTResult.x">(msca.optim.ntsolver.NTResult attribute)</a>
+          <li><a href="api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult.x">(msca.optim.solver.ntsolver.NTResult attribute)</a>
 </li>
         </ul></li>
     </ul></td>
