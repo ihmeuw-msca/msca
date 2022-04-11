@@ -2,10 +2,11 @@
 <html class="no-js">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" />
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+<link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="msca.optim.solver" href="msca.optim.solver.html" /><link rel="prev" title="msca.linalg" href="msca.linalg.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>Overview: module code - msca 0.0.2</title>
+        <title>msca.optim.prox - msca 0.0.2</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -171,12 +172,12 @@
   <ul>
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing msca</a></li>
 </ul>
-<ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api_reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/msca.c2fun.html">msca.c2fun</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/msca.linalg.html">msca.linalg</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/msca.optim.prox.html">msca.optim.prox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api_reference/msca.optim.solver.html">msca.optim.solver</a></li>
+<ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.linalg.html">msca.linalg</a></li>
+<li class="toctree-l2 current current-page"><a class="current reference internal" href="#">msca.optim.prox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.solver.html">msca.optim.solver</a></li>
 </ul>
 </li>
 </ul>
@@ -211,20 +212,75 @@
           </label>
         </div>
         <article role="main">
-          <h1>All modules for which code is available</h1>
-<ul><li><a href="msca/c2fun/main.html">msca.c2fun.main</a></li>
-<li><a href="msca/linalg/matrix.html">msca.linalg.matrix</a></li>
-<li><a href="msca/optim/prox/capped_simplex.html">msca.optim.prox.capped_simplex</a></li>
-<li><a href="msca/optim/solver/ipsolver.html">msca.optim.solver.ipsolver</a></li>
-<li><a href="msca/optim/solver/ntsolver.html">msca.optim.solver.ntsolver</a></li>
+          <section id="msca-optim-prox">
+<h1>msca.optim.prox<a class="headerlink" href="#msca-optim-prox" title="Permalink to this headline">#</a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="msca.optim.prox.proj_capped_simplex">
+<span class="sig-prename descclassname"><span class="pre">msca.optim.prox.</span></span><span class="sig-name descname"><span class="pre">proj_capped_simplex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ub</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/prox/capped_simplex.html#proj_capped_simplex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.prox.proj_capped_simplex" title="Permalink to this definition">#</a></dt>
+<dd><p>Projection onto the capped simplex. The capped simplex can be defined as</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\triangle(s, l, u) =
+\left\{x \in \mathbb{R}^n :
+l \le x \le u, \sum_{i=1}^n x_i = s\right\}\]</div></div>
+<p>And the projection problem can be frame as an optimization problem.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\min_{y} \frac{1}{2}\|y - x\|^2, \quad
+\mathrm{s.t.}\; y\in\triangle(s, l, u)\]</div></div>
+<p>The solution can be found by solving the following equation for <span class="math notranslate nohighlight">\(z\)</span>.</p>
+<div class="math-wrapper"><div class="math notranslate nohighlight">
+\[\mathbf{1}^\top \max(\min(x - z \mathbf{1}, u), l) = s\]</div></div>
+<p>Given <span class="math notranslate nohighlight">\(z\)</span> the solution of the projection problem is
+<span class="math notranslate nohighlight">\(y = \max(\min(x - z \mathbf{1}, u), l)\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>NDArray</em>) – The vector that needs to be projected.</p></li>
+<li><p><strong>s</strong> (<em>float</em>) – The target sum of the vector.</p></li>
+<li><p><strong>lb</strong> (<em>float</em><em> | </em><em>NDArray</em>) – The lower bounds of the target variable. If it is a scalar, it will be
+used for all coordinates of the variable. Default is 0.</p></li>
+<li><p><strong>ub</strong> (<em>float</em><em> | </em><em>NDArray</em>) – The lower bounds of the target variable. If it is a scalar, it will be
+used for all coordinates of the variable. Default is 1.</p></li>
 </ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The target variable that satisfy the bounds and sum constraints.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>NDArray</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError</strong> – Raised when the provided sum is lower than sum of the lower bounds or
+    higher than the sum of the upper bounds.</p>
+</dd>
+</dl>
+</dd></dl>
+</section>
+
         </article>
       </div>
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="msca.optim.solver.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">msca.optim.solver</div>
+              </div>
+              <svg><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="msca.linalg.html">
+              <svg><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">msca.linalg</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -256,5 +312,6 @@
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
     <script src="../_static/scripts/furo.js"></script>
+    <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     </body>
 </html>
