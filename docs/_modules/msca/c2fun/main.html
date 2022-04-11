@@ -482,7 +482,7 @@
         <span class="sd">"""</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f(x) = \\frac{1}{x}</span>
+<span class="sd">            f'(x) = \\frac{1}{x}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -498,7 +498,7 @@
         <span class="sd">"""</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f(x) = -\\frac{1}{x^2}</span>
+<span class="sd">            f''(x) = -\\frac{1}{x^2}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -555,7 +555,7 @@
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        .. math::</span>
-<span class="sd">            f(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}</span>
+<span class="sd">            f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}</span>
 <span class="sd">            = \\frac{\\exp(x)}{(1 + \\exp(x))^2}</span>
 
 <span class="sd">        Parameters</span>
@@ -581,7 +581,7 @@
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
         <span class="sd">"""</span>
 <span class="sd">        .. math::</span>
-<span class="sd">            f(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}</span>
+<span class="sd">            f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}</span>
 <span class="sd">            = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}</span>
 
 <span class="sd">        Parameters</span>

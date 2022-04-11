@@ -269,7 +269,7 @@ class Log(C2Fun):
         """
         .. math::
 
-            f(x) = \\frac{1}{x}
+            f'(x) = \\frac{1}{x}
 
         Parameters
         ----------
@@ -285,7 +285,7 @@ class Log(C2Fun):
         """
         .. math::
 
-            f(x) = -\\frac{1}{x^2}
+            f''(x) = -\\frac{1}{x^2}
 
         Parameters
         ----------
@@ -342,7 +342,7 @@ class Expit(C2Fun):
     def dfun(x: NDArray) -> NDArray:
         """
         .. math::
-            f(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}
+            f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}
             = \\frac{\\exp(x)}{(1 + \\exp(x))^2}
 
         Parameters
@@ -368,7 +368,7 @@ class Expit(C2Fun):
     def d2fun(x: NDArray) -> NDArray:
         """
         .. math::
-            f(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}
+            f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}
             = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}
 
         Parameters

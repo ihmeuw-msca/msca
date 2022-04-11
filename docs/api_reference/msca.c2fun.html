@@ -450,7 +450,7 @@ the <a class="reference internal" href="#msca.c2fun.main.C2Fun.__call__" title="
 <dt class="sig sig-object py" id="msca.c2fun.main.Log.dfun">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dfun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/c2fun/main.html#Log.dfun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.c2fun.main.Log.dfun" title="Permalink to this definition">#</a></dt>
 <dd><div class="math-wrapper"><div class="math notranslate nohighlight">
-\[f(x) = \frac{1}{x}\]</div></div>
+\[f'(x) = \frac{1}{x}\]</div></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – Provided independent variable.</p>
@@ -464,7 +464,7 @@ the <a class="reference internal" href="#msca.c2fun.main.C2Fun.__call__" title="
 <dt class="sig sig-object py" id="msca.c2fun.main.Log.d2fun">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">d2fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/c2fun/main.html#Log.d2fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.c2fun.main.Log.d2fun" title="Permalink to this definition">#</a></dt>
 <dd><div class="math-wrapper"><div class="math notranslate nohighlight">
-\[f(x) = -\frac{1}{x^2}\]</div></div>
+\[f''(x) = -\frac{1}{x^2}\]</div></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – Provided independent variable.</p>
@@ -507,7 +507,7 @@ with <span class="math notranslate nohighlight">\(\exp(x)\)</span> when <span cl
 <dt class="sig sig-object py" id="msca.c2fun.main.Expit.dfun">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">dfun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/c2fun/main.html#Expit.dfun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.c2fun.main.Expit.dfun" title="Permalink to this definition">#</a></dt>
 <dd><div class="math-wrapper"><div class="math notranslate nohighlight">
-\[f(x) = \frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}
+\[f'(x) = \frac{\exp(-x)}{(1 + \exp(-x)) ^ 2}
 = \frac{\exp(x)}{(1 + \exp(x))^2}\]</div></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -522,7 +522,7 @@ with <span class="math notranslate nohighlight">\(\exp(x)\)</span> when <span cl
 <dt class="sig sig-object py" id="msca.c2fun.main.Expit.d2fun">
 <em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">d2fun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/c2fun/main.html#Expit.d2fun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.c2fun.main.Expit.d2fun" title="Permalink to this definition">#</a></dt>
 <dd><div class="math-wrapper"><div class="math notranslate nohighlight">
-\[f(x) = \frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}
+\[f''(x) = \frac{\exp(-2x) - \exp(-x)}{(1 + \exp(-x)) ^ 3}
 = \frac{\exp(x) - \exp(2x)}{(1 + \exp(x))^3}\]</div></div>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

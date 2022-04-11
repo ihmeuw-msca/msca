@@ -164,6 +164,8 @@ class IPSolver:
             Maximum number of iterations, by default 100.
         mu
             Initial interior point bairrier parameter, by default 1.0.
+        update_mu_every
+            Parameter mu updating frequency, by default 5.
         scale_mu
             Shrinkage factor for mu updates, by default 0.1
         verbose
