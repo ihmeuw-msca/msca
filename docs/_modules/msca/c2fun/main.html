@@ -250,6 +250,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.typing</span> <span class="kn">import</span> <span class="n">NDArray</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erfc</span>
 
 
 <div class="viewcode-block" id="C2Fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun">[docs]</a><span class="k">class</span> <span class="nc">C2Fun</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
@@ -379,7 +380,7 @@
 
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Identity.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
@@ -395,7 +396,7 @@
 
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div></div>
 
 
 <div class="viewcode-block" id="Exp"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp">[docs]</a><span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
@@ -539,7 +540,7 @@
 
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="n">pos_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">pos_indices</span><span class="p">])</span>
@@ -565,7 +566,7 @@
 
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="n">pos_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">pos_indices</span><span class="p">])</span>
@@ -591,7 +592,7 @@
 
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
         <span class="n">pos_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span>
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">pos_indices</span><span class="p">])</span>
@@ -661,11 +662,129 @@
         <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span></div></div>
 
 
+<div class="viewcode-block" id="Logerfc"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc">[docs]</a><span class="k">class</span> <span class="nc">Logerfc</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+    <span class="sd">"""Logerfc function is a special function that appears in stochastic</span>
+<span class="sd">    frontier analysis. Erfc function can be written as</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        \\mathrm{erfc}(x) =</span>
+<span class="sd">        1 - \\frac{2}{\\sqrt(\\pi)}\\int_0^x \\exp(-t^2) \\,dt</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    Erfc function converges to zero very fast when :math:`x` increases, and it</span>
+<span class="sd">    will cause numerical issue when compute Logerfc. We use asymptotic</span>
+<span class="sd">    approximation to avoid this problem.</span>
+
+<span class="sd">    """</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
+        <span class="sd">"""The inverse of the logerfc function is not implemeneted.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        NotImplementedError</span>
+<span class="sd">            Raised whenever using this property.</span>
+
+<span class="sd">        """</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="Logerfc.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f(x) = \\log(\\mathrm{erfc}(x))</span>
+
+<span class="sd">        When :math:`x \\ge 25` we use approximation.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f(x) \\approx -x^2 + \\log\\left(1 - \\frac{1}{2 x^2}\\right) -</span>
+<span class="sd">            \\log(\\sqrt{\\pi} x)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x</span>
+<span class="sd">            Provided independent variable.</span>
+
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="n">l_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">25</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">l_indices</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">erfc</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">l_indices</span><span class="p">]))</span>
+
+        <span class="n">r_indices</span> <span class="o">=</span> <span class="o">~</span><span class="n">l_indices</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.5</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="Logerfc.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f'(x) = -\\frac{2\\exp(-x^2)}{\\sqrt{\\pi}\\mathrm{erfc}(x)}</span>
+
+<span class="sd">        When :math:`x \\ge 25` we use approximation.</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f(x) \\approx -2 x - \\frac{1}{x} + \\frac{2}{2 x^3 - x}</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x</span>
+<span class="sd">            Provided independent variable.</span>
+
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="n">l_indices</span> <span class="o">=</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">25</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">l_indices</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">[</span><span class="n">l_indices</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">erfc</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">l_indices</span><span class="p">])</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
+        <span class="p">)</span>
+
+        <span class="n">r_indices</span> <span class="o">=</span> <span class="o">~</span><span class="n">l_indices</span>
+        <span class="n">y</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span> <span class="o">-</span>
+            <span class="mi">1</span><span class="o">/</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span> <span class="o">+</span>
+            <span class="mi">2</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">x</span><span class="p">[</span><span class="n">r_indices</span><span class="p">])</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">y</span></div>
+
+<div class="viewcode-block" id="Logerfc.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+        <span class="sd">"""</span>
+<span class="sd">        .. math::</span>
+
+<span class="sd">            f''(x) = \\frac{4 x \\exp(-x^2)}{\\sqrt{\\pi} \\mathrm{erfc}(x)} -</span>
+<span class="sd">            \\frac{4 \\exp(-2 x^2)}{\\pi \\mathrm{erfc}(x)^2} =</span>
+<span class="sd">            -2 x f'(x) - f'(x)^2</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x</span>
+<span class="sd">            Provided independent variable.</span>
+
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">Logerfc</span><span class="o">.</span><span class="n">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span></div></div>
+
+
 <span class="n">identity</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">()</span>
 <span class="n">exp</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Exp</span><span class="p">()</span>
 <span class="n">log</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Log</span><span class="p">()</span>
 <span class="n">expit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Expit</span><span class="p">()</span>
 <span class="n">logit</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Logit</span><span class="p">()</span>
+<span class="n">logerfc</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Logerfc</span><span class="p">()</span>
 
 <span class="n">c2fun_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">C2Fun</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">"identity"</span><span class="p">:</span> <span class="n">identity</span><span class="p">,</span>
@@ -673,6 +792,7 @@
     <span class="s2">"log"</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span>
     <span class="s2">"expit"</span><span class="p">:</span> <span class="n">expit</span><span class="p">,</span>
     <span class="s2">"logit"</span><span class="p">:</span> <span class="n">logit</span><span class="p">,</span>
+    <span class="s2">"logerfc"</span><span class="p">:</span> <span class="n">logerfc</span><span class="p">,</span>
 <span class="p">}</span>
 <span class="sd">"""A dictionary that map function names with the function instances.</span>
 

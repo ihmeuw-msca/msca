@@ -489,7 +489,7 @@ class Logerfc(C2Fun):
         .. math::
 
             f(x) \\approx -x^2 + \\log\\left(1 - \\frac{1}{2 x^2}\\right) -
-            \\log(\\sqrt(\\pi) x)
+            \\log(\\sqrt{\\pi} x)
 
         Parameters
         ----------
@@ -516,7 +516,7 @@ class Logerfc(C2Fun):
         """
         .. math::
 
-            f'(x) = -\\frac{2\\exp(-x^2)}{\\sqrt(\\pi)\\mathrm{erfc}(x)}
+            f'(x) = -\\frac{2\\exp(-x^2)}{\\sqrt{\\pi}\\mathrm{erfc}(x)}
 
         When :math:`x \\ge 25` we use approximation.
 
@@ -552,7 +552,7 @@ class Logerfc(C2Fun):
         .. math::
 
             f''(x) = \\frac{4 x \\exp(-x^2)}{\\sqrt{\\pi} \\mathrm{erfc}(x)} -
-            \\frac{4 \\exp(-2 x^2)}{\\sqrt(\\pi) \\mathrm{erfc}(x)^2} =
+            \\frac{4 \\exp(-2 x^2)}{\\pi \\mathrm{erfc}(x)^2} =
             -2 x f'(x) - f'(x)^2
 
         Parameters
