@@ -52,7 +52,7 @@ class NTSolver:
         self.grad = grad
         self.hess = hess
 
-    def update_params(
+    def _update_params(
         self, x: List[NDArray],
         dx: List[NDArray],
         a_init: float = 1.0,
@@ -162,7 +162,7 @@ class NTSolver:
             dx = -self.hess(x).solve(g)
 
             # get step size
-            step, x = self.update_params(
+            step, x = self._update_params(
                 x, dx, a_init, a_const, a_scale, a_lb
             )
 

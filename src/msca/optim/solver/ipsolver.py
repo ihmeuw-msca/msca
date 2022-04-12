@@ -92,7 +92,7 @@ class IPSolver:
             self.grad(p[0]) + self.cmat.T.dot(p[2])
         ]
 
-    def update_params(
+    def _update_params(
         self,
         p: List[NDArray],
         dp: List[NDArray],
@@ -243,7 +243,7 @@ class IPSolver:
             dp = [dx, ds, dv]
 
             # get step size
-            step, p = self.update_params(
+            step, p = self._update_params(
                 p, dp, m, a_init, a_const, a_scale, a_lb
             )
 
