@@ -32,7 +32,7 @@ def test_ipsolver():
         cvec
     )
     result = solver.minimize(
-        x0=np.zeros(5), gtol=1e-10, xtol=0.0, mtol=1e-10, update_mu_every=1
+        x0=np.zeros(5), gtol=1e-10, xtol=0.0, mtol=1e-10, m_freq=1
     )
     assert result.success
     assert np.allclose(result.x, np.minimum(0, vec))
