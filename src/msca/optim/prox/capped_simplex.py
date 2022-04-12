@@ -14,7 +14,7 @@ def proj_capped_simplex(x: NDArray,
     .. math::
         \\triangle(s, l, u) =
         \\left\\{x \\in \\mathbb{R}^n :
-        l \\le x \\le u, \sum_{i=1}^n x_i = s\\right\\}
+        l \\le x \\le u, \\sum_{i=1}^n x_i = s\\right\\}
 
     And the projection problem can be frame as an optimization problem.
 
