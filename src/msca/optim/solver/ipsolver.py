@@ -69,7 +69,7 @@ class IPSolver:
         self.cmat = cmat
         self.cvec = cvec
 
-    def get_kkt(self, p: List[NDArray], mu: float) -> List[NDArray]:
+    def get_kkt(self, p: List[NDArray], m: float) -> List[NDArray]:
         """Get the KKT system.
 
         Parameters
@@ -77,7 +77,7 @@ class IPSolver:
         p : List[NDArray]
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
-        mu
+        m
             Interior point method barrier variable.
 
         Returns
@@ -88,7 +88,7 @@ class IPSolver:
         """
         return [
             self.cmat.dot(p[0]) + p[1] - self.cvec,
-            p[1]*p[2] - mu,
+            p[1]*p[2] - m,
             self.grad(p[0]) + self.cmat.T.dot(p[2])
         ]
 
@@ -96,7 +96,11 @@ class IPSolver:
         self,
         p: List[NDArray],
         dp: List[NDArray],
-        mu: float
+        m: float,
+        a_init: float = 1.0,
+        a_const: float = 0.01,
+        a_scale: float = 0.9,
+        a_lb: float = 1e-3,
     ) -> Tuple[float, List[NDArray]]:
         """Update parameters with line search.
 
@@ -107,8 +111,18 @@ class IPSolver:
             variable and v is the dual variable for the constraints.
         dp : List[NDArray]
             A list of direction for the parameters.
-        mu
+        m
             Interior point method barrier variable.
+        a_init
+            Initial step size, by default 1.0.
+        a_const
+            Constant for the line search condition, the larger the harder, by
+            default 0.01.
+        a_scale
+            Shrinkage factor for step size, by default 0.9.
+        a_lb
+            Lower bound of the step size when the step size is below this bound
+            the line search will be terminated.
 
         Returns
         -------
@@ -116,26 +130,25 @@ class IPSolver:
             The step size in the given direction.
 
         """
-        c = 0.01
-        a = 1.0
+        a = a_init
         for i in [1, 2]:
             indices = dp[i] < 0.0
             if not any(indices):
                 continue
             a = 0.99*np.minimum(a, np.min(-p[i][indices] / dp[i][indices]))
 
-        f_curr = self.get_kkt(p, mu)
+        f_curr = self.get_kkt(p, m)
         gnorm_curr = np.max(np.abs(np.hstack(f_curr)))
 
-        for _ in range(100):
+        while a >= a_lb:
             p_next = [v.copy() for v in p]
             for i in range(len(p)):
                 p_next[i] += a * dp[i]
-            f_next = self.get_kkt(p_next, mu)
+            f_next = self.get_kkt(p_next, m)
             gnorm_next = np.max(np.abs(np.hstack(f_next)))
-            if gnorm_next <= (1 - c*a)*gnorm_curr:
+            if gnorm_next <= (1 - a_const*a)*gnorm_curr:
                 break
-            a *= 0.9
+            a *= a_scale
         return a, p_next
 
     def minimize(self,
@@ -144,9 +157,13 @@ class IPSolver:
                  gtol: float = 1e-8,
                  mtol: float = 1e-6,
                  max_iter: int = 100,
-                 mu: float = 1.0,
-                 update_mu_every: int = 5,
-                 scale_mu: float = 0.5,
+                 m_init: float = 1.0,
+                 m_freq: int = 5,
+                 m_scale: float = 0.5,
+                 a_init: float = 1.0,
+                 a_const: float = 0.01,
+                 a_scale: float = 0.9,
+                 a_lb: float = 1e-3,
                  verbose: bool = False) -> NDArray:
         """Minimize optimization objective over constraints.
 
@@ -159,15 +176,25 @@ class IPSolver:
         gtol
             Tolerance for the KKT system, by default 1e-8.
         mtol
-            Tolerance for the log barrier parameter mu, by default 1e-6.
+            Tolerance for the log barrier parameter m, by default 1e-6.
         max_iter
-            Maximum number of iterations, by default 100.
-        mu
+            Maximm number of iterations, by default 100.
+        m_init
             Initial interior point bairrier parameter, by default 1.0.
-        update_mu_every
-            Parameter mu updating frequency, by default 5.
-        scale_mu
-            Shrinkage factor for mu updates, by default 0.1
+        m_freq
+            Parameter m updating frequency, by default 5.
+        m_scale
+            Shrinkage factor for m updates, by default 0.1
+        a_init
+            Initial step size, by default 1.0.
+        a_const
+            Constant for the line search condition, the larger the harder, by
+            default 0.01.
+        a_scale
+            Shrinkage factor for step size, by default 0.9.
+        a_lb
+            Lower bound of the step size when the step size is below this bound
+            the line search will be terminated.
         verbose
             Indicator of if print out convergence history, by default False
 
@@ -185,7 +212,8 @@ class IPSolver:
             np.ones(self.cvec.size),
         ]
 
-        f = self.get_kkt(p, mu)
+        m = m_init
+        f = self.get_kkt(p, m)
         gnorm = np.max(np.abs(np.hstack(f)))
         xdiff = 1.0
         step = 1.0
@@ -196,7 +224,7 @@ class IPSolver:
             fun = self.fun(p[0])
             print(f"{type(self).__name__}:")
             print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                  f"{step=:.2e}, {mu=:.2e}")
+                  f"{step=:.2e}, {m=:.2e}")
 
         while (not success) and (niter < max_iter):
             niter += 1
@@ -215,22 +243,24 @@ class IPSolver:
             dp = [dx, ds, dv]
 
             # get step size
-            step, p = self.update_params(p, dp, mu)
+            step, p = self.update_params(
+                p, dp, m, a_init, a_const, a_scale, a_lb
+            )
 
-            # update mu
-            if niter % update_mu_every == 0:
-                mu = max(scale_mu*mu, 0.1*p[1].dot(p[2])/len(p[1]))
+            # update m
+            if niter % m_freq == 0:
+                m = max(m_scale*m, 0.1*p[1].dot(p[2])/len(p[1]))
 
             # update f and gnorm
-            f = self.get_kkt(p, mu)
+            f = self.get_kkt(p, m)
             gnorm = np.max(np.abs(np.hstack(f)))
             xdiff = step*np.max(np.abs(dp[0]))
 
             if verbose:
                 fun = self.fun(p[0])
                 print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                      f"{step=:.2e}, {mu=:.2e}")
-            success = (gnorm <= gtol or xdiff <= xtol) and (mu <= mtol)
+                      f"{step=:.2e}, {m=:.2e}")
+            success = (gnorm <= gtol or xdiff <= xtol) and (m <= mtol)
 
         result = IPResult(
             x=p[0],
