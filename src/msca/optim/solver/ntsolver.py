@@ -53,7 +53,12 @@ class NTSolver:
         self.hess = hess
 
     def update_params(
-        self, x: List[NDArray], dx: List[NDArray]
+        self, x: List[NDArray],
+        dx: List[NDArray],
+        a_init: float = 1.0,
+        a_const: float = 0.01,
+        a_scale: float = 0.9,
+        a_lb: float = 1e-3,
     ) -> Tuple[float, List[NDArray]]:
         """Update parameters with line search.
 
@@ -64,6 +69,16 @@ class NTSolver:
             variable and v is the dual variable for the constraints.
         dx
             A list of direction for the parameters.
+        a_init
+            Initial step size, by default 1.0.
+        a_const
+            Constant for the line search condition, the larger the harder, by
+            default 0.01.
+        a_scale
+            Shrinkage factor for step size, by default 0.9.
+        a_lb
+            Lower bound of the step size when the step size is below this bound
+            the line search will be terminated.
 
         Returns
         -------
@@ -71,16 +86,15 @@ class NTSolver:
             The step size in the given direction.
 
         """
-        c = 0.01
-        a = 1.0
+        a = a_init
         gnorm_curr = np.max(np.abs(self.grad(x)))
-        for _ in range(100):
+        while a >= a_lb:
             x_next = x + a*dx
             g_next = self.grad(x_next)
             gnorm_next = np.max(np.abs(g_next))
-            if gnorm_next <= (1 - c*a)*gnorm_curr:
+            if gnorm_next <= (1 - a_const*a)*gnorm_curr:
                 break
-            a *= 0.9
+            a *= a_scale
         return a, x_next
 
     def minimize(self,
@@ -88,6 +102,10 @@ class NTSolver:
                  xtol: float = 1e-8,
                  gtol: float = 1e-8,
                  max_iter: int = 100,
+                 a_init: float = 1.0,
+                 a_const: float = 0.01,
+                 a_scale: float = 0.9,
+                 a_lb: float = 1e-3,
                  verbose: bool = False) -> NDArray:
         """Minimize optimization objective over constraints.
 
@@ -101,6 +119,16 @@ class NTSolver:
             Tolerance for the KKT system, by default 1e-8.
         max_iter
             Maximum number of iterations, by default 100.
+        a_init
+            Initial step size, by default 1.0.
+        a_const
+            Constant for the line search condition, the larger the harder, by
+            default 0.01.
+        a_scale
+            Shrinkage factor for step size, by default 0.9.
+        a_lb
+            Lower bound of the step size when the step size is below this bound
+            the line search will be terminated.
         verbose
             Indicator of if print out convergence history, by default False
 
@@ -134,7 +162,9 @@ class NTSolver:
             dx = -self.hess(x).solve(g)
 
             # get step size
-            step, x = self.update_params(x, dx)
+            step, x = self.update_params(
+                x, dx, a_init, a_const, a_scale, a_lb
+            )
 
             # update f and gnorm
             g = self.grad(x)
