@@ -87,14 +87,19 @@ class NTSolver:
 
         """
         a = a_init
+        x_next = x + a*dx
+        g_next = self.grad(x_next)
         gnorm_curr = np.max(np.abs(self.grad(x)))
-        while a >= a_lb:
+        gnorm_next = np.max(np.abs(g_next))
+
+        while gnorm_next > (1 - a_const*a)*gnorm_curr:
+            if a*a_scale < a_lb:
+                break
+            a *= a_scale
             x_next = x + a*dx
             g_next = self.grad(x_next)
             gnorm_next = np.max(np.abs(g_next))
-            if gnorm_next <= (1 - a_const*a)*gnorm_curr:
-                break
-            a *= a_scale
+
         return a, x_next
 
     def minimize(self,

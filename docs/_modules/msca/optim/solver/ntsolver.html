@@ -301,14 +301,19 @@
 
 <span class="sd">        """</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">a_init</span>
+        <span class="n">x_next</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">dx</span>
+        <span class="n">g_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">x_next</span><span class="p">)</span>
         <span class="n">gnorm_curr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-        <span class="k">while</span> <span class="n">a</span> <span class="o">&gt;=</span> <span class="n">a_lb</span><span class="p">:</span>
+        <span class="n">gnorm_next</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">g_next</span><span class="p">))</span>
+
+        <span class="k">while</span> <span class="n">gnorm_next</span> <span class="o">&gt;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a_const</span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">gnorm_curr</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">a</span><span class="o">*</span><span class="n">a_scale</span> <span class="o">&lt;</span> <span class="n">a_lb</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">a</span> <span class="o">*=</span> <span class="n">a_scale</span>
             <span class="n">x_next</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">a</span><span class="o">*</span><span class="n">dx</span>
             <span class="n">g_next</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grad</span><span class="p">(</span><span class="n">x_next</span><span class="p">)</span>
             <span class="n">gnorm_next</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">g_next</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">gnorm_next</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">a_const</span><span class="o">*</span><span class="n">a</span><span class="p">)</span><span class="o">*</span><span class="n">gnorm_curr</span><span class="p">:</span>
-                <span class="k">break</span>
-            <span class="n">a</span> <span class="o">*=</span> <span class="n">a_scale</span>
+
         <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">x_next</span>
 
 <div class="viewcode-block" id="NTSolver.minimize"><a class="viewcode-back" href="../../../../api_reference/msca.optim.solver.html#msca.optim.solver.ntsolver.NTSolver.minimize">[docs]</a>    <span class="k">def</span> <span class="nf">minimize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>

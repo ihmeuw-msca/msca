@@ -138,17 +138,23 @@ class IPSolver:
             a = 0.99*np.minimum(a, np.min(-p[i][indices] / dp[i][indices]))
 
         f_curr = self.get_kkt(p, m)
+        p_next = [v.copy() for v in p]
+        for i in range(len(p)):
+            p_next[i] += a * dp[i]
+        f_next = self.get_kkt(p_next, m)
         gnorm_curr = np.max(np.abs(np.hstack(f_curr)))
+        gnorm_next = np.max(np.abs(np.hstack(f_next)))
 
-        while a >= a_lb:
+        while gnorm_next > (1 - a_const*a)*gnorm_curr:
+            if a*a_scale < a_lb:
+                break
+            a *= a_scale
             p_next = [v.copy() for v in p]
             for i in range(len(p)):
                 p_next[i] += a * dp[i]
             f_next = self.get_kkt(p_next, m)
             gnorm_next = np.max(np.abs(np.hstack(f_next)))
-            if gnorm_next <= (1 - a_const*a)*gnorm_curr:
-                break
-            a *= a_scale
+
         return a, p_next
 
     def minimize(self,
