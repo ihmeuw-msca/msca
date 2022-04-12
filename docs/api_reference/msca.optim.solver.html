@@ -6,7 +6,7 @@
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="prev" title="msca.optim.prox" href="msca.optim.prox.html" />
 
     <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>msca.optim.solver - msca 0.0.3</title>
+        <title>msca.optim.solver - msca 0.0.4</title>
       <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
@@ -134,7 +134,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">msca 0.0.3</div></a>
+      <a href="../index.html"><div class="brand">msca 0.0.4</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -161,7 +161,7 @@
     <img class="sidebar-logo only-dark" src="../_static/logo/logo-dark.png" alt="Dark Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">msca 0.0.3</span>
+  <span class="sidebar-brand-text">msca 0.0.4</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
   <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
@@ -282,14 +282,14 @@
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.get_kkt">
-<span class="sig-name descname"><span class="pre">get_kkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.get_kkt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.get_kkt" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">get_kkt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.get_kkt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.get_kkt" title="Permalink to this definition">#</a></dt>
 <dd><p>Get the KKT system.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>p</strong> (<em>List</em><em>[</em><em>NDArray</em><em>]</em>) – A list a parameters, including x, s, and v, where s is the slackness
 variable and v is the dual variable for the constraints.</p></li>
-<li><p><strong>mu</strong> (<em>float</em>) – Interior point method barrier variable.</p></li>
+<li><p><strong>m</strong> (<em>float</em>) – Interior point method barrier variable.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -301,29 +301,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dl>
 </dd></dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.update_params">
-<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.update_params" title="Permalink to this definition">#</a></dt>
-<dd><p>Update parameters with line search.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>p</strong> (<em>List</em><em>[</em><em>NDArray</em><em>]</em>) – A list a parameters, including x, s, and v, where s is the slackness
-variable and v is the dual variable for the constraints.</p></li>
-<li><p><strong>dp</strong> (<em>List</em><em>[</em><em>NDArray</em><em>]</em>) – A list of direction for the parameters.</p></li>
-<li><p><strong>mu</strong> (<em>float</em>) – Interior point method barrier variable.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The step size in the given direction.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
 <dt class="sig sig-object py" id="msca.optim.solver.ipsolver.IPSolver.minimize">
-<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">update_mu_every</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_mu</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.minimize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-06</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ipsolver.html#IPSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ipsolver.IPSolver.minimize" title="Permalink to this definition">#</a></dt>
 <dd><p>Minimize optimization objective over constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -331,11 +310,17 @@ variable and v is the dual variable for the constraints.</p></li>
 <li><p><strong>x0</strong> (<em>NDArray</em>) – Initial guess for the solution.</p></li>
 <li><p><strong>xtol</strong> (<em>float</em>) – Tolerance for the differences in <cite>x</cite>, by default 1e-8.</p></li>
 <li><p><strong>gtol</strong> (<em>float</em>) – Tolerance for the KKT system, by default 1e-8.</p></li>
-<li><p><strong>mtol</strong> (<em>float</em>) – Tolerance for the log barrier parameter mu, by default 1e-6.</p></li>
-<li><p><strong>max_iter</strong> (<em>int</em>) – Maximum number of iterations, by default 100.</p></li>
-<li><p><strong>mu</strong> (<em>float</em>) – Initial interior point bairrier parameter, by default 1.0.</p></li>
-<li><p><strong>update_mu_every</strong> (<em>int</em>) – Parameter mu updating frequency, by default 5.</p></li>
-<li><p><strong>scale_mu</strong> (<em>float</em>) – Shrinkage factor for mu updates, by default 0.1</p></li>
+<li><p><strong>mtol</strong> (<em>float</em>) – Tolerance for the log barrier parameter m, by default 1e-6.</p></li>
+<li><p><strong>max_iter</strong> (<em>int</em>) – Maximm number of iterations, by default 100.</p></li>
+<li><p><strong>m_init</strong> (<em>float</em>) – Initial interior point bairrier parameter, by default 1.0.</p></li>
+<li><p><strong>m_freq</strong> (<em>int</em>) – Parameter m updating frequency, by default 5.</p></li>
+<li><p><strong>m_scale</strong> (<em>float</em>) – Shrinkage factor for m updates, by default 0.1</p></li>
+<li><p><strong>a_init</strong> (<em>float</em>) – Initial step size, by default 1.0.</p></li>
+<li><p><strong>a_const</strong> (<em>float</em>) – Constant for the line search condition, the larger the harder, by
+default 0.01.</p></li>
+<li><p><strong>a_scale</strong> (<em>float</em>) – Shrinkage factor for step size, by default 0.9.</p></li>
+<li><p><strong>a_lb</strong> (<em>float</em>) – Lower bound of the step size when the step size is below this bound
+the line search will be terminated.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Indicator of if print out convergence history, by default False</p></li>
 </ul>
 </dd>
@@ -408,28 +393,8 @@ variable and v is the dual variable for the constraints.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTSolver.update_params">
-<span class="sig-name descname"><span class="pre">update_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dx</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver.update_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver.update_params" title="Permalink to this definition">#</a></dt>
-<dd><p>Update parameters with line search.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> (<em>List</em><em>[</em><em>numpy.ndarray</em><em>[</em><em>Any</em><em>, </em><em>numpy.dtype</em><em>[</em><em>numpy.typing._generic_alias.ScalarType</em><em>]</em><em>]</em><em>]</em>) – A list a parameters, including x, s, and v, where s is the slackness
-variable and v is the dual variable for the constraints.</p></li>
-<li><p><strong>dx</strong> (<em>List</em><em>[</em><em>numpy.ndarray</em><em>[</em><em>Any</em><em>, </em><em>numpy.dtype</em><em>[</em><em>numpy.typing._generic_alias.ScalarType</em><em>]</em><em>]</em><em>]</em>) – A list of direction for the parameters.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>The step size in the given direction.</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>float</p>
-</dd>
-</dl>
-</dd></dl>
-<dl class="py method">
 <dt class="sig sig-object py" id="msca.optim.solver.ntsolver.NTSolver.minimize">
-<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver.minimize" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_init</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_const</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">a_lb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/optim/solver/ntsolver.html#NTSolver.minimize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.optim.solver.ntsolver.NTSolver.minimize" title="Permalink to this definition">#</a></dt>
 <dd><p>Minimize optimization objective over constraints.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -438,6 +403,12 @@ variable and v is the dual variable for the constraints.</p></li>
 <li><p><strong>xtol</strong> (<em>float</em>) – Tolerance for the differences in <cite>x</cite>, by default 1e-8.</p></li>
 <li><p><strong>gtol</strong> (<em>float</em>) – Tolerance for the KKT system, by default 1e-8.</p></li>
 <li><p><strong>max_iter</strong> (<em>int</em>) – Maximum number of iterations, by default 100.</p></li>
+<li><p><strong>a_init</strong> (<em>float</em>) – Initial step size, by default 1.0.</p></li>
+<li><p><strong>a_const</strong> (<em>float</em>) – Constant for the line search condition, the larger the harder, by
+default 0.01.</p></li>
+<li><p><strong>a_scale</strong> (<em>float</em>) – Shrinkage factor for step size, by default 0.9.</p></li>
+<li><p><strong>a_lb</strong> (<em>float</em>) – Lower bound of the step size when the step size is below this bound
+the line search will be terminated.</p></li>
 <li><p><strong>verbose</strong> (<em>bool</em>) – Indicator of if print out convergence history, by default False</p></li>
 </ul>
 </dd>
