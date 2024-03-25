@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="msca.optim.prox" href="msca.optim.prox.html" /><link rel="prev" title="msca.c2fun" href="msca.c2fun.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>msca.linalg - msca 0.0.4</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>msca.linalg - msca 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ad7f860e" />
     
     
 
@@ -49,10 +49,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -134,7 +136,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">msca 0.0.4</div></a>
+      <a href="../index.html"><div class="brand">msca 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -161,10 +163,10 @@
     <img class="sidebar-logo only-dark" src="../_static/logo/logo-dark.png" alt="Dark Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">msca 0.0.4</span>
+  <span class="sidebar-brand-text">msca 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -173,7 +175,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing msca</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l1 current has-children"><a class="reference internal" href="index.html">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a></li>
 <li class="toctree-l2 current current-page"><a class="current reference internal" href="#">msca.linalg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="msca.optim.prox.html">msca.optim.prox</a></li>
@@ -198,7 +200,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -213,395 +217,432 @@
         </div>
         <article role="main">
           <section id="msca-linalg">
-<h1>msca.linalg<a class="headerlink" href="#msca-linalg" title="Permalink to this headline">#</a></h1>
+<h1>msca.linalg<a class="headerlink" href="#msca-linalg" title="Link to this heading">#</a></h1>
 <section id="module-msca.linalg.matrix">
-<span id="msca-linalg-matrix"></span><h2>msca.linalg.matrix<a class="headerlink" href="#module-msca.linalg.matrix" title="Permalink to this headline">#</a></h2>
+<span id="msca-linalg-matrix"></span><h2>msca.linalg.matrix<a class="headerlink" href="#module-msca.linalg.matrix" title="Link to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="msca.linalg.matrix.Matrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">Matrix</span></span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">Matrix</span></span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
 <p>A matrix wrapper class that unifies the interfaces for different types
 of array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Raises</dt>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>ValueError</strong> – Raised when the number of dimension is not two.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.Matrix.scale_rows">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.scale_rows" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.scale_rows" title="Link to this definition">#</a></dt>
 <dd><p>Scale rows of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that contains scalings for rows of the matrix. The size of
 the vector should align with the number of rows of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.Matrix.scale_cols">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.scale_cols" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.scale_cols" title="Link to this definition">#</a></dt>
 <dd><p>Scale columns of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that contains scalings for columns of the matrix. The size
 of the vector should align with the number of columns of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.Matrix.solve">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.solve" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.solve" title="Link to this definition">#</a></dt>
 <dd><p>Solve the linear system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that represent the right hand side of the linear equation.
 The size of the vector should align with the number of rows of the
 matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The solution of the linear system.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.Matrix.to_numpy">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.to_numpy" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#Matrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.Matrix.to_numpy" title="Link to this definition">#</a></dt>
 <dd><p>Convert to a numpy array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A numpy representation of the matrix.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">NumpyMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">msca.linalg.matrix.Matrix</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">NumpyMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ndarray</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.dot">
-<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.dot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.dot" title="Link to this definition">#</a></dt>
 <dd><p>Dot product operator for the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – Give vector or matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Results of the dot product. If the result is two dimensional it will
 be an instance of the <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> class.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray | <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.scale_rows">
-<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.scale_rows" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.scale_rows" title="Link to this definition">#</a></dt>
 <dd><p>Scale rows of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that contains scalings for rows of the matrix. The size of
 the vector should align with the number of rows of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.scale_cols">
-<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.scale_cols" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.scale_cols" title="Link to this definition">#</a></dt>
 <dd><p>Scale columns of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that contains scalings for columns of the matrix. The size
 of the vector should align with the number of columns of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.solve" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.solve" title="Link to this definition">#</a></dt>
 <dd><p>Solve the linear system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that represent the right hand side of the linear equation.
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>ArrayLike</em>) – A vector that represent the right hand side of the linear equation.
 The size of the vector should align with the number of rows of the
-matrix.</p>
+matrix.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The solution of the linear system.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.NumpyMatrix.to_numpy">
-<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.to_numpy" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#NumpyMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.NumpyMatrix.to_numpy" title="Link to this definition">#</a></dt>
 <dd><p>Convert to a numpy array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A numpy representation of the matrix.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">CSRMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse._csr.csr_matrix</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">msca.linalg.matrix.Matrix</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">CSRMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">csr_matrix</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.T">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix" title="msca.linalg.matrix.CSCMatrix"><span class="pre">msca.linalg.matrix.CSCMatrix</span></a></em><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.T" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix" title="msca.linalg.matrix.CSCMatrix"><span class="pre">CSCMatrix</span></a></em><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.T" title="Link to this definition">#</a></dt>
 <dd><p>Transpose of the matrix. It will be an instance of the
 <a class="reference internal" href="#msca.linalg.matrix.CSCMatrix" title="msca.linalg.matrix.CSCMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSCMatrix</span></code></a>.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.dot">
-<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.dot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.dot" title="Link to this definition">#</a></dt>
 <dd><p>Dot product operator for the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – Give vector or matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Results of the dot product. If the result is two dimensional it will
 be an instance of the <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> class.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray | <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.scale_rows">
-<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.scale_rows" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.scale_rows" title="Link to this definition">#</a></dt>
 <dd><p>Scale rows of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that contains scalings for rows of the matrix. The size of
 the vector should align with the number of rows of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.scale_cols">
-<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.scale_cols" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.scale_cols" title="Link to this definition">#</a></dt>
 <dd><p>Scale columns of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that contains scalings for columns of the matrix. The size
 of the vector should align with the number of columns of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.solve" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.solve" title="Link to this definition">#</a></dt>
 <dd><p>Solve the linear system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that represent the right hand side of the linear equation.
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>NDArray</em>) – A vector that represent the right hand side of the linear equation.
 The size of the vector should align with the number of rows of the
-matrix.</p>
+matrix.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The solution of the linear system.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSRMatrix.to_numpy">
-<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.to_numpy" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSRMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSRMatrix.to_numpy" title="Link to this definition">#</a></dt>
 <dd><p>Convert to a numpy array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A numpy representation of the matrix.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">CSCMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix" title="Permalink to this definition">#</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.sparse._csc.csc_matrix</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">msca.linalg.matrix.Matrix</span></code></a></p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">CSCMatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">csc_matrix</span></code>, <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a></p>
 <dl class="py property">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.T">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix" title="msca.linalg.matrix.CSRMatrix"><span class="pre">msca.linalg.matrix.CSRMatrix</span></a></em><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.T" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">T</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix" title="msca.linalg.matrix.CSRMatrix"><span class="pre">CSRMatrix</span></a></em><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.T" title="Link to this definition">#</a></dt>
 <dd><p>Transpose of the matrix. It will be an instance of the
 <a class="reference internal" href="#msca.linalg.matrix.CSRMatrix" title="msca.linalg.matrix.CSRMatrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">CSRMatrix</span></code></a>.</p>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.dot">
-<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.dot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">dot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.dot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.dot" title="Link to this definition">#</a></dt>
 <dd><p>Dot product operator for the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>ArrayLike</em>) – Give vector or matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Results of the dot product. If the result is two dimensional it will
 be an instance of the <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> class.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray | <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.scale_rows">
-<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.scale_rows" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_rows</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.scale_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.scale_rows" title="Link to this definition">#</a></dt>
 <dd><p>Scale rows of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that contains scalings for rows of the matrix. The size of
 the vector should align with the number of rows of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.scale_cols">
-<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.scale_cols" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">scale_cols</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.scale_cols"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.scale_cols" title="Link to this definition">#</a></dt>
 <dd><p>Scale columns of the matrix.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that contains scalings for columns of the matrix. The size
 of the vector should align with the number of columns of the matrix.</p>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The scaled matrix.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.solve" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.solve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.solve" title="Link to this definition">#</a></dt>
 <dd><p>Solve the linear system.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>x</strong> (<em>NDArray</em>) – A vector that represent the right hand side of the linear equation.
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> (<em>NDArray</em>) – A vector that represent the right hand side of the linear equation.
 The size of the vector should align with the number of rows of the
-matrix.</p>
+matrix.</p></li>
+<li><p><strong>method</strong> (<em>str</em>) – </p></li>
+</ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The solution of the linear system.</p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="msca.linalg.matrix.CSCMatrix.to_numpy">
-<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.to_numpy" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">to_numpy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#CSCMatrix.to_numpy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.CSCMatrix.to_numpy" title="Link to this definition">#</a></dt>
 <dd><p>Convert to a numpy array.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>A numpy representation of the matrix.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>NDArray</p>
 </dd>
 </dl>
 </dd></dl>
+
 </dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="msca.linalg.matrix.matrix_classes">
-<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">matrix_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.linalg.matrix.matrix_classes" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">matrix_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.linalg.matrix.matrix_classes" title="Link to this definition">#</a></dt>
 <dd><p>A collection of all matrix classes.</p>
 <dl class="field-list simple">
 </dl>
 </dd></dl>
+
 <dl class="py data">
 <dt class="sig sig-object py" id="msca.linalg.matrix.matrix_class_dict">
-<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">matrix_class_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.linalg.matrix.matrix_class_dict" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">matrix_class_dict</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">Type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#msca.linalg.matrix.matrix_class_dict" title="Link to this definition">#</a></dt>
 <dd><p>Matrix classes organize in a dictionary, with key as their parent class and
 value as the matrix class.</p>
 <dl class="field-list simple">
 </dl>
 </dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="msca.linalg.matrix.asmatrix">
-<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">asmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#asmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.asmatrix" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">msca.linalg.matrix.</span></span><span class="sig-name descname"><span class="pre">asmatrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/msca/linalg/matrix.html#asmatrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#msca.linalg.matrix.asmatrix" title="Link to this definition">#</a></dt>
 <dd><p>Convert data into an instance of the matrix class based on its type.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>data</strong> (<em>Any</em>) – Given data, it should be compatible with the matrix classes. If data is
 an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix"><code class="xref py py-class docutils literal notranslate"><span class="pre">Matrix</span></code></a> already, it will be returned as it is.</p>
 </dd>
-<dt class="field-even">Raises</dt>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>TypeError</strong> – Raised when the type of the data is not compatible with the matrix
     classes.</p>
 </dd>
-<dt class="field-odd">Returns</dt>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The converted matrix.</p>
 </dd>
-<dt class="field-even">Return type</dt>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="#msca.linalg.matrix.Matrix" title="msca.linalg.matrix.Matrix">Matrix</a></p>
 </dd>
 </dl>
 </dd></dl>
+
 </section>
 </section>
 
@@ -617,10 +658,10 @@ an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" t
                 </div>
                 <div class="title">msca.optim.prox</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="msca.c2fun.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -634,7 +675,7 @@ an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" t
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022 IHME Math Sciences
+                Copyright &#169; 2024, IHME Math Sciences
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -642,9 +683,7 @@ an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" t
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -656,14 +695,52 @@ an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" t
       <div class="toc-sticky toc-scroll">
         <div class="toc-title-container">
           <span class="toc-title">
-            Contents
+            On this page
           </span>
         </div>
         <div class="toc-tree-container">
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">msca.linalg</a><ul>
-<li><a class="reference internal" href="#module-msca.linalg.matrix">msca.linalg.matrix</a></li>
+<li><a class="reference internal" href="#module-msca.linalg.matrix">msca.linalg.matrix</a><ul>
+<li><a class="reference internal" href="#msca.linalg.matrix.Matrix"><code class="docutils literal notranslate"><span class="pre">Matrix</span></code></a><ul>
+<li><a class="reference internal" href="#msca.linalg.matrix.Matrix.scale_rows"><code class="docutils literal notranslate"><span class="pre">Matrix.scale_rows()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.Matrix.scale_cols"><code class="docutils literal notranslate"><span class="pre">Matrix.scale_cols()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.Matrix.solve"><code class="docutils literal notranslate"><span class="pre">Matrix.solve()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.Matrix.to_numpy"><code class="docutils literal notranslate"><span class="pre">Matrix.to_numpy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix</span></code></a><ul>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix.dot"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix.dot()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix.scale_rows"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix.scale_rows()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix.scale_cols"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix.scale_cols()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix.solve"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix.solve()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.NumpyMatrix.to_numpy"><code class="docutils literal notranslate"><span class="pre">NumpyMatrix.to_numpy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix"><code class="docutils literal notranslate"><span class="pre">CSRMatrix</span></code></a><ul>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.T"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.T</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.dot"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.dot()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.scale_rows"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.scale_rows()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.scale_cols"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.scale_cols()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.solve"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.solve()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSRMatrix.to_numpy"><code class="docutils literal notranslate"><span class="pre">CSRMatrix.to_numpy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix"><code class="docutils literal notranslate"><span class="pre">CSCMatrix</span></code></a><ul>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.T"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.T</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.dot"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.dot()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.scale_rows"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.scale_rows()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.scale_cols"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.scale_cols()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.solve"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.solve()</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.CSCMatrix.to_numpy"><code class="docutils literal notranslate"><span class="pre">CSCMatrix.to_numpy()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#msca.linalg.matrix.matrix_classes"><code class="docutils literal notranslate"><span class="pre">matrix_classes</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.matrix_class_dict"><code class="docutils literal notranslate"><span class="pre">matrix_class_dict</span></code></a></li>
+<li><a class="reference internal" href="#msca.linalg.matrix.asmatrix"><code class="docutils literal notranslate"><span class="pre">asmatrix()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -675,10 +752,9 @@ an instance of <a class="reference internal" href="#msca.linalg.matrix.Matrix" t
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     </body>
 </html>

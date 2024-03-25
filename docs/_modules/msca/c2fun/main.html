@@ -1,15 +1,15 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en" data-content_root="../../../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>msca.c2fun.main - msca 0.0.4</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>msca.c2fun.main - msca 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/custom.css?v=ad7f860e" />
     
     
 
@@ -48,10 +48,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -133,7 +135,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../../index.html"><div class="brand">msca 0.0.4</div></a>
+      <a href="../../../index.html"><div class="brand">msca 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -160,10 +162,10 @@
     <img class="sidebar-logo only-dark" src="../../../_static/logo/logo-dark.png" alt="Dark Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">msca 0.0.4</span>
+  <span class="sidebar-brand-text">msca 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -172,7 +174,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installing msca</a></li>
 </ul>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api_reference/index.html">API Reference</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api_reference/msca.c2fun.html">msca.c2fun</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api_reference/msca.linalg.html">msca.linalg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api_reference/msca.optim.prox.html">msca.optim.prox</a></li>
@@ -197,7 +199,8 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          <div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -212,7 +215,7 @@
         </div>
         <article role="main">
           <h1>Source code for msca.c2fun.main</h1><div class="highlight"><pre>
-<span></span><span class="sd">"""Continuously twice differentiable function. The instance of this class</span>
+<span></span><span class="sd">&quot;&quot;&quot;Continuously twice differentiable function. The instance of this class</span>
 <span class="sd">provides the function and the derivative and the second derivative of the</span>
 <span class="sd">function. It also contains the inverse of the function.</span>
 
@@ -243,7 +246,7 @@
 <span class="sd">create new instances from the class. You can also access the instances from the</span>
 <span class="sd">model-level variable :data:`c2fun_dict`.</span>
 
-<span class="sd">"""</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractproperty</span><span class="p">,</span> <span class="n">abstractstaticmethod</span>
@@ -254,8 +257,10 @@
 <span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">erfc</span>
 
 
-<div class="viewcode-block" id="C2Fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun">[docs]</a><span class="k">class</span> <span class="nc">C2Fun</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
-    <span class="sd">"""Abstract class that defines the interface for twice continuous function.</span>
+<div class="viewcode-block" id="C2Fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun">[docs]</a>
+<span class="k">class</span> <span class="nc">C2Fun</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Abstract class that defines the interface for twice continuous function.</span>
 <span class="sd">    To inherit this class, user much provide :meth:`fun`, :meth:`dfun` and</span>
 <span class="sd">    :meth:`d2fun`. And if inverse of the function is defined and implemented</span>
 <span class="sd">    please override :attr:`inv`, otherwise please raise</span>
@@ -264,53 +269,64 @@
 <span class="sd">    The instance of :class:`C2Fun` is callable, with the signature defined in</span>
 <span class="sd">    the :meth:`__call__` function.</span>
 
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@abstractproperty</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the function such that :code:`x = fun.inv(fun(x))`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the function such that :code:`x = fun.inv(fun(x))`.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span>
 
-<div class="viewcode-block" id="C2Fun.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.fun">[docs]</a>    <span class="nd">@abstractstaticmethod</span>
+<div class="viewcode-block" id="C2Fun.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.fun">[docs]</a>
+    <span class="nd">@abstractstaticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""Implementation of the function.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implementation of the function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="C2Fun.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.dfun">[docs]</a>    <span class="nd">@abstractstaticmethod</span>
+
+<div class="viewcode-block" id="C2Fun.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.dfun">[docs]</a>
+    <span class="nd">@abstractstaticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""Implementation of the derivative of the function.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implementation of the derivative of the function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="C2Fun.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.d2fun">[docs]</a>    <span class="nd">@abstractstaticmethod</span>
+
+<div class="viewcode-block" id="C2Fun.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.d2fun">[docs]</a>
+    <span class="nd">@abstractstaticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""Implementation of the second order derivative of the function.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Implementation of the second order derivative of the function.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">pass</span></div>
 
-<div class="viewcode-block" id="C2Fun.__call__"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+
+<div class="viewcode-block" id="C2Fun.__call__">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.C2Fun.__call__">[docs]</a>
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">,</span> <span class="n">order</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
@@ -329,31 +345,37 @@
 <span class="sd">        ValueError</span>
 <span class="sd">            Raised when the order is not 0, or 1, or 2.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">order</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Order has to be selected from 0, 1 or 2."</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Order has to be selected from 0, 1 or 2.&quot;</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()"</span></div>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span></div>
 
 
-<div class="viewcode-block" id="Identity"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity">[docs]</a><span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Identity">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity">[docs]</a>
+<span class="k">class</span> <span class="nc">Identity</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the identity function is the identity itself.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the identity function is the identity itself.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span>
 
-<div class="viewcode-block" id="Identity.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Identity.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
 <span class="sd">            f(x) = x</span>
@@ -363,55 +385,67 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span></div>
 
-<div class="viewcode-block" id="Identity.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Identity.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f'(x) = 1</span>
+<span class="sd">            f&#39;(x) = 1</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Identity.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Identity.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Identity.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f''(x) = 0</span>
+<span class="sd">            f&#39;&#39;(x) = 0</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Exp"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp">[docs]</a><span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Exp">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp">[docs]</a>
+<span class="k">class</span> <span class="nc">Exp</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the exponential function is :class:`Log`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the exponential function is :class:`Log`.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">log</span>
 
-<div class="viewcode-block" id="Exp.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Exp.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
 <span class="sd">            f(x) = \\exp(x)</span>
@@ -421,52 +455,64 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Exp.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Exp.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f'(x) = \\exp(x)</span>
+<span class="sd">            f&#39;(x) = \\exp(x)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Exp.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Exp.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Exp.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f''(x) = \\exp(x)</span>
+<span class="sd">            f&#39;&#39;(x) = \\exp(x)</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div></div>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Log"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log">[docs]</a><span class="k">class</span> <span class="nc">Log</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Log">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log">[docs]</a>
+<span class="k">class</span> <span class="nc">Log</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the log function is the :class:`Exp`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the log function is the :class:`Exp`.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">exp</span>
 
-<div class="viewcode-block" id="Log.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Log.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
 <span class="sd">            f(x) = \\log(x)</span>
@@ -476,61 +522,73 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Log.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Log.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f'(x) = \\frac{1}{x}</span>
+<span class="sd">            f&#39;(x) = \\frac{1}{x}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">x</span></div>
 
-<div class="viewcode-block" id="Log.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Log.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Log.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f''(x) = -\\frac{1}{x^2}</span>
+<span class="sd">            f&#39;&#39;(x) = -\\frac{1}{x^2}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span></div></div>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="o">/</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Expit"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit">[docs]</a><span class="k">class</span> <span class="nc">Expit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
-    <span class="sd">"""</span>
+
+<div class="viewcode-block" id="Expit">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit">[docs]</a>
+<span class="k">class</span> <span class="nc">Expit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Note</span>
 <span class="sd">    ----</span>
 <span class="sd">    We use the form with :math:`\\exp(-x)` when :math:`x &gt; 0`, and the form</span>
 <span class="sd">    with :math:`\\exp(x)` when :math:`x \\le 0`.</span>
 
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the expit function is the :class:`Logit`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the expit function is the :class:`Logit`.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">logit</span>
 
-<div class="viewcode-block" id="Expit.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Expit.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 <span class="sd">            f(x) = \\frac{1}{1 + \\exp(-x)} = \\frac{\\exp(x)}{1 + \\exp(x)}</span>
 
@@ -539,7 +597,7 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -553,11 +611,14 @@
 
         <span class="k">return</span> <span class="n">y</span></div>
 
-<div class="viewcode-block" id="Expit.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Expit.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
-<span class="sd">            f'(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}</span>
+<span class="sd">            f&#39;(x) = \\frac{\\exp(-x)}{(1 + \\exp(-x)) ^ 2}</span>
 <span class="sd">            = \\frac{\\exp(x)}{(1 + \\exp(x))^2}</span>
 
 <span class="sd">        Parameters</span>
@@ -565,7 +626,7 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -579,11 +640,14 @@
 
         <span class="k">return</span> <span class="n">y</span></div>
 
-<div class="viewcode-block" id="Expit.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Expit.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Expit.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
-<span class="sd">            f''(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}</span>
+<span class="sd">            f&#39;&#39;(x) = \\frac{\\exp(-2x) - \\exp(-x)}{(1 + \\exp(-x)) ^ 3}</span>
 <span class="sd">            = \\frac{\\exp(x) - \\exp(2x)}{(1 + \\exp(x))^3}</span>
 
 <span class="sd">        Parameters</span>
@@ -591,7 +655,7 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -603,21 +667,27 @@
         <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">neg_indices</span><span class="p">])</span>
         <span class="n">y</span><span class="p">[</span><span class="n">neg_indices</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">z</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">z</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span>
 
-        <span class="k">return</span> <span class="n">y</span></div></div>
+        <span class="k">return</span> <span class="n">y</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Logit"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit">[docs]</a><span class="k">class</span> <span class="nc">Logit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Logit">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit">[docs]</a>
+<span class="k">class</span> <span class="nc">Logit</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the logit function is the :class:`Expit`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the logit function is the :class:`Expit`.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">expit</span>
 
-<div class="viewcode-block" id="Logit.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Logit.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
 <span class="sd">            f(x) = \\log\\left(\\frac{x}{1 - x}\\right)</span>
@@ -627,44 +697,54 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Logit.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Logit.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f'(x) = \\frac{1}{x(1 - x)}</span>
+<span class="sd">            f&#39;(x) = \\frac{1}{x(1 - x)}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Logit.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Logit.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logit.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f''(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}</span>
+<span class="sd">            f&#39;&#39;(x) = \\frac{2x - 1}{x ^ 2(1 - x) ^ 2}</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span></div></div>
+        <span class="k">return</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">x</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span></div>
+</div>
 
 
-<div class="viewcode-block" id="Logerfc"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc">[docs]</a><span class="k">class</span> <span class="nc">Logerfc</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
-    <span class="sd">"""Logerfc function is a special function that appears in stochastic</span>
+
+<div class="viewcode-block" id="Logerfc">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc">[docs]</a>
+<span class="k">class</span> <span class="nc">Logerfc</span><span class="p">(</span><span class="n">C2Fun</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logerfc function is a special function that appears in stochastic</span>
 <span class="sd">    frontier analysis. Erfc function can be written as</span>
 
 <span class="sd">    .. math::</span>
@@ -677,23 +757,25 @@
 <span class="sd">    will cause numerical issue when compute Logerfc. We use asymptotic</span>
 <span class="sd">    approximation to avoid this problem.</span>
 
-<span class="sd">    """</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">inv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">C2Fun</span><span class="p">:</span>
-        <span class="sd">"""The inverse of the logerfc function is not implemeneted.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The inverse of the logerfc function is not implemeneted.</span>
 
 <span class="sd">        Raises</span>
 <span class="sd">        ------</span>
 <span class="sd">        NotImplementedError</span>
 <span class="sd">            Raised whenever using this property.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>
 
-<div class="viewcode-block" id="Logerfc.fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.fun">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Logerfc.fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
 <span class="sd">            f(x) = \\log(\\mathrm{erfc}(x))</span>
@@ -710,7 +792,7 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -725,12 +807,15 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">y</span></div>
 
-<div class="viewcode-block" id="Logerfc.dfun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.dfun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Logerfc.dfun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.dfun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f'(x) = -\\frac{2\\exp(-x^2)}{\\sqrt{\\pi}\\mathrm{erfc}(x)}</span>
+<span class="sd">            f&#39;(x) = -\\frac{2\\exp(-x^2)}{\\sqrt{\\pi}\\mathrm{erfc}(x)}</span>
 
 <span class="sd">        When :math:`x \\ge 25` we use approximation.</span>
 
@@ -743,7 +828,7 @@
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
@@ -760,24 +845,29 @@
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">y</span></div>
 
-<div class="viewcode-block" id="Logerfc.d2fun"><a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.d2fun">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Logerfc.d2fun">
+<a class="viewcode-back" href="../../../api_reference/msca.c2fun.html#msca.c2fun.main.Logerfc.d2fun">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">d2fun</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">NDArray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NDArray</span><span class="p">:</span>
-        <span class="sd">"""</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        .. math::</span>
 
-<span class="sd">            f''(x) = \\frac{4 x \\exp(-x^2)}{\\sqrt{\\pi} \\mathrm{erfc}(x)} -</span>
+<span class="sd">            f&#39;&#39;(x) = \\frac{4 x \\exp(-x^2)}{\\sqrt{\\pi} \\mathrm{erfc}(x)} -</span>
 <span class="sd">            \\frac{4 \\exp(-2 x^2)}{\\pi \\mathrm{erfc}(x)^2} =</span>
-<span class="sd">            -2 x f'(x) - f'(x)^2</span>
+<span class="sd">            -2 x f&#39;(x) - f&#39;(x)^2</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        x</span>
 <span class="sd">            Provided independent variable.</span>
 
-<span class="sd">        """</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">Logerfc</span><span class="o">.</span><span class="n">dfun</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-        <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span></div></div>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">x</span><span class="o">*</span><span class="n">d</span> <span class="o">-</span> <span class="n">d</span><span class="o">**</span><span class="mi">2</span></div>
+</div>
+
 
 
 <span class="n">identity</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Identity</span><span class="p">()</span>
@@ -788,14 +878,14 @@
 <span class="n">logerfc</span><span class="p">:</span> <span class="n">C2Fun</span> <span class="o">=</span> <span class="n">Logerfc</span><span class="p">()</span>
 
 <span class="n">c2fun_dict</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">C2Fun</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">"identity"</span><span class="p">:</span> <span class="n">identity</span><span class="p">,</span>
-    <span class="s2">"exp"</span><span class="p">:</span> <span class="n">exp</span><span class="p">,</span>
-    <span class="s2">"log"</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span>
-    <span class="s2">"expit"</span><span class="p">:</span> <span class="n">expit</span><span class="p">,</span>
-    <span class="s2">"logit"</span><span class="p">:</span> <span class="n">logit</span><span class="p">,</span>
-    <span class="s2">"logerfc"</span><span class="p">:</span> <span class="n">logerfc</span><span class="p">,</span>
+    <span class="s2">&quot;identity&quot;</span><span class="p">:</span> <span class="n">identity</span><span class="p">,</span>
+    <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="n">exp</span><span class="p">,</span>
+    <span class="s2">&quot;log&quot;</span><span class="p">:</span> <span class="n">log</span><span class="p">,</span>
+    <span class="s2">&quot;expit&quot;</span><span class="p">:</span> <span class="n">expit</span><span class="p">,</span>
+    <span class="s2">&quot;logit&quot;</span><span class="p">:</span> <span class="n">logit</span><span class="p">,</span>
+    <span class="s2">&quot;logerfc&quot;</span><span class="p">:</span> <span class="n">logerfc</span><span class="p">,</span>
 <span class="p">}</span>
-<span class="sd">"""A dictionary that map function names with the function instances.</span>
+<span class="sd">&quot;&quot;&quot;A dictionary that map function names with the function instances.</span>
 
 <span class="sd">You can access the instances of :class:`C2Fun` through this dictionary.</span>
 
@@ -803,10 +893,10 @@
 
 <span class="sd">    from msca.c2fun import c2fun_dict</span>
 
-<span class="sd">    exp = c2fun_dict['exp']</span>
+<span class="sd">    exp = c2fun_dict[&#39;exp&#39;]</span>
 
 
-<span class="sd">"""</span>
+<span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
         </article>
       </div>
@@ -819,7 +909,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022 IHME Math Sciences
+                Copyright &#169; 2024, IHME Math Sciences
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -827,9 +917,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -841,10 +929,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
-    <script src="../../../_static/scripts/furo.js"></script>
+</div><script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/furo.js?v=32e29ea5"></script>
     </body>
 </html>
