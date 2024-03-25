@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, List, Tuple
+from typing import Callable
 
 import numpy as np
 from numpy.typing import NDArray
@@ -25,6 +25,7 @@ class NTResult:
         Number of iterations.
 
     """
+
     x: NDArray
     success: bool
     fun: float
@@ -53,13 +54,14 @@ class NTSolver:
         self.hess = hess
 
     def _update_params(
-        self, x: List[NDArray],
-        dx: List[NDArray],
+        self,
+        x: list[NDArray],
+        dx: list[NDArray],
         a_init: float = 1.0,
         a_const: float = 0.01,
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
-    ) -> Tuple[float, List[NDArray]]:
+    ) -> tuple[float, list[NDArray]]:
         """Update parameters with line search.
 
         Parameters
@@ -87,31 +89,33 @@ class NTSolver:
 
         """
         a = a_init
-        x_next = x + a*dx
+        x_next = x + a * dx
         g_next = self.grad(x_next)
         gnorm_curr = np.max(np.abs(self.grad(x)))
         gnorm_next = np.max(np.abs(g_next))
 
-        while gnorm_next > (1 - a_const*a)*gnorm_curr:
-            if a*a_scale < a_lb:
+        while gnorm_next > (1 - a_const * a) * gnorm_curr:
+            if a * a_scale < a_lb:
                 break
             a *= a_scale
-            x_next = x + a*dx
+            x_next = x + a * dx
             g_next = self.grad(x_next)
             gnorm_next = np.max(np.abs(g_next))
 
         return a, x_next
 
-    def minimize(self,
-                 x0: NDArray,
-                 xtol: float = 1e-8,
-                 gtol: float = 1e-8,
-                 max_iter: int = 100,
-                 a_init: float = 1.0,
-                 a_const: float = 0.01,
-                 a_scale: float = 0.9,
-                 a_lb: float = 1e-3,
-                 verbose: bool = False) -> NDArray:
+    def minimize(
+        self,
+        x0: NDArray,
+        xtol: float = 1e-8,
+        gtol: float = 1e-8,
+        max_iter: int = 100,
+        a_init: float = 1.0,
+        a_const: float = 0.01,
+        a_scale: float = 0.9,
+        a_lb: float = 1e-3,
+        verbose: bool = False,
+    ) -> NDArray:
         """Minimize optimization objective over constraints.
 
         Parameters
@@ -157,8 +161,7 @@ class NTSolver:
         if verbose:
             fun = self.fun(x)
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                  f"{step=:.2e}")
+            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}")
 
         while (not success) and (niter < max_iter):
             niter += 1
@@ -167,19 +170,18 @@ class NTSolver:
             dx = -self.hess(x).solve(g)
 
             # get step size
-            step, x = self._update_params(
-                x, dx, a_init, a_const, a_scale, a_lb
-            )
+            step, x = self._update_params(x, dx, a_init, a_const, a_scale, a_lb)
 
             # update f and gnorm
             g = self.grad(x)
             gnorm = np.max(np.abs(g))
-            xdiff = step*np.max(np.abs(dx))
+            xdiff = step * np.max(np.abs(dx))
 
             if verbose:
                 fun = self.fun(x)
-                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                      f"{step=:.2e}")
+                print(
+                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}"
+                )
             success = gnorm <= gtol or xdiff <= xtol
 
         result = NTResult(

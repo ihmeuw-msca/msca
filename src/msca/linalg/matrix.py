@@ -1,12 +1,11 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Dict, Tuple, Type
+from typing import Any, Type
 
-import numpy
+import numpy as np
+import scipy as sp
 from numpy.typing import ArrayLike, NDArray
-from scipy.sparse import csc_matrix, csr_matrix, spdiags
-from scipy.sparse.linalg import spsolve
 
 
 class Matrix(ABC):
@@ -92,10 +91,10 @@ class Matrix(ABC):
         pass
 
 
-class NumpyMatrix(numpy.ndarray, Matrix):
+class NumpyMatrix(np.ndarray, Matrix):
 
     def __new__(cls, *args, **kwargs):
-        return numpy.asarray(*args, **kwargs).view(cls)
+        return np.asarray(*args, **kwargs).view(cls)
 
     def __init__(self, *args, **kwargs):
         super(Matrix, self).__init__()
@@ -115,31 +114,40 @@ class NumpyMatrix(numpy.ndarray, Matrix):
             be an instance of the :py:class:`Matrix` class.
 
         """
-        result = numpy.dot(self, x)
+        result = np.dot(self, x)
         if result.ndim == 1:
-            return numpy.asarray(result)
+            return np.asarray(result)
         return result
 
     def scale_rows(self, x: ArrayLike) -> NumpyMatrix:
-        return numpy.asarray(x)[:, numpy.newaxis] * self
+        return np.asarray(x)[:, np.newaxis] * self
 
     def scale_cols(self, x: ArrayLike) -> NumpyMatrix:
-        return self * numpy.asarray(x)
+        return self * np.asarray(x)
 
-    def solve(self, x: ArrayLike) -> NDArray:
-        return numpy.linalg.solve(self, x)
+    def solve(self, x: ArrayLike, method: str = "", **kwargs) -> NDArray:
+        x = np.asarray(x)
+        if method == "":
+            result = np.linalg.solve(self, x, **kwargs)
+        elif method == "cg":
+            result, info = sp.linalg.cg(self, x, **kwargs)
+            if info > 0:
+                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+        else:
+            raise ValueError(f"{method=:} is not supported.")
+        return result
 
     def to_numpy(self) -> NDArray:
-        return numpy.asarray(self.copy())
+        return np.asarray(self.copy())
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-class CSRMatrix(csr_matrix, Matrix):
+class CSRMatrix(sp.sparse.csr_matrix, Matrix):
 
     def __init__(self, *args, **kwargs):
-        super(csr_matrix, self).__init__(*args, **kwargs)
+        super(sp.sparse.csr_matrix, self).__init__(*args, **kwargs)
         super(Matrix, self).__init__()
 
     @property
@@ -165,24 +173,32 @@ class CSRMatrix(csr_matrix, Matrix):
             be an instance of the :py:class:`Matrix` class.
 
         """
-        result = super(csr_matrix, self).dot(x)
+        result = super(sp.sparse.csr_matrix, self).dot(x)
         if result.ndim == 1:
             return result
         return asmatrix(result)
 
     def scale_rows(self, x: NDArray) -> CSRMatrix:
-        x = numpy.asarray(x)
-        return CSRMatrix(spdiags(x, 0, len(x), len(x)) * self)
+        x = np.asarray(x)
+        return CSRMatrix(sp.sparse.spdiags(x, 0, len(x), len(x)) * self)
 
     def scale_cols(self, x: NDArray) -> CSRMatrix:
-        x = numpy.asarray(x)
+        x = np.asarray(x)
         result = self.copy()
         result.data *= x[result.indices]
         return CSRMatrix(result)
 
-    def solve(self, x: NDArray) -> NDArray:
-        x = numpy.asarray(x)
-        return spsolve(self, x)
+    def solve(self, x: NDArray, method: str = "", **kwargs) -> NDArray:
+        x = np.asarray(x)
+        if method == "":
+            result = sp.sparse.linalg.spsolve(self, x, **kwargs)
+        elif method == "cg":
+            result, info = sp.sparse.linalg.cg(self, x, **kwargs)
+            if info > 0:
+                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+        else:
+            raise ValueError(f"{method=:} is not supported.")
+        return result
 
     def to_numpy(self) -> NDArray:
         return self.toarray()
@@ -191,10 +207,10 @@ class CSRMatrix(csr_matrix, Matrix):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-class CSCMatrix(csc_matrix, Matrix):
+class CSCMatrix(sp.sparse.csc_matrix, Matrix):
 
     def __init__(self, *args, **kwargs):
-        super(csc_matrix, self).__init__(*args, **kwargs)
+        super(sp.sparse.csc_matrix, self).__init__(*args, **kwargs)
         super(Matrix, self).__init__()
 
     @property
@@ -220,24 +236,32 @@ class CSCMatrix(csc_matrix, Matrix):
             be an instance of the :py:class:`Matrix` class.
 
         """
-        result = super(csc_matrix, self).dot(x)
+        result = super(sp.sparse.csc_matrix, self).dot(x)
         if result.ndim == 1:
             return result
         return asmatrix(result)
 
     def scale_rows(self, x: NDArray) -> CSCMatrix:
-        x = numpy.asarray(x)
+        x = np.asarray(x)
         result = self.copy()
         result.data *= x[result.indices]
         return CSCMatrix(result)
 
     def scale_cols(self, x: NDArray) -> CSRMatrix:
-        x = numpy.asarray(x)
-        return CSCMatrix(self * spdiags(x, 0, len(x), len(x)))
+        x = np.asarray(x)
+        return CSCMatrix(self * sp.sparse.spdiags(x, 0, len(x), len(x)))
 
-    def solve(self, x: NDArray) -> NDArray:
-        x = numpy.asarray(x)
-        return spsolve(self, x)
+    def solve(self, x: NDArray, method: str = "", **kwargs) -> NDArray:
+        x = np.asarray(x)
+        if method == "":
+            result = sp.sparse.linalg.spsolve(self, x, **kwargs)
+        elif method == "cg":
+            result, info = sp.sparse.linalg.cg(self, x, **kwargs)
+            if info > 0:
+                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+        else:
+            raise ValueError(f"{method=:} is not supported.")
+        return result
 
     def to_numpy(self) -> NDArray:
         return self.toarray()
@@ -246,7 +270,7 @@ class CSCMatrix(csc_matrix, Matrix):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-matrix_classes: Tuple[Type] = (
+matrix_classes: tuple[Type, ...] = (
     NumpyMatrix,
     CSCMatrix,
     CSRMatrix,
@@ -257,9 +281,8 @@ matrix_classes: Tuple[Type] = (
 
 """
 
-matrix_class_dict: Dict[Type, Type] = {
-    matrix_class.__base__: matrix_class
-    for matrix_class in matrix_classes
+matrix_class_dict: dict[Type, Type] = {
+    matrix_class.__base__: matrix_class for matrix_class in matrix_classes
 }
 """Matrix classes organize in a dictionary, with key as their parent class and
 value as the matrix class.
