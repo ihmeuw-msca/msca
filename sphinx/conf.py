@@ -10,29 +10,21 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath("."))
-from pathlib import Path
+import tomllib
+from datetime import datetime
 
-import msca
-
-base_dir = Path(msca.__file__).parent
-
-about = {}
-with (base_dir / "__about__.py").open() as f:
-    exec(f.read(), about)
+with open("../pyproject.toml", "rb") as f:
+    pyproject = tomllib.load(f)
 
 
 # -- Project information -----------------------------------------------------
 
-project = about["__title__"]
-copyright = about["__copyright__"]
-author = about["__author__"]
+project = pyproject["project"]["name"]
+author = ", ".join([info["name"] for info in pyproject["project"]["authors"]])
+copyright = f"{datetime.today().year}, {author}"
 
 # The full version, including alpha/beta/rc tags
-version = about["__version__"]
-
+version = pyproject["project"]["version"]
 
 # -- General configuration ---------------------------------------------------
 
@@ -92,6 +84,6 @@ html_theme_options = {
         "color-brand-primary": "#6FD8D1",
         "color-brand-content": "#6FD8D1",
         "color-problematic": "#FA9F50",
-        "color-background-secondary": "#202020"
+        "color-background-secondary": "#202020",
     },
 }

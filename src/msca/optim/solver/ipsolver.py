@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, List, Tuple
+from typing import Callable
 
 import numpy as np
 from msca.linalg.matrix import Matrix
@@ -30,6 +30,7 @@ class IPResult:
         The maximum constraint violation.
 
     """
+
     x: NDArray
     success: bool
     fun: float
@@ -57,24 +58,21 @@ class IPSolver:
 
     """
 
-    def __init__(self,
-                 fun: Callable,
-                 grad: Callable,
-                 hess: Callable,
-                 cmat: Matrix,
-                 cvec: NDArray):
+    def __init__(
+        self, fun: Callable, grad: Callable, hess: Callable, cmat: Matrix, cvec: NDArray
+    ):
         self.fun = fun
         self.grad = grad
         self.hess = hess
         self.cmat = cmat
         self.cvec = cvec
 
-    def get_kkt(self, p: List[NDArray], m: float) -> List[NDArray]:
+    def get_kkt(self, p: list[NDArray], m: float) -> list[NDArray]:
         """Get the KKT system.
 
         Parameters
         ----------
-        p : List[NDArray]
+        p : list[NDArray]
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
         m
@@ -82,34 +80,34 @@ class IPSolver:
 
         Returns
         -------
-        List[NDArray]
+        list[NDArray]
             The KKT system with three components.
 
         """
         return [
             self.cmat.dot(p[0]) + p[1] - self.cvec,
-            p[1]*p[2] - m,
-            self.grad(p[0]) + self.cmat.T.dot(p[2])
+            p[1] * p[2] - m,
+            self.grad(p[0]) + self.cmat.T.dot(p[2]),
         ]
 
     def _update_params(
         self,
-        p: List[NDArray],
-        dp: List[NDArray],
+        p: list[NDArray],
+        dp: list[NDArray],
         m: float,
         a_init: float = 1.0,
         a_const: float = 0.01,
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
-    ) -> Tuple[float, List[NDArray]]:
+    ) -> tuple[float, list[NDArray]]:
         """Update parameters with line search.
 
         Parameters
         ----------
-        p : List[NDArray]
+        p : list[NDArray]
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
-        dp : List[NDArray]
+        dp : list[NDArray]
             A list of direction for the parameters.
         m
             Interior point method barrier variable.
@@ -135,7 +133,7 @@ class IPSolver:
             indices = dp[i] < 0.0
             if not any(indices):
                 continue
-            a = 0.99*np.minimum(a, np.min(-p[i][indices] / dp[i][indices]))
+            a = 0.99 * np.minimum(a, np.min(-p[i][indices] / dp[i][indices]))
 
         f_curr = self.get_kkt(p, m)
         p_next = [v.copy() for v in p]
@@ -145,8 +143,8 @@ class IPSolver:
         gnorm_curr = np.max(np.abs(np.hstack(f_curr)))
         gnorm_next = np.max(np.abs(np.hstack(f_next)))
 
-        while gnorm_next > (1 - a_const*a)*gnorm_curr:
-            if a*a_scale < a_lb:
+        while gnorm_next > (1 - a_const * a) * gnorm_curr:
+            if a * a_scale < a_lb:
                 break
             a *= a_scale
             p_next = [v.copy() for v in p]
@@ -157,20 +155,24 @@ class IPSolver:
 
         return a, p_next
 
-    def minimize(self,
-                 x0: NDArray,
-                 xtol: float = 1e-8,
-                 gtol: float = 1e-8,
-                 mtol: float = 1e-6,
-                 max_iter: int = 100,
-                 m_init: float = 1.0,
-                 m_freq: int = 5,
-                 m_scale: float = 0.5,
-                 a_init: float = 1.0,
-                 a_const: float = 0.01,
-                 a_scale: float = 0.9,
-                 a_lb: float = 1e-3,
-                 verbose: bool = False) -> NDArray:
+    def minimize(
+        self,
+        x0: NDArray,
+        xtol: float = 1e-8,
+        gtol: float = 1e-8,
+        mtol: float = 1e-6,
+        max_iter: int = 100,
+        m_init: float = 1.0,
+        m_freq: int = 5,
+        m_scale: float = 0.5,
+        a_init: float = 1.0,
+        a_const: float = 0.01,
+        a_scale: float = 0.9,
+        a_lb: float = 1e-3,
+        verbose: bool = False,
+        mat_solve_method: str = "",
+        mat_solve_options: dict | None = None,
+    ) -> NDArray:
         """Minimize optimization objective over constraints.
 
         Parameters
@@ -203,6 +205,10 @@ class IPSolver:
             the line search will be terminated.
         verbose
             Indicator of if print out convergence history, by default False
+        mat_solve_method
+            Method to solve the linear system, by default "".
+        mat_solve_options
+            Options for the linear system solver, by default None.
 
         Returns
         -------
@@ -217,6 +223,7 @@ class IPSolver:
             np.ones(self.cvec.size),
             np.ones(self.cvec.size),
         ]
+        mat_solve_options = mat_solve_options or {}
 
         m = m_init
         f = self.get_kkt(p, m)
@@ -229,8 +236,9 @@ class IPSolver:
         if verbose:
             fun = self.fun(p[0])
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                  f"{step=:.2e}, {m=:.2e}")
+            print(
+                f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
+            )
 
         while (not success) and (niter < max_iter):
             niter += 1
@@ -242,30 +250,29 @@ class IPSolver:
 
             # compute all directions
             mat = self.hess(p[0]) + csv_mat.T.dot(self.cmat)
-            vec = -f[2] + self.cmat.T.dot(sf2_vec - sv_vec*f[0])
-            dx = mat.solve(vec)
+            vec = -f[2] + self.cmat.T.dot(sf2_vec - sv_vec * f[0])
+            dx = mat.solve(vec, method=mat_solve_method, **mat_solve_options)
             ds = -f[0] - self.cmat.dot(dx)
-            dv = -sf2_vec - sv_vec*ds
+            dv = -sf2_vec - sv_vec * ds
             dp = [dx, ds, dv]
 
             # get step size
-            step, p = self._update_params(
-                p, dp, m, a_init, a_const, a_scale, a_lb
-            )
+            step, p = self._update_params(p, dp, m, a_init, a_const, a_scale, a_lb)
 
             # update m
             if niter % m_freq == 0:
-                m = max(m_scale*m, 0.1*p[1].dot(p[2])/len(p[1]))
+                m = max(m_scale * m, 0.1 * p[1].dot(p[2]) / len(p[1]))
 
             # update f and gnorm
             f = self.get_kkt(p, m)
             gnorm = np.max(np.abs(np.hstack(f)))
-            xdiff = step*np.max(np.abs(dp[0]))
+            xdiff = step * np.max(np.abs(dp[0]))
 
             if verbose:
                 fun = self.fun(p[0])
-                print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                      f"{step=:.2e}, {m=:.2e}")
+                print(
+                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
+                )
             success = (gnorm <= gtol or xdiff <= xtol) and (m <= mtol)
 
         result = IPResult(
@@ -275,7 +282,7 @@ class IPSolver:
             grad=self.grad(p[0]),
             hess=self.hess(p[0]),
             niter=niter,
-            maxcv=float(np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max())
+            maxcv=float(np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max()),
         )
 
         return result

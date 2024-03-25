@@ -1,16 +1,16 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" lang="en" data-content_root="../">
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
-    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="color-scheme" content="light dark"><meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="msca.c2fun" href="msca.c2fun.html" /><link rel="prev" title="Installing msca" href="../installation.html" />
 
-    <meta name="generator" content="sphinx-4.5.0, furo 2022.03.04"/>
-        <title>API Reference - msca 0.0.4</title>
-      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=935aa2abcc5c1da4283d1dc201fb1f0add16d23a" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=25ceb02ed1c46dc30f2321ff83e92799f69dfdb9" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css" />
+    <!-- Generated with Sphinx 7.2.6 and Furo 2024.01.29 -->
+        <title>API Reference - msca 0.1.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?v=135e06be" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?v=36a5483c" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=ad7f860e" />
     
     
 
@@ -49,10 +49,12 @@
   }
 </style></head>
   <body>
+    
     <script>
       document.body.dataset.theme = localStorage.getItem("theme") || "auto";
     </script>
     
+
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
   <symbol id="svg-toc" viewBox="0 0 24 24">
     <title>Contents</title>
@@ -134,7 +136,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../index.html"><div class="brand">msca 0.0.4</div></a>
+      <a href="../index.html"><div class="brand">msca 0.1.0</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -161,10 +163,10 @@
     <img class="sidebar-logo only-dark" src="../_static/logo/logo-dark.png" alt="Dark Logo"/>
   </div>
   
-  <span class="sidebar-brand-text">msca 0.0.4</span>
+  <span class="sidebar-brand-text">msca 0.1.0</span>
   
 </a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
-  <input class="sidebar-search" placeholder=Search name="q" aria-label="Search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
   <input type="hidden" name="check_keywords" value="yes">
   <input type="hidden" name="area" value="default">
 </form>
@@ -173,7 +175,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../installation.html">Installing msca</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">API Reference</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle navigation of API Reference</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a></li>
 <li class="toctree-l2"><a class="reference internal" href="msca.linalg.html">msca.linalg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="msca.optim.prox.html">msca.optim.prox</a></li>
@@ -198,7 +200,9 @@
           </svg>
           <span>Back to top</span>
         </a>
-        <div class="content-icon-container"><div class="theme-toggle-container theme-toggle-content">
+        <div class="content-icon-container">
+          
+<div class="theme-toggle-container theme-toggle-content">
             <button class="theme-toggle">
               <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
               <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
@@ -213,16 +217,35 @@
         </div>
         <article role="main">
           <section id="api-reference">
-<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">#</a></h1>
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading">#</a></h1>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a></li>
+<li class="toctree-l1"><a class="reference internal" href="msca.c2fun.html">msca.c2fun</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.C2Fun"><code class="docutils literal notranslate"><span class="pre">C2Fun</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Identity"><code class="docutils literal notranslate"><span class="pre">Identity</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Exp"><code class="docutils literal notranslate"><span class="pre">Exp</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Log"><code class="docutils literal notranslate"><span class="pre">Log</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Expit"><code class="docutils literal notranslate"><span class="pre">Expit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Logit"><code class="docutils literal notranslate"><span class="pre">Logit</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.Logerfc"><code class="docutils literal notranslate"><span class="pre">Logerfc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.c2fun.html#msca.c2fun.main.c2fun_dict"><code class="docutils literal notranslate"><span class="pre">c2fun_dict</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="msca.linalg.html">msca.linalg</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="msca.linalg.html#module-msca.linalg.matrix">msca.linalg.matrix</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="msca.optim.prox.html">msca.optim.prox</a></li>
-<li class="toctree-l1"><a class="reference internal" href="msca.optim.solver.html">msca.optim.solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="msca.optim.prox.html">msca.optim.prox</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.prox.html#msca.optim.prox.proj_capped_simplex"><code class="docutils literal notranslate"><span class="pre">proj_capped_simplex()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="msca.optim.solver.html">msca.optim.solver</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.solver.html#msca.optim.solver.ipsolver.IPResult"><code class="docutils literal notranslate"><span class="pre">IPResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.solver.html#msca.optim.solver.ipsolver.IPSolver"><code class="docutils literal notranslate"><span class="pre">IPSolver</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.solver.html#msca.optim.solver.ntsolver.NTResult"><code class="docutils literal notranslate"><span class="pre">NTResult</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="msca.optim.solver.html#msca.optim.solver.ntsolver.NTSolver"><code class="docutils literal notranslate"><span class="pre">NTSolver</span></code></a></li>
+</ul>
+</li>
 </ul>
 </div>
 </section>
@@ -239,10 +262,10 @@
                 </div>
                 <div class="title">msca.c2fun</div>
               </div>
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
             </a>
           <a class="prev-page" href="../installation.html">
-              <svg><use href="#svg-arrow-right"></use></svg>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
               <div class="page-info">
                 <div class="context">
                   <span>Previous</span>
@@ -256,7 +279,7 @@
         <div class="bottom-of-page">
           <div class="left-details">
             <div class="copyright">
-                Copyright &#169; 2022 IHME Math Sciences
+                Copyright &#169; 2024, IHME Math Sciences
             </div>
             Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
             
@@ -264,9 +287,7 @@
             
           </div>
           <div class="right-details">
-            <div class="icons">
-              
-            </div>
+            
           </div>
         </div>
         
@@ -278,10 +299,9 @@
       
     </aside>
   </div>
-</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
-    <script src="../_static/scripts/furo.js"></script>
+</div><script src="../_static/documentation_options.js?v=5929fcd5"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/scripts/furo.js?v=32e29ea5"></script>
     </body>
 </html>
