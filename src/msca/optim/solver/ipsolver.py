@@ -170,6 +170,8 @@ class IPSolver:
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
         verbose: bool = False,
+        mat_solve_method: str = "",
+        mat_solve_options: dict | None = None,
     ) -> NDArray:
         """Minimize optimization objective over constraints.
 
@@ -203,6 +205,10 @@ class IPSolver:
             the line search will be terminated.
         verbose
             Indicator of if print out convergence history, by default False
+        mat_solve_method
+            Method to solve the linear system, by default "".
+        mat_solve_options
+            Options for the linear system solver, by default None.
 
         Returns
         -------
@@ -217,6 +223,7 @@ class IPSolver:
             np.ones(self.cvec.size),
             np.ones(self.cvec.size),
         ]
+        mat_solve_options = mat_solve_options or {}
 
         m = m_init
         f = self.get_kkt(p, m)
@@ -230,8 +237,7 @@ class IPSolver:
             fun = self.fun(p[0])
             print(f"{type(self).__name__}:")
             print(
-                f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                f"{step=:.2e}, {m=:.2e}"
+                f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
             )
 
         while (not success) and (niter < max_iter):
@@ -245,7 +251,7 @@ class IPSolver:
             # compute all directions
             mat = self.hess(p[0]) + csv_mat.T.dot(self.cmat)
             vec = -f[2] + self.cmat.T.dot(sf2_vec - sv_vec * f[0])
-            dx = mat.solve(vec)
+            dx = mat.solve(vec, method=mat_solve_method, **mat_solve_options)
             ds = -f[0] - self.cmat.dot(dx)
             dv = -sf2_vec - sv_vec * ds
             dp = [dx, ds, dv]
@@ -265,8 +271,7 @@ class IPSolver:
             if verbose:
                 fun = self.fun(p[0])
                 print(
-                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
-                    f"{step=:.2e}, {m=:.2e}"
+                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
                 )
             success = (gnorm <= gtol or xdiff <= xtol) and (m <= mtol)
 

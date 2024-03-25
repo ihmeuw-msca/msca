@@ -115,6 +115,8 @@ class NTSolver:
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
         verbose: bool = False,
+        mat_solve_method: str = "",
+        mat_solve_options: dict | None = None,
     ) -> NDArray:
         """Minimize optimization objective over constraints.
 
@@ -140,6 +142,10 @@ class NTSolver:
             the line search will be terminated.
         verbose
             Indicator of if print out convergence history, by default False
+        mat_solve_method
+            Method to solve the linear system, by default "".
+        mat_solve_options
+            Options for the linear system solver, by default None.
 
         Returns
         -------
@@ -150,6 +156,7 @@ class NTSolver:
 
         # initialize the parameters
         x = x0.copy()
+        mat_solve_options = mat_solve_options or {}
 
         g = self.grad(x)
         gnorm = np.max(np.abs(g))
@@ -167,7 +174,7 @@ class NTSolver:
             niter += 1
 
             # compute all directions
-            dx = -self.hess(x).solve(g)
+            dx = -self.hess(x).solve(g, method=mat_solve_method, **mat_solve_options)
 
             # get step size
             step, x = self._update_params(x, dx, a_init, a_const, a_scale, a_lb)
