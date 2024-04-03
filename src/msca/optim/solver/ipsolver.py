@@ -4,8 +4,9 @@ from dataclasses import dataclass
 from typing import Callable
 
 import numpy as np
-from msca.linalg.matrix import Matrix
-from numpy.typing import NDArray
+
+from msca.array_interface import ArrayInterface
+from msca.typing import Array, DenseArray
 
 
 @dataclass
@@ -31,11 +32,11 @@ class IPResult:
 
     """
 
-    x: NDArray
+    x: DenseArray
     success: bool
     fun: float
-    grad: NDArray
-    hess: NDArray
+    grad: DenseArray
+    hess: Array
     niter: int
     maxcv: float
 
@@ -59,20 +60,27 @@ class IPSolver:
     """
 
     def __init__(
-        self, fun: Callable, grad: Callable, hess: Callable, cmat: Matrix, cvec: NDArray
+        self,
+        fun: Callable,
+        grad: Callable,
+        hess: Callable,
+        cmat: Array,
+        cvec: DenseArray,
+        arrif: ArrayInterface,
     ):
         self.fun = fun
         self.grad = grad
         self.hess = hess
         self.cmat = cmat
         self.cvec = cvec
+        self.arrif = arrif
 
-    def get_kkt(self, p: list[NDArray], m: float) -> list[NDArray]:
+    def get_kkt(self, p: list[DenseArray], m: float) -> list[DenseArray]:
         """Get the KKT system.
 
         Parameters
         ----------
-        p : list[NDArray]
+        p
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
         m
@@ -92,22 +100,22 @@ class IPSolver:
 
     def _update_params(
         self,
-        p: list[NDArray],
-        dp: list[NDArray],
+        p: list[DenseArray],
+        dp: list[DenseArray],
         m: float,
         a_init: float = 1.0,
         a_const: float = 0.01,
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
-    ) -> tuple[float, list[NDArray]]:
+    ) -> tuple[float, list[DenseArray]]:
         """Update parameters with line search.
 
         Parameters
         ----------
-        p : list[NDArray]
+        p
             A list a parameters, including x, s, and v, where s is the slackness
             variable and v is the dual variable for the constraints.
-        dp : list[NDArray]
+        dp
             A list of direction for the parameters.
         m
             Interior point method barrier variable.
@@ -133,15 +141,15 @@ class IPSolver:
             indices = dp[i] < 0.0
             if not any(indices):
                 continue
-            a = 0.99 * np.minimum(a, np.min(-p[i][indices] / dp[i][indices]))
+            a = 0.99 * min(a, min(-p[i][indices] / dp[i][indices]))
 
         f_curr = self.get_kkt(p, m)
         p_next = [v.copy() for v in p]
         for i in range(len(p)):
             p_next[i] += a * dp[i]
         f_next = self.get_kkt(p_next, m)
-        gnorm_curr = np.max(np.abs(np.hstack(f_curr)))
-        gnorm_next = np.max(np.abs(np.hstack(f_next)))
+        gnorm_curr = max(abs(self.arrif.hstack_dense_array(f_curr)))
+        gnorm_next = max(abs(self.arrif.hstack_dense_array(f_next)))
 
         while gnorm_next > (1 - a_const * a) * gnorm_curr:
             if a * a_scale < a_lb:
@@ -151,13 +159,13 @@ class IPSolver:
             for i in range(len(p)):
                 p_next[i] += a * dp[i]
             f_next = self.get_kkt(p_next, m)
-            gnorm_next = np.max(np.abs(np.hstack(f_next)))
+            gnorm_next = max(abs(self.arrif.hstack_dense_array(f_next)))
 
         return a, p_next
 
     def minimize(
         self,
-        x0: NDArray,
+        x0: DenseArray,
         xtol: float = 1e-8,
         gtol: float = 1e-8,
         mtol: float = 1e-6,
@@ -172,7 +180,7 @@ class IPSolver:
         verbose: bool = False,
         mat_solve_method: str = "",
         mat_solve_options: dict | None = None,
-    ) -> NDArray:
+    ) -> IPResult:
         """Minimize optimization objective over constraints.
 
         Parameters
@@ -220,14 +228,14 @@ class IPSolver:
         # initialize the parameters
         p = [
             x0,
-            np.ones(self.cvec.size),
-            np.ones(self.cvec.size),
+            self.arrif.as_dense_array(np.ones(self.cvec.size)),
+            self.arrif.as_dense_array(np.ones(self.cvec.size)),
         ]
         mat_solve_options = mat_solve_options or {}
 
         m = m_init
         f = self.get_kkt(p, m)
-        gnorm = np.max(np.abs(np.hstack(f)))
+        gnorm = max(abs(self.arrif.hstack_dense_array(f)))
         xdiff = 1.0
         step = 1.0
         niter = 0
@@ -246,12 +254,14 @@ class IPSolver:
             # cache convenient variables
             sv_vec = p[2] / p[1]
             sf2_vec = f[1] / p[1]
-            csv_mat = self.cmat.scale_rows(sv_vec)
+            csv_mat = self.arrif.scale_rows(self.cmat, sv_vec)
 
             # compute all directions
             mat = self.hess(p[0]) + csv_mat.T.dot(self.cmat)
             vec = -f[2] + self.cmat.T.dot(sf2_vec - sv_vec * f[0])
-            dx = mat.solve(vec, method=mat_solve_method, **mat_solve_options)
+            dx = self.arrif.solve(
+                mat, vec, method=mat_solve_method, **mat_solve_options
+            )
             ds = -f[0] - self.cmat.dot(dx)
             dv = -sf2_vec - sv_vec * ds
             dp = [dx, ds, dv]
@@ -265,8 +275,8 @@ class IPSolver:
 
             # update f and gnorm
             f = self.get_kkt(p, m)
-            gnorm = np.max(np.abs(np.hstack(f)))
-            xdiff = step * np.max(np.abs(dp[0]))
+            gnorm = max(abs(self.arrif.hstack_dense_array(f)))
+            xdiff = step * max(abs(dp[0]))
 
             if verbose:
                 fun = self.fun(p[0])
@@ -275,6 +285,7 @@ class IPSolver:
                 )
             success = (gnorm <= gtol or xdiff <= xtol) and (m <= mtol)
 
+        maxcv = max(max(self.cmat.dot(p[0]) - self.cvec), 0.0)
         result = IPResult(
             x=p[0],
             success=success,
@@ -282,7 +293,7 @@ class IPSolver:
             grad=self.grad(p[0]),
             hess=self.hess(p[0]),
             niter=niter,
-            maxcv=float(np.maximum(0.0, self.cmat.dot(p[0]) - self.cvec).max()),
+            maxcv=float(maxcv),
         )
 
         return result

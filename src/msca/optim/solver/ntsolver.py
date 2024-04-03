@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Callable
 
-import numpy as np
-from numpy.typing import NDArray
+from msca.array_interface.main import ArrayInterface
+from msca.typing import Array, DenseArray
 
 
 @dataclass
@@ -26,11 +26,11 @@ class NTResult:
 
     """
 
-    x: NDArray
+    x: DenseArray
     success: bool
     fun: float
-    grad: NDArray
-    hess: NDArray
+    grad: DenseArray
+    hess: Array
     niter: int
 
 
@@ -48,20 +48,23 @@ class NTSolver:
 
     """
 
-    def __init__(self, fun: Callable, grad: Callable, hess: Callable):
+    def __init__(
+        self, fun: Callable, grad: Callable, hess: Callable, arrif: ArrayInterface
+    ):
         self.fun = fun
         self.grad = grad
         self.hess = hess
+        self.arrif = arrif
 
     def _update_params(
         self,
-        x: list[NDArray],
-        dx: list[NDArray],
+        x: list[DenseArray],
+        dx: list[DenseArray],
         a_init: float = 1.0,
         a_const: float = 0.01,
         a_scale: float = 0.9,
         a_lb: float = 1e-3,
-    ) -> tuple[float, list[NDArray]]:
+    ) -> tuple[float, list[DenseArray]]:
         """Update parameters with line search.
 
         Parameters
@@ -91,8 +94,8 @@ class NTSolver:
         a = a_init
         x_next = x + a * dx
         g_next = self.grad(x_next)
-        gnorm_curr = np.max(np.abs(self.grad(x)))
-        gnorm_next = np.max(np.abs(g_next))
+        gnorm_curr = max(abs(self.grad(x)))
+        gnorm_next = max(abs(g_next))
 
         while gnorm_next > (1 - a_const * a) * gnorm_curr:
             if a * a_scale < a_lb:
@@ -100,13 +103,13 @@ class NTSolver:
             a *= a_scale
             x_next = x + a * dx
             g_next = self.grad(x_next)
-            gnorm_next = np.max(np.abs(g_next))
+            gnorm_next = max(abs(g_next))
 
         return a, x_next
 
     def minimize(
         self,
-        x0: NDArray,
+        x0: DenseArray,
         xtol: float = 1e-8,
         gtol: float = 1e-8,
         max_iter: int = 100,
@@ -117,7 +120,7 @@ class NTSolver:
         verbose: bool = False,
         mat_solve_method: str = "",
         mat_solve_options: dict | None = None,
-    ) -> NDArray:
+    ) -> NTResult:
         """Minimize optimization objective over constraints.
 
         Parameters
@@ -159,7 +162,7 @@ class NTSolver:
         mat_solve_options = mat_solve_options or {}
 
         g = self.grad(x)
-        gnorm = np.max(np.abs(g))
+        gnorm = max(abs(g))
         xdiff = 1.0
         step = 1.0
         niter = 0
@@ -174,15 +177,17 @@ class NTSolver:
             niter += 1
 
             # compute all directions
-            dx = -self.hess(x).solve(g, method=mat_solve_method, **mat_solve_options)
+            dx = -self.arrif.solve(
+                self.hess(x), g, method=mat_solve_method, **mat_solve_options
+            )
 
             # get step size
             step, x = self._update_params(x, dx, a_init, a_const, a_scale, a_lb)
 
             # update f and gnorm
             g = self.grad(x)
-            gnorm = np.max(np.abs(g))
-            xdiff = step * np.max(np.abs(dx))
+            gnorm = max(abs(g))
+            xdiff = step * max(abs(dx))
 
             if verbose:
                 fun = self.fun(x)

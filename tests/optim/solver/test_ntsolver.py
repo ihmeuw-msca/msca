@@ -1,15 +1,16 @@
 import numpy as np
-from msca.linalg.matrix import asmatrix
+from msca.array_interface import NumpyArrayInterface
 from msca.optim.solver import NTSolver
 
 np.random.seed(123)
-mat = asmatrix(np.eye(5))
-vec = np.random.randn(5)
+arrif = NumpyArrayInterface("float32")
+mat = arrif.as_array(np.eye(5))
+vec = arrif.as_array(np.random.randn(5))
 
 
 def objective(x):
     r = vec - mat.dot(x)
-    return 0.5*(r**2).sum()
+    return 0.5 * (r**2).sum()
 
 
 def gradient(x):
@@ -26,9 +27,12 @@ def test_ntsolver():
         objective,
         gradient,
         hessian,
+        arrif,
     )
     result = solver.minimize(
-        x0=np.zeros(5), gtol=1e-10, xtol=0.0,
+        x0=arrif.as_array(np.zeros(5)),
+        gtol=1e-10,
+        xtol=0.0,
     )
     assert result.success
     assert np.allclose(result.x, vec)
