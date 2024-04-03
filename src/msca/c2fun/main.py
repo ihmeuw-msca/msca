@@ -30,9 +30,10 @@ create new instances from the class. You can also access the instances from the
 model-level variable :data:`c2fun_dict`.
 
 """
+
 from __future__ import annotations
 
-from abc import ABC, abstractproperty, abstractstaticmethod
+from abc import ABC, abstractmethod
 from typing import Dict
 
 import numpy as np
@@ -52,14 +53,14 @@ class C2Fun(ABC):
 
     """
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def inv(self) -> C2Fun:
-        """The inverse of the function such that :code:`x = fun.inv(fun(x))`.
-
-        """
+        """The inverse of the function such that :code:`x = fun.inv(fun(x))`."""
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def fun(x: NDArray) -> NDArray:
         """Implementation of the function.
 
@@ -71,7 +72,8 @@ class C2Fun(ABC):
         """
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def dfun(x: NDArray) -> NDArray:
         """Implementation of the derivative of the function.
 
@@ -83,7 +85,8 @@ class C2Fun(ABC):
         """
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def d2fun(x: NDArray) -> NDArray:
         """Implementation of the second order derivative of the function.
 
@@ -129,12 +132,9 @@ class C2Fun(ABC):
 
 
 class Identity(C2Fun):
-
     @property
     def inv(self) -> C2Fun:
-        """The inverse of the identity function is the identity itself.
-
-        """
+        """The inverse of the identity function is the identity itself."""
         return self
 
     @staticmethod
@@ -187,12 +187,9 @@ class Identity(C2Fun):
 
 
 class Exp(C2Fun):
-
     @property
     def inv(self) -> C2Fun:
-        """The inverse of the exponential function is :class:`Log`.
-
-        """
+        """The inverse of the exponential function is :class:`Log`."""
         return log
 
     @staticmethod
@@ -242,12 +239,9 @@ class Exp(C2Fun):
 
 
 class Log(C2Fun):
-
     @property
     def inv(self) -> C2Fun:
-        """The inverse of the log function is the :class:`Exp`.
-
-        """
+        """The inverse of the log function is the :class:`Exp`."""
         return exp
 
     @staticmethod
@@ -309,9 +303,7 @@ class Expit(C2Fun):
 
     @property
     def inv(self) -> C2Fun:
-        """The inverse of the expit function is the :class:`Logit`.
-
-        """
+        """The inverse of the expit function is the :class:`Logit`."""
         return logit
 
     @staticmethod
@@ -357,11 +349,11 @@ class Expit(C2Fun):
 
         pos_indices = x > 0
         z = np.exp(-x[pos_indices])
-        y[pos_indices] = z / (1 + z)**2
+        y[pos_indices] = z / (1 + z) ** 2
 
         neg_indices = ~pos_indices
         z = np.exp(x[neg_indices])
-        y[neg_indices] = z / (1 + z)**2
+        y[neg_indices] = z / (1 + z) ** 2
 
         return y
 
@@ -383,22 +375,19 @@ class Expit(C2Fun):
 
         pos_indices = x > 0
         z = np.exp(-x[pos_indices])
-        y[pos_indices] = (z**2 - z) / (1 + z)**3
+        y[pos_indices] = (z**2 - z) / (1 + z) ** 3
 
         neg_indices = ~pos_indices
         z = np.exp(x[neg_indices])
-        y[neg_indices] = (z - z**2) / (1 + z)**3
+        y[neg_indices] = (z - z**2) / (1 + z) ** 3
 
         return y
 
 
 class Logit(C2Fun):
-
     @property
     def inv(self) -> C2Fun:
-        """The inverse of the logit function is the :class:`Expit`.
-
-        """
+        """The inverse of the logit function is the :class:`Expit`."""
         return expit
 
     @staticmethod
@@ -446,7 +435,7 @@ class Logit(C2Fun):
 
         """
         x = np.asarray(x)
-        return (2*x - 1) / (x * (1 - x))**2
+        return (2 * x - 1) / (x * (1 - x)) ** 2
 
 
 class Logerfc(C2Fun):
@@ -505,9 +494,9 @@ class Logerfc(C2Fun):
 
         r_indices = ~l_indices
         y[r_indices] = (
-            -x[r_indices]**2 +
-            np.log(1 - 0.5/x[r_indices]**2) -
-            np.log(np.sqrt(np.pi)*x[r_indices])
+            -(x[r_indices] ** 2)
+            + np.log(1 - 0.5 / x[r_indices] ** 2)
+            - np.log(np.sqrt(np.pi) * x[r_indices])
         )
         return y
 
@@ -535,14 +524,14 @@ class Logerfc(C2Fun):
 
         l_indices = x < 25
         y[l_indices] = (
-            -2*np.exp(-x[l_indices]**2)/(erfc(x[l_indices])*np.sqrt(np.pi))
+            -2 * np.exp(-(x[l_indices] ** 2)) / (erfc(x[l_indices]) * np.sqrt(np.pi))
         )
 
         r_indices = ~l_indices
         y[r_indices] = (
-            -2*x[r_indices] -
-            1/x[r_indices] +
-            2/(2*x[r_indices]**3 - x[r_indices])
+            -2 * x[r_indices]
+            - 1 / x[r_indices]
+            + 2 / (2 * x[r_indices] ** 3 - x[r_indices])
         )
         return y
 
@@ -563,7 +552,7 @@ class Logerfc(C2Fun):
         """
         x = np.asarray(x)
         d = Logerfc.dfun(x)
-        return -2*x*d - d**2
+        return -2 * x * d - d**2
 
 
 identity: C2Fun = Identity()
