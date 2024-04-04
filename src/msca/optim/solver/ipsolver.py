@@ -19,11 +19,11 @@ class IPResult:
         The solution of the optimization.
     success
         Whether or not the optimizer exited successfully.
-    fun
+    objective
         The objective function value.
-    grad
+    gradient
         Gradient of the objective function.
-    hess
+    hessian
         Hessian of the objective function.
     niter
         Number of iterations.
@@ -34,9 +34,9 @@ class IPResult:
 
     x: DenseArray
     success: bool
-    fun: float
-    grad: DenseArray
-    hess: Array
+    objective: float
+    gradient: DenseArray
+    hessian: Array
     niter: int
     maxcv: float
 
@@ -46,11 +46,11 @@ class IPSolver:
 
     Parameters
     ----------
-    fun
+    objective
         The optimization objective function.
-    grad
+    gradient
         The optimization gradient function.
-    hess
+    hessian
         The optimization hessian function.
     cmat
         The constraint linear mapping.
@@ -61,16 +61,16 @@ class IPSolver:
 
     def __init__(
         self,
-        fun: Callable,
-        grad: Callable,
-        hess: Callable,
+        objective: Callable,
+        gradient: Callable,
+        hessian: Callable,
         cmat: Array,
         cvec: DenseArray,
         arrif: ArrayInterface,
     ):
-        self.fun = fun
-        self.grad = grad
-        self.hess = hess
+        self.objective = objective
+        self.gradient = gradient
+        self.hessian = hessian
         self.cmat = cmat
         self.cvec = cvec
         self.arrif = arrif
@@ -95,7 +95,7 @@ class IPSolver:
         return [
             self.cmat.dot(p[0]) + p[1] - self.cvec,
             p[1] * p[2] - m,
-            self.grad(p[0]) + self.cmat.T.dot(p[2]),
+            self.gradient(p[0]) + self.cmat.T.dot(p[2]),
         ]
 
     def _update_params(
@@ -242,10 +242,10 @@ class IPSolver:
         success = False
 
         if verbose:
-            fun = self.fun(p[0])
+            objective = self.objective(p[0])
             print(f"{type(self).__name__}:")
             print(
-                f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
+                f"{niter=:3d}, {objective=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
             )
 
         while (not success) and (niter < max_iter):
@@ -257,7 +257,7 @@ class IPSolver:
             csv_mat = self.arrif.scale_rows(self.cmat, sv_vec)
 
             # compute all directions
-            mat = self.hess(p[0]) + csv_mat.T.dot(self.cmat)
+            mat = self.hessian(p[0]) + csv_mat.T.dot(self.cmat)
             vec = -f[2] + self.cmat.T.dot(sf2_vec - sv_vec * f[0])
             dx = self.arrif.solve(
                 mat, vec, method=mat_solve_method, **mat_solve_options
@@ -279,9 +279,9 @@ class IPSolver:
             xdiff = step * max(abs(dp[0]))
 
             if verbose:
-                fun = self.fun(p[0])
+                objective = self.objective(p[0])
                 print(
-                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
+                    f"{niter=:3d}, {objective=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}, {m=:.2e}"
                 )
             success = (gnorm <= gtol or xdiff <= xtol) and (m <= mtol)
 
@@ -289,9 +289,9 @@ class IPSolver:
         result = IPResult(
             x=p[0],
             success=success,
-            fun=self.fun(p[0]),
-            grad=self.grad(p[0]),
-            hess=self.hess(p[0]),
+            objective=self.objective(p[0]),
+            gradient=self.gradient(p[0]),
+            hessian=self.hessian(p[0]),
             niter=niter,
             maxcv=float(maxcv),
         )

@@ -15,11 +15,11 @@ class NTResult:
         The solution of the optimization.
     success
         Whether or not the optimizer exited successfully.
-    fun
+    objective
         The objective function value.
-    grad
+    gradient
         Gradient of the objective function.
-    hess
+    hessian
         Hessian of the objective function.
     niter
         Number of iterations.
@@ -28,9 +28,9 @@ class NTResult:
 
     x: DenseArray
     success: bool
-    fun: float
-    grad: DenseArray
-    hess: Array
+    objective: float
+    gradient: DenseArray
+    hessian: Array
     niter: int
 
 
@@ -39,21 +39,27 @@ class NTSolver:
 
     Parameters
     ----------
-    fun
+    objective
         Optimization objective function
-    grad
+    gradient
         Optimization gradient function
-    hess
+    hessian
         Optimization hessian function
+    arrif
+        Array interface define all the array operation
 
     """
 
     def __init__(
-        self, fun: Callable, grad: Callable, hess: Callable, arrif: ArrayInterface
+        self,
+        objective: Callable,
+        gradient: Callable,
+        hessian: Callable,
+        arrif: ArrayInterface,
     ):
-        self.fun = fun
-        self.grad = grad
-        self.hess = hess
+        self.objective = objective
+        self.gradient = gradient
+        self.hessian = hessian
         self.arrif = arrif
 
     def _update_params(
@@ -93,8 +99,8 @@ class NTSolver:
         """
         a = a_init
         x_next = x + a * dx
-        g_next = self.grad(x_next)
-        gnorm_curr = max(abs(self.grad(x)))
+        g_next = self.gradient(x_next)
+        gnorm_curr = max(abs(self.gradient(x)))
         gnorm_next = max(abs(g_next))
 
         while gnorm_next > (1 - a_const * a) * gnorm_curr:
@@ -102,7 +108,7 @@ class NTSolver:
                 break
             a *= a_scale
             x_next = x + a * dx
-            g_next = self.grad(x_next)
+            g_next = self.gradient(x_next)
             gnorm_next = max(abs(g_next))
 
         return a, x_next
@@ -161,7 +167,7 @@ class NTSolver:
         x = x0.copy()
         mat_solve_options = mat_solve_options or {}
 
-        g = self.grad(x)
+        g = self.gradient(x)
         gnorm = max(abs(g))
         xdiff = 1.0
         step = 1.0
@@ -169,39 +175,41 @@ class NTSolver:
         success = False
 
         if verbose:
-            fun = self.fun(x)
+            objective = self.objective(x)
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}")
+            print(
+                f"{niter=:3d}, {objective=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}"
+            )
 
         while (not success) and (niter < max_iter):
             niter += 1
 
             # compute all directions
             dx = -self.arrif.solve(
-                self.hess(x), g, method=mat_solve_method, **mat_solve_options
+                self.hessian(x), g, method=mat_solve_method, **mat_solve_options
             )
 
             # get step size
             step, x = self._update_params(x, dx, a_init, a_const, a_scale, a_lb)
 
             # update f and gnorm
-            g = self.grad(x)
+            g = self.gradient(x)
             gnorm = max(abs(g))
             xdiff = step * max(abs(dx))
 
             if verbose:
-                fun = self.fun(x)
+                objective = self.objective(x)
                 print(
-                    f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}"
+                    f"{niter=:3d}, {objective=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}"
                 )
             success = gnorm <= gtol or xdiff <= xtol
 
         result = NTResult(
             x=x,
             success=success,
-            fun=self.fun(x),
-            grad=self.grad(x),
-            hess=self.hess(x),
+            objective=self.objective(x),
+            gradient=self.gradient(x),
+            hessian=self.hessian(x),
             niter=niter,
         )
 
