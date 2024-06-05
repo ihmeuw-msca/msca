@@ -51,11 +51,9 @@ def test_to_numpy(mat, matrix_class):
     assert isinstance(mat.to_numpy(), np.ndarray)
 
 
-@pytest.mark.parametrize("mat", [
-    np.eye(2),
-    csc_matrix(np.eye(2)),
-    csr_matrix(np.eye(2))
-])
+@pytest.mark.parametrize(
+    "mat", [np.eye(2), csc_matrix(np.eye(2)), csr_matrix(np.eye(2))]
+)
 def test_asmatrix(mat):
     mat = asmatrix(mat)
     assert isinstance(mat, Matrix)

@@ -5,10 +5,9 @@ from numpy.typing import NDArray
 from scipy.optimize import brentq
 
 
-def proj_capped_simplex(x: NDArray,
-                        s: float,
-                        lb: float | NDArray = 0.0,
-                        ub: float | NDArray = 1.0) -> NDArray:
+def proj_capped_simplex(
+    x: NDArray, s: float, lb: float | NDArray = 0.0, ub: float | NDArray = 1.0
+) -> NDArray:
     """Projection onto the capped simplex. The capped simplex can be defined as
 
     .. math::
