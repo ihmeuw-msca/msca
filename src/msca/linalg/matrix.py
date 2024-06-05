@@ -92,7 +92,6 @@ class Matrix(ABC):
 
 
 class NumpyMatrix(np.ndarray, Matrix):
-
     def __new__(cls, *args, **kwargs):
         return np.asarray(*args, **kwargs).view(cls)
 
@@ -145,7 +144,6 @@ class NumpyMatrix(np.ndarray, Matrix):
 
 
 class CSRMatrix(sp.sparse.csr_matrix, Matrix):
-
     def __init__(self, *args, **kwargs):
         super(sp.sparse.csr_matrix, self).__init__(*args, **kwargs)
         super(Matrix, self).__init__()
@@ -208,7 +206,6 @@ class CSRMatrix(sp.sparse.csr_matrix, Matrix):
 
 
 class CSCMatrix(sp.sparse.csc_matrix, Matrix):
-
     def __init__(self, *args, **kwargs):
         super(sp.sparse.csc_matrix, self).__init__(*args, **kwargs)
         super(Matrix, self).__init__()

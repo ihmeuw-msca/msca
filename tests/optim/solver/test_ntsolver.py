@@ -9,7 +9,7 @@ vec = np.random.randn(5)
 
 def objective(x):
     r = vec - mat.dot(x)
-    return 0.5*(r**2).sum()
+    return 0.5 * (r**2).sum()
 
 
 def gradient(x):
@@ -28,7 +28,9 @@ def test_ntsolver():
         hessian,
     )
     result = solver.minimize(
-        x0=np.zeros(5), gtol=1e-10, xtol=0.0,
+        x0=np.zeros(5),
+        gtol=1e-10,
+        xtol=0.0,
     )
     assert result.success
     assert np.allclose(result.x, vec)
