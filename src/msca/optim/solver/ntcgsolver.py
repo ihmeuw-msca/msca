@@ -5,16 +5,15 @@ from typing import Callable
 
 import numpy as np
 from numpy.typing import NDArray
-from scipy.sparse.linalg import LinearOperator, cg
+from scipy.sparse.linalg import cg
 
-from msca.linalg.matrix import Matrix
 from msca.optim.line_search import line_search_map
 from msca.optim.precon import precon_builder_map
 
 
 @dataclass
 class NTCGResult:
-    """Newton's solver result.
+    """Newton CG's solver result.
 
     Parameters
     ----------
@@ -42,7 +41,7 @@ class NTCGResult:
 
 
 class NTCGSolver:
-    """Newton's solver.
+    """Newton CG's solver.
 
     Parameters
     ----------
@@ -59,32 +58,6 @@ class NTCGSolver:
         self.fun = fun
         self.grad = grad
         self.hess = hess
-        self.record = {}
-
-    def _build_precon(
-        self, s_deque: deque, y_deque: deque, r_deque: deque, hess: Matrix
-    ) -> LinearOperator | None:
-        if len(s_deque) == 0:
-            return None
-
-        gamma = 1 / (r_deque[-1] * np.dot(y_deque[-1], y_deque[-1]))
-
-        def precon_mv(x):
-            q = x.copy()
-            a_deque = deque()
-            for s, y, r in list(zip(s_deque, y_deque, r_deque))[::-1]:
-                a = r * s.dot(q)
-                q -= a * y
-                a_deque.append(a)
-            z = gamma * q
-            for s, y, r in zip(s_deque, y_deque, r_deque):
-                b = r * y.dot(z)
-                z += (a_deque.pop() - b) * s
-            return z
-
-        precon = LinearOperator(hess.shape, matvec=precon_mv)
-
-        return precon
 
     def minimize(
         self,
@@ -114,10 +87,29 @@ class NTCGSolver:
             Tolerance for the KKT system, by default 1e-8.
         maxiter
             Maximum number of iterations, by default 100.
+        line_search
+            Line search method, by default "armijo".
+        line_search_options
+            Options for the line search method, by default None.
+        precon_builder
+            Preconditioner builder, by default None.
+        precon_builder_options
+            Options for the preconditioner builder, by default None.
+        cg_maxiter_init
+            Initial maximum number of CG iterations, by default None. If it is
+            None, solver will try to use cg_maxiter as a constant cap of number
+            of CG iterations. And if cg_maxiter is also None, there will be no
+            cap.
+        cg_maxiter_incr
+            Increment of maximum number of CG iterations, by default 0. After
+            the increment, the number of CG iterations will still be capped by
+            cg_maxiter if cg_maxiter is not None.
+        cg_maxiter
+            Maximum number of CG iterations, by default None.
+        cg_options
+            Options for the CG function, by default None.
         verbose
             Indicator of if print out convergence history, by default False
-        cg_options
-            Options for the linear system solver, by default None.
 
         Returns
         -------
@@ -136,20 +128,15 @@ class NTCGSolver:
             )
         cg_options = cg_options or {}
 
-        if cg_maxiter_init is None and cg_maxiter is None:
-
-            def get_cg_maxiter(niter):
+        def get_cg_maxiter(niter: int) -> int | None:
+            if cg_maxiter_init is None and cg_maxiter is None:
                 return None
-
-        elif cg_maxiter is None:
-
-            def get_cg_maxiter(niter):
-                return cg_maxiter_init + cg_maxiter_incr * (niter - 1)
-
-        else:
-
-            def get_cg_maxiter(niter):
-                return min(cg_maxiter, cg_maxiter_init + cg_maxiter_incr * (niter - 1))
+            if cg_maxiter_init is None:
+                return cg_maxiter
+            result = cg_maxiter_init + cg_maxiter_incr * (niter - 1)
+            if cg_maxiter is not None:
+                result = min(result, cg_maxiter)
+            return result
 
         g = self.grad(x)
         gnorm = np.max(np.abs(g))
@@ -181,9 +168,7 @@ class NTCGSolver:
             if precon_builder is not None:
                 cg_options["M"] = precon_builder(x_pair, g_pair)
             cg_options["maxiter"] = get_cg_maxiter(niter)
-            # gnorm = np.max(np.abs(g))
             dx = cg(hess, -g, **cg_options)[0]
-            # dx *= gnorm
 
             # get step size
             step = line_search(self.grad, x, dx, **line_search_options)

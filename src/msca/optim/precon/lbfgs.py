@@ -6,6 +6,17 @@ from scipy.sparse.linalg import LinearOperator
 
 
 class LBFGSPreconBuilder:
+    """LBFGS preconditioner builder. This is based on the LBFGS algorithm
+    `here <https://en.wikipedia.org/wiki/Limited-memory_BFGS>`_. We use the
+    built linear operator as the preconditioner of the system.
+
+    Parameters
+    ----------
+    rank
+        Rank of the LBFGS approximation. Default is 5.
+
+    """
+
     def __init__(self, rank: int = 5) -> None:
         self.rank = rank
         self._s = deque(maxlen=self.rank)
@@ -15,6 +26,25 @@ class LBFGSPreconBuilder:
     def __call__(
         self, x_pair: deque[NDArray], g_pair: deque[NDArray]
     ) -> LinearOperator | None:
+        """Returns the preconditioner.
+
+        Parameters
+        ----------
+        x_pair
+            The previous and current variables.
+        g_pair
+            The gradient at previous and current variables.
+
+        Returns
+        -------
+        LinearOperator | None
+            If `x_pair` or `g_pair` only contains information of one iteration
+            it will return None which means no preconditioning. Because we
+            cannot compute the LBFGS inverse Hessian approximation based on one
+            iteration. Otherwise it will return a linear operator as the LBFGS
+            inverse Hessian approximation.
+
+        """
         if len(x_pair) != 2 or len(g_pair) != 2:
             return
         self._s.append(x_pair[1] - x_pair[0])
