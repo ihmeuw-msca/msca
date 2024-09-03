@@ -8,9 +8,14 @@ version = "0.1.1"
 description = "Mathematical sciences and computational algorithms"
 readme = "README.rst"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = { text = "BSD-2-Clause" }
 authors = [
     { name = "IHME Math Sciences", email = "ihme.math.sciences@gmail.com" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: BSD License",
+    "Natural Language :: English",
 ]
 dependencies = [
     "numpy",
@@ -18,7 +23,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-cov"]
 docs = ["sphinx", "sphinx-autodoc-typehints", "furo"]
 
 [project.urls]
