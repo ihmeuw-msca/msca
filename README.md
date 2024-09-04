@@ -4,5 +4,4 @@
 .. image:: https://badge.fury.io/py/msca.svg
     :target: https://badge.fury.io/py/msca
 
-Mathematical sciences and computational algorithms
-==================================================
+# Mathematical sciences and computational algorithms
