@@ -51,7 +51,7 @@ def _build_integration_weights_midpoint(
     val = diffs[col_index]
     # rewrite the end intervals sizes
     end_points = np.hstack([0, np.cumsum(sizes)])
-    val[end_points[:-1]] = grid_points[lb_index + 1] - lb
-    val[end_points[1:] - 1] = ub - grid_points[ub_index - 1]
+    val[end_points[:-1]] = np.minimum(grid_points[lb_index + 1], ub) - lb
+    val[end_points[1:] - 1] = ub - np.maximum(lb, grid_points[ub_index - 1])
 
     return (val, (row_index, col_index))
