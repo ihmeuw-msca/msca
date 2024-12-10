@@ -20,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: python -m pip install cibuildwheel . --upgrade pip
     - name: Build package distribution
-      run: python -m cibuildwheel --output-dir wheelhouse
+      run: python -m cibuildwheel --output-dir dist
       env:
         CIBW_BUILD: "cp312-manylinux_x86_64"
     - name: Publish package distribution to PyPI
