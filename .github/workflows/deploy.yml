@@ -18,11 +18,11 @@ jobs:
       with:
         python-version: "3.12"
     - name: Install dependencies
-      run: python -m pip install build . --upgrade pip
+      run: python -m pip install cibuildwheel . --upgrade pip
     - name: Build package distribution
-      run: python -m build --sdist --wheel --outdir dist/ .
+      run: python -m cibuildwheel --output-dir wheelhouse
     - name: Publish package distribution to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      uses: pypa/gh-action-pypi-publish@release/v1.12
       with:
         skip_existing: true
         user: __token__
