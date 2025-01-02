@@ -119,10 +119,8 @@ class UniqueSeq(tuple[T, ...]):
     ) -> core_schema.CoreSchema:
         instance_schema = core_schema.is_instance_schema(cls)
 
-        item_type = get_args(source)
-        iterable_t_schema = handler.generate_schema(
-            Iterable[item_type] if len(item_type) > 0 else Iterable
-        )
+        item_type = get_args(source) or T.__bound__
+        iterable_t_schema = handler.generate_schema(Iterable[item_type])
         non_instance_schema = core_schema.no_info_after_validator_function(
             cls, iterable_t_schema
         )
