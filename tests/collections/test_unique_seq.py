@@ -1,7 +1,5 @@
-from typing import Iterable
-
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 
 from msca.collections import UniqueSeq
 
@@ -10,7 +8,7 @@ from msca.collections import UniqueSeq
 @pytest.mark.parametrize(
     "x", [[1, 2, 3], (1, 2, 3), iter(["a", "b", "c", "c"])]
 )
-def test_new_success(x: Iterable) -> None:
+def test_new_success(x) -> None:
     a = UniqueSeq(x)
     assert len(a) == len(set(a))
 
@@ -146,3 +144,69 @@ def test_item_type_success(T) -> None:
 def test_item_type_failure(T) -> None:
     with pytest.raises(TypeError):
         UniqueSeq[T]
+
+
+# UniqueSeq is also compatible with pydantic Models
+# pydantic.BaseModel will automatically parse the input
+@pytest.mark.parametrize(
+    "a",
+    [[1, 2, 3], (1, 2, 3), iter([1, 2, 3]), ["1", 2, "3"]],
+)
+def test_pydantic_base_model_with_item_type_success(a) -> None:
+    class TestModel(BaseModel):
+        a: UniqueSeq[int]
+
+    model = TestModel(a=a)
+    assert isinstance(model.a, UniqueSeq)
+    assert model.a == (1, 2, 3)
+
+
+# If the input item type does not match, pydantic will raise ValidationError
+def test_pydantic_base_model_with_item_type_failure() -> None:
+    class TestModel(BaseModel):
+        a: UniqueSeq[int]
+
+    # here tuple (1, 2) is not an instance of item type int
+    with pytest.raises(ValidationError):
+        _ = TestModel(a=[(1, 2), 1])
+
+
+# When no item type is provided, pydantic will test if input is hashable
+def test_pydantic_base_model_no_item_type() -> None:
+    class TestModel(BaseModel):
+        a: UniqueSeq
+
+    model = TestModel(a=[1, 2, 3])
+    assert isinstance(model.a, UniqueSeq)
+    assert model.a == (1, 2, 3)
+
+    # list [1, 2] is not hashable
+    with pytest.raises(ValidationError):
+        _ = TestModel(a=[[1, 2]])
+
+    # One exception for this is that if we provide tuple[int, ...] as the item
+    # type, it will convert the list to tuple and no error will be raised.
+    class OtherTestModel(BaseModel):
+        a: UniqueSeq[tuple[int, ...]]
+
+    model = OtherTestModel(a=[[1, 2]])
+    assert isinstance(model.a, UniqueSeq)
+    assert model.a == ((1, 2),)
+
+
+# Since UniqueSeq is a subclass of tuple, pydantic will serialize and
+# deserialize in the same way as tuple.
+def test_pydantic_base_model_serialization() -> None:
+    class TestModel(BaseModel):
+        a: UniqueSeq[int]
+
+    model = TestModel(a=[1, 2, 2, 3])
+
+    # serialization
+    model_dict = model.model_dump()
+    assert model_dict == {"a": (1, 2, 3)}
+
+    # deserialization
+    other_model = TestModel(**model_dict)
+    assert isinstance(other_model.a, UniqueSeq)
+    assert other_model.a == (1, 2, 3)
