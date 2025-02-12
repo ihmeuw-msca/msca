@@ -1,19 +1,12 @@
-from collections.abc import Iterator, Hashable, Iterable
-from itertools import chain, filterfalse
+from collections.abc import Hashable, Iterable
+from itertools import chain
 from typing import Any, Never, Self, get_args
 from types import GenericAlias
 
+from msca.itertools import unique_everseen
+
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
-
-
-def unique_everseen[T: Hashable](
-    iterable: Iterable[T], seen: Iterable[T] = ()
-) -> Iterator[T]:
-    seen = set(seen)
-    for item in filterfalse(seen.__contains__, iterable):
-        seen.add(item)
-        yield item
 
 
 def _unsupported_operand_type_error(operand: str, x: Any, y: Any) -> TypeError:
