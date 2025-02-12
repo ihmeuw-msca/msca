@@ -24,7 +24,7 @@ def _unsupported_operand_type_error(operand: str, x: Any, y: Any) -> TypeError:
     )
 
 
-class UniqueSeq[T: Hashable](tuple[T, ...]):
+class UniqueSeq[T: Hashable](tuple):
     def __new__(cls, iterable: Iterable[T] = ()) -> Self:
         if isinstance(iterable, cls):
             return iterable
