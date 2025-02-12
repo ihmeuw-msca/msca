@@ -1,15 +1,15 @@
-from collections.abc import Generator, Hashable, Iterable
+from collections.abc import Iterator, Hashable, Iterable
 from itertools import chain, filterfalse
-from types import GenericAlias, UnionType
-from typing import Any, Never, Self, TypeVar, get_args
+from typing import Any, Never, Self, get_args
+from types import GenericAlias
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
 
-T = TypeVar("T", bound=Hashable)
 
-
-def unique_everseen(iterable: Iterable[T], seen: Iterable[T] = ()) -> Generator:
+def unique_everseen[T: Hashable](
+    iterable: Iterable[T], seen: Iterable[T] = ()
+) -> Iterator[T]:
     seen = set(seen)
     for item in filterfalse(seen.__contains__, iterable):
         seen.add(item)
@@ -24,40 +24,7 @@ def _unsupported_operand_type_error(operand: str, x: Any, y: Any) -> TypeError:
     )
 
 
-def _wrong_number_of_arguments_error(
-    cls: type, wrong_item_type: Any
-) -> TypeError:
-    return TypeError(
-        f"Wrong number of arguments for '{cls.__name__}', expected single item type, got '{wrong_item_type}'"
-    )
-
-
-def _unidentified_item_type_error(
-    item_type: Any, expected_item_types: tuple[type, ...]
-) -> TypeError:
-    type_names = ", ".join(
-        [f"'{t.__module__}.{t.__name__}'" for t in expected_item_types]
-    )
-    return TypeError(
-        f"Unrecognized item type '{item_type}', expected an instance of the following types: {type_names}"
-    )
-
-
-def _extract_types_from_item_type(
-    item_type: type | GenericAlias | UnionType, types: set[type] | None = None
-) -> set[type]:
-    types = set() if types is None else types
-    if isinstance(item_type, type):
-        types.add(item_type)
-        return types
-    if isinstance(item_type, GenericAlias):
-        types.add(item_type.__origin__)
-    for item_sub_type in get_args(item_type):
-        _extract_types_from_item_type(item_sub_type, types=types)
-    return types
-
-
-class UniqueSeq(tuple[T, ...]):
+class UniqueSeq[T: Hashable](tuple[T, ...]):
     def __new__(cls, iterable: Iterable[T] = ()) -> Self:
         if isinstance(iterable, cls):
             return iterable
@@ -82,28 +49,15 @@ class UniqueSeq(tuple[T, ...]):
     def __repr__(self) -> str:
         return f"{type(self).__name__}({super().__repr__()})"
 
-    def __class_getitem__(
-        cls, item_type: type | tuple[type, ...]
-    ) -> GenericAlias:
-        if isinstance(item_type, tuple):
-            if len(item_type) != 1:
-                raise _wrong_number_of_arguments_error(cls, item_type)
-            item_type = item_type[0]
+    def __str__(self) -> str:
+        return super().__repr__()
 
-        if item_type is not None:
-            # TODO: these types might not be comprehensive, for example
-            # typing.Literal should also be included
-            expected_item_types = (type, GenericAlias, UnionType)
-            if not isinstance(item_type, expected_item_types):
-                raise _unidentified_item_type_error(
-                    item_type, expected_item_types
-                )
-            bound = Hashable
-            extracted_types = _extract_types_from_item_type(item_type)
-            if not all(issubclass(t, bound) for t in extracted_types):
-                raise TypeError(
-                    f"Item type '{item_type}' is not a subclass of '{str(bound)}'"
-                )
+    def __class_getitem__(cls, item_type: Any) -> GenericAlias:
+        if isinstance(item_type, tuple) and len(item_type) != 1:
+            raise TypeError(
+                f"Wrong number of parameters for '{cls.__name__}', "
+                f"actual {len(item_type)}, expected 1"
+            )
         return super().__class_getitem__(item_type)
 
     @classmethod
@@ -112,9 +66,10 @@ class UniqueSeq(tuple[T, ...]):
     ) -> core_schema.CoreSchema:
         instance_schema = core_schema.is_instance_schema(cls)
 
-        item_type = get_args(source) or Hashable
-        iterable_t_schema = handler.generate_schema(Iterable[item_type])  # type: ignore[valid-type]
+        iterable_schema: dict[str, Any] = {"type": "generator"}
+        if item_type := get_args(source):
+            iterable_schema["items_schema"] = handler(item_type[0])
         non_instance_schema = core_schema.no_info_after_validator_function(
-            cls, iterable_t_schema
+            cls, iterable_schema
         )
         return core_schema.union_schema([instance_schema, non_instance_schema])

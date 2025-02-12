@@ -135,17 +135,6 @@ def test_item_type_success(T) -> None:
     UniqueSeq[T]
 
 
-# When item type is not hashable, it will raise TypeError
-# we will replace all 'int' in the above example by list which will lead to the
-# failure of the type hinting.
-@pytest.mark.parametrize(
-    "T", [list, tuple[list, str], list | str, tuple[list, str] | None]
-)
-def test_item_type_failure(T) -> None:
-    with pytest.raises(TypeError):
-        UniqueSeq[T]
-
-
 # UniqueSeq is also compatible with pydantic Models
 # pydantic.BaseModel will automatically parse the input
 @pytest.mark.parametrize(
@@ -181,7 +170,7 @@ def test_pydantic_base_model_no_item_type() -> None:
     assert model.a == (1, 2, 3)
 
     # list [1, 2] is not hashable
-    with pytest.raises(ValidationError):
+    with pytest.raises(TypeError):
         _ = TestModel(a=[[1, 2]])
 
     # One exception for this is that if we provide tuple[int, ...] as the item
