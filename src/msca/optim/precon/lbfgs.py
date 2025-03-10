@@ -68,6 +68,8 @@ class LBFGSPreconBuilder:
                 z += (a_deque.pop() - b) * s
             return z
 
-        precon = LinearOperator((size, size), matvec=precon_mv)
+        precon = LinearOperator(
+            (size, size), matvec=precon_mv, dtype=x_pair[0].dtype
+        )
 
         return precon
