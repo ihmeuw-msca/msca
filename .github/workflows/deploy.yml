@@ -22,7 +22,7 @@ jobs:
     - name: Build package distribution
       run: python -m cibuildwheel --output-dir dist
       env:
-        CIBW_BUILD: "cp311-* cp312-*"
+        CIBW_BUILD: "cp311-macosx* cp312-macosx* cp311-manylinux* cp312-manylinux* cp311-win* cp312-win*"
     - name: Publish package distribution to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1.12
       with:
