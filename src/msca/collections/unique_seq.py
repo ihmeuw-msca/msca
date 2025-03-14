@@ -1,13 +1,15 @@
-from collections.abc import Iterator, Hashable, Iterable
+from collections.abc import Hashable, Iterable, Iterator
 from itertools import chain, filterfalse
-from typing import Any, Never, Self, get_args
 from types import GenericAlias
+from typing import Any, Never, Self, TypeVar, get_args
 
 from pydantic import GetCoreSchemaHandler
 from pydantic_core import core_schema
 
+T = TypeVar("T", bound=Hashable)
 
-def unique_everseen[T: Hashable](
+
+def unique_everseen(
     iterable: Iterable[T], seen: Iterable[T] = ()
 ) -> Iterator[T]:
     seen = set(seen)
@@ -24,7 +26,7 @@ def _unsupported_operand_type_error(operand: str, x: Any, y: Any) -> TypeError:
     )
 
 
-class UniqueSeq[T: Hashable](tuple):
+class UniqueSeq(tuple[T, ...]):
     def __new__(cls, iterable: Iterable[T] = ()) -> Self:
         if isinstance(iterable, cls):
             return iterable
