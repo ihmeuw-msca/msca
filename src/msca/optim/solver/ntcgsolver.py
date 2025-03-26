@@ -144,6 +144,7 @@ class NTCGSolver:
         step = 1.0
         niter = 0
         success = False
+        failure = False
 
         x_pair = deque([x], maxlen=2)
         g_pair = deque([g], maxlen=2)
@@ -151,9 +152,11 @@ class NTCGSolver:
         if verbose:
             fun = self.fun(x)
             print(f"{type(self).__name__}:")
-            print(f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}")
+            print(
+                f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, {step=:.2e}"
+            )
 
-        while (not success) and (niter < maxiter):
+        while (not success) and (not failure) and (niter < maxiter):
             niter += 1
 
             # compute all directions
@@ -189,6 +192,12 @@ class NTCGSolver:
                     f"{step=:.2e}, cg_iter={cg_info['iter']}"
                 )
             success = gnorm <= gtol or xdiff <= xtol
+            failure = not (
+                np.isfinite(fun)
+                and np.isfinite(gnorm)
+                and np.isfinite(xdiff)
+                and np.isfinite(step)
+            )
 
         result = NTCGResult(
             x=x,
