@@ -169,9 +169,12 @@ class NTCGSolver:
                 cg_options["M"] = precon_builder(x_pair, g_pair)
             cg_options["maxiter"] = get_cg_maxiter(niter)
             dx = cg(hess, -g, **cg_options)[0]
-
-            # get step size
-            step = line_search(self.grad, x, dx, **line_search_options)
+            try:
+                # get step size
+                step = line_search(x, -dx,g,self.fun, **line_search_options)
+            except:
+                dx = -g
+                step = line_search(x, -dx,g,self.fun, **line_search_options)
             x = x + step * dx
 
             # update f and gnorm
