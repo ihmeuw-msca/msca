@@ -126,7 +126,7 @@ class NTCGSolver:
             precon_builder = precon_builder_map[precon_builder](
                 **(precon_builder_options or {})
             )
-        cg_options = cg_options or {}
+        cg_options = cg_options or {"rtol":1e-2}
 
         def get_cg_maxiter(niter: int) -> int | None:
             if cg_maxiter_init is None and cg_maxiter is None:
@@ -168,7 +168,7 @@ class NTCGSolver:
             if precon_builder is not None:
                 cg_options["M"] = precon_builder(x_pair, g_pair)
             cg_options["maxiter"] = get_cg_maxiter(niter)
-            dx = cg(hess, -g, **cg_options)[0]
+            dx = cg(hess, -g,**cg_options)[0]
             try:
                 # get step size
                 step = line_search(x, -dx,g,self.fun, **line_search_options)
