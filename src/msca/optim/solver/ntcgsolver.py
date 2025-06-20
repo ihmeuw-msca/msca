@@ -185,8 +185,8 @@ class NTCGSolver:
             x_pair.append(x)
             g_pair.append(g)
 
+            fun = self.fun(x)
             if verbose:
-                fun = self.fun(x)
                 print(
                     f"{niter=:3d}, {fun=:.2e}, {gnorm=:.2e}, {xdiff=:.2e}, "
                     f"{step=:.2e}, cg_iter={cg_info['iter']}"
