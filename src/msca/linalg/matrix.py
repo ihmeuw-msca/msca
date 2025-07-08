@@ -131,7 +131,9 @@ class NumpyMatrix(np.ndarray, Matrix):
         elif method == "cg":
             result, info = sp.linalg.cg(self, x, **kwargs)
             if info > 0:
-                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+                raise RuntimeError(
+                    f"CG convergence not achieved. with {info=:}"
+                )
         else:
             raise ValueError(f"{method=:} is not supported.")
         return result
@@ -193,7 +195,9 @@ class CSRMatrix(sp.sparse.csr_matrix, Matrix):
         elif method == "cg":
             result, info = sp.sparse.linalg.cg(self, x, **kwargs)
             if info > 0:
-                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+                raise RuntimeError(
+                    f"CG convergence not achieved. with {info=:}"
+                )
         else:
             raise ValueError(f"{method=:} is not supported.")
         return result
@@ -255,7 +259,9 @@ class CSCMatrix(sp.sparse.csc_matrix, Matrix):
         elif method == "cg":
             result, info = sp.sparse.linalg.cg(self, x, **kwargs)
             if info > 0:
-                raise RuntimeError(f"CG convergence not achieved. with {info=:}")
+                raise RuntimeError(
+                    f"CG convergence not achieved. with {info=:}"
+                )
         else:
             raise ValueError(f"{method=:} is not supported.")
         return result

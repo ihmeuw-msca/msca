@@ -520,7 +520,9 @@ class Logerfc(C2Fun):
 
         l_indices = x < 25
         y[l_indices] = (
-            -2 * np.exp(-(x[l_indices] ** 2)) / (erfc(x[l_indices]) * np.sqrt(np.pi))
+            -2
+            * np.exp(-(x[l_indices] ** 2))
+            / (erfc(x[l_indices]) * np.sqrt(np.pi))
         )
 
         r_indices = ~l_indices
