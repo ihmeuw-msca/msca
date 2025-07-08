@@ -175,7 +175,7 @@ class NTCGSolver:
             try:
                 # get step size
                 step = line_search(x, -dx, g, self.fun, **line_search_options)
-            except:
+            except RuntimeError:
                 dx = -g
                 step = line_search(x, -dx, g, self.fun, **line_search_options)
             x = x + step * dx
