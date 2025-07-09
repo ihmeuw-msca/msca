@@ -174,10 +174,14 @@ class NTCGSolver:
             dx = cg(hess, -g, **cg_options)[0]
             try:
                 # get step size
-                step = line_search(x, -dx, g, self.fun, **line_search_options)
+                step = line_search(
+                    gradient=self.grad, x=x, dx=-dx, **line_search_options
+                )
             except RuntimeError:
                 dx = -g
-                step = line_search(x, -dx, g, self.fun, **line_search_options)
+                step = line_search(
+                    gradient=self.grad, x=x, dx=-dx, **line_search_options
+                )
             x = x + step * dx
 
             # update f and gnorm
