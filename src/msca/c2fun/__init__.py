@@ -12,6 +12,7 @@ from .main import (
     expit,
     logit,
     logerfc,
+    c2fun_dict,
 )
 
 __all__ = [
@@ -28,4 +29,5 @@ __all__ = [
     "expit",
     "logit",
     "logerfc",
+    "c2fun_dict",
 ]
