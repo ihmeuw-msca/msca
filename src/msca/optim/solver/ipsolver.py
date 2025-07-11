@@ -59,7 +59,12 @@ class IPSolver:
     """
 
     def __init__(
-        self, fun: Callable, grad: Callable, hess: Callable, cmat: Matrix, cvec: NDArray
+        self,
+        fun: Callable,
+        grad: Callable,
+        hess: Callable,
+        cmat: Matrix,
+        cvec: NDArray,
     ):
         self.fun = fun
         self.grad = grad
@@ -257,7 +262,9 @@ class IPSolver:
             dp = [dx, ds, dv]
 
             # get step size
-            step, p = self._update_params(p, dp, m, a_init, a_const, a_scale, a_lb)
+            step, p = self._update_params(
+                p, dp, m, a_init, a_const, a_scale, a_lb
+            )
 
             # update m
             if niter % m_freq == 0:

@@ -25,6 +25,8 @@ def hessian(x):
 
 def test_ipsolver():
     solver = IPSolver(objective, gradient, hessian, cmat, cvec)
-    result = solver.minimize(x0=np.zeros(5), gtol=1e-10, xtol=0.0, mtol=1e-10, m_freq=1)
+    result = solver.minimize(
+        x0=np.zeros(5), gtol=1e-10, xtol=0.0, mtol=1e-10, m_freq=1
+    )
     assert result.success
     assert np.allclose(result.x, np.minimum(0, vec))

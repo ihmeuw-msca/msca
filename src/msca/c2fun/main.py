@@ -33,7 +33,7 @@ model-level variable :data:`c2fun_dict`.
 
 from __future__ import annotations
 
-from abc import ABC, abstractproperty, abstractstaticmethod
+from abc import ABC, abstractmethod
 from typing import Dict
 
 import numpy as np
@@ -53,12 +53,14 @@ class C2Fun(ABC):
 
     """
 
-    @abstractproperty
+    @property
+    @abstractmethod
     def inv(self) -> C2Fun:
         """The inverse of the function such that :code:`x = fun.inv(fun(x))`."""
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def fun(x: NDArray) -> NDArray:
         """Implementation of the function.
 
@@ -70,7 +72,8 @@ class C2Fun(ABC):
         """
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def dfun(x: NDArray) -> NDArray:
         """Implementation of the derivative of the function.
 
@@ -82,7 +85,8 @@ class C2Fun(ABC):
         """
         pass
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def d2fun(x: NDArray) -> NDArray:
         """Implementation of the second order derivative of the function.
 
@@ -520,7 +524,9 @@ class Logerfc(C2Fun):
 
         l_indices = x < 25
         y[l_indices] = (
-            -2 * np.exp(-(x[l_indices] ** 2)) / (erfc(x[l_indices]) * np.sqrt(np.pi))
+            -2
+            * np.exp(-(x[l_indices] ** 2))
+            / (erfc(x[l_indices]) * np.sqrt(np.pi))
         )
 
         r_indices = ~l_indices
