@@ -140,16 +140,10 @@ def get_skill_scores(
 
 ```python
 def get_model_objective(
-    data: pd.DataFrame | dict[str, pd.DataFrame], 
+    data: pd.DataFrame, 
     xmodel: XModel
 ) -> float:
     """Get model objective score.
-    
-    Parameters
-    ----------
-    data
-        Single dataframe or dictionary mapping column names to dataframes.
-        If dict, should contain all columns needed by xmodel.
     """
 ```
 
@@ -165,14 +159,112 @@ def get_model_objective(
 
 ```python
 # Single dataframe (current usage)
-score = get_model_score("mean_absolute_error", data=df)
+score = get_model_score("mean_absolute_error", data=data_modeling)
 
-# Multiple dataframes
+# Multiple dataframes - each column from different source
 data_sources = {
-    "obs": observations_df,
-    "pred": predictions_df, 
-    "weights": weights_df
+    "obs": data_observations,           # observed death rates from preprocessing
+    "pred_kreg": predictions,           # location model predictions
+    "weights": data_observations        # sample sizes/weights
 }
-score = get_model_score("mean_absolute_error", data=data_sources)
+score = get_model_score(
+    metric="mean_absolute_error", 
+    data=data_sources,
+    obs="obs",
+    pred="pred_kreg", 
+    weights="weights"
+)
 
+# Using get_weighted_mean with multiple dataframes to create reference predictions
+reference_data_sources = {
+    "obs": data_observations,      # observed death rates
+    "weights": data_observations   # sample sizes as weights
+}
+reference_predictions = get_weighted_mean(
+    data=reference_data_sources,
+    val="obs", 
+    weights="weights", 
+    by=["age_group_id", "sex_id"], 
+    name="demographic_baseline"
+)
+
+# Using the reference for skill scores with CoD modeling data
+skill_data_sources = {
+    "obs": data_observations,           # observed death rates
+    "pred_kreg": predictions,           # location-level model predictions  
+    "weights": data_observations        # sample sizes as weights
+}
+skill_score = get_skill_score(
+    metric="mean_absolute_error",
+    data=skill_data_sources,
+    reference=reference_predictions,
+    groupby=["location_id", "sex_id"],
+    obs="obs",
+    pred="pred_kreg", 
+    weights="weights"
+)
+
+# Complete CoD modeling workflow: reference computation + model evaluation
+# Step 1: Compute weighted mean reference at age-sex level (simple demographic baseline)
+reference_by_age_sex = get_weighted_mean(
+    data={
+        "obs": data_observations, 
+        "weights": data_observations
+    },
+    val="obs",
+    weights="weights", 
+    by=["age_group_id", "sex_id"],
+    name="demographic_baseline"
+)
+
+# Step 2: Evaluate global model skill against demographic baseline
+global_skill_scores = get_skill_scores(
+    metric="mean_absolute_error",
+    data={
+        "obs": data_observations,
+        "pred_super_region": predictions,    # global predictions
+        "weights": data_observations
+    },
+    reference=reference_by_age_sex,
+    groupby=["sex_id", "super_region_id"],
+    obs="obs",
+    pred="pred_super_region",
+    weights="weights",
+    score="demographic_baseline"
+)
+
+# Step 3: Compare location model against national model performance  
+location_vs_national_skill = get_skill_scores(
+    metric="mean_absolute_percentage_error",
+    data={
+        "obs": data_observations,
+        "pred_kreg": predictions,           # location model predictions
+        "weights": data_observations
+    },
+    reference=predictions,                  # use national predictions as reference
+    groupby=["sex_id", "location_id"],
+    obs="obs", 
+    pred="pred_kreg",
+    weights="weights",
+    score="pred_national"  # column name from national predictions reference
+)
 ```
+
+## Data Flow Summary
+
+**Stage Outputs:**
+- `PreprocessingStage` → `data_observations`, `data_modeling`
+- `FitGlobalStage` → `predictions` (with `pred_super_region`, `pred_region`)
+- `FitNationalStage` → `predictions` (with `pred_national`)
+- `FitLocationStage` → `predictions` (with `pred_kreg`, `pred_kreg_lwr`, `pred_kreg_upr`)
+- `CreateDrawsStage` → `draws` (with `draw_0`, `draw_1`, ..., `draw_n`)
+
+**Key Columns:**
+- `obs`: death rate observations
+- `weights`: sample sizes/effective weights
+- `pred_super_region`: global model predictions
+- `pred_region`: region model predictions  
+- `pred_national`: national model predictions
+- `pred_kreg`: final location model predictions
+- `kreg_soln`: kernel regression solution
+- Standard IDs: `sex_id`, `location_id`, `age_group_id`, `year_id`
