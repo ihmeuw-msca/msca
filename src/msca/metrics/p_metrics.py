@@ -2,7 +2,6 @@
 Peng's original metrics.
 """
 
-import numpy as np
 import pandas as pd
 
 
