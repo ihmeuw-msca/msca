@@ -15,7 +15,6 @@ from numpy.typing import NDArray
 from sklearn import metrics
 from spxmod.model import XModel
 
-
 METRICS = {
     "mean_absolute_error": metrics.mean_absolute_error,
     "mean_absolute_percentage_error": metrics.mean_absolute_percentage_error,
@@ -32,6 +31,15 @@ VALID_METRICS = Literal[
     "objective",
     "root_mean_squared_error",
 ]
+
+class Metric:
+    def __init__(self, name: str) -> None:
+        if not hasattr(self, f"get_{name}"):
+            raise AttributeError(f"'{name}' is not a valid metric")
+        self.name = name
+    
+    def __call__(self, data: pd.DataFrame, obs: str, pred: str, weights: str, xmodel: XModel) -> float:
+        return self.metric_function(data, obs, pred, weights, xmodel)
 
 
 def get_weighted_mean(
@@ -371,67 +379,6 @@ def get_skill_scores(
             )
 
     return pd.DataFrame(skill_scores)
-
-
-def get_performance(
-    data: pd.DataFrame,
-    avg_by: list[str],
-    skill: str,
-    ascending: bool = True,
-    other_cols: list[str] | None = None,
-) -> pd.DataFrame:
-    """Get performance summary by averaging skill scores across specified groups.
-
-    Parameters
-    ----------
-    data
-        DataFrame containing skill column and grouping columns.
-    skill
-        Column name containing skill scores. Defaults to "skill".
-    avg_by
-        List of column names to group by and average skill scores.
-        Duplicates will be dropped based on these columns.
-    ascending
-        If True (default), returns ascending skill scores (worst performers first).
-        If False, returns descending skill scores (best performers first).
-    other_cols
-        List of other columns that the user wants returned in the dataframe for easier diagnosis (e.g location_name)
-
-    Returns
-    -------
-    pd.DataFrame
-        Filtered copy of input data with avg_by columns, other_cols (if specified),
-        averaged skill scores, and skill_rank column. Sorted by skill score.
-        Contains only the relevant columns so it can be saved separately
-        (e.g., as skill_rank.csv) or merged back with original data.
-        Worst performing groups appear first when desc=False.
-    """
-    try:
-        required_cols = [skill] + avg_by
-        if other_cols is not None:
-            required_cols.extend(other_cols)
-
-        # Validate required columns exist
-        missing_cols = [col for col in required_cols if col not in data.columns]
-        if missing_cols:
-            raise ValueError(f"Missing columns in data: {missing_cols}")
-
-        performance_data = data[required_cols].copy()
-
-        # Calculate average skill scores by group
-        performance_data["avg_skill"] = performance_data.groupby(avg_by)[
-            skill
-        ].transform("mean")
-
-        # Calculate skill rank
-        performance_data["skill_rank"] = performance_data["avg_skill"].rank(
-            method="min", ascending=ascending
-        )
-
-        return performance_data.sort_values("avg_skill", ascending=ascending)
-
-    except Exception as e:
-        raise ValueError(f"Error computing performance summary: {e}")
 
 
 def get_model_objective(data: pd.DataFrame, xmodel: XModel) -> float:

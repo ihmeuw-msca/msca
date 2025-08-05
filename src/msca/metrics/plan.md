@@ -40,15 +40,121 @@ def get_weighted_mean(
 ### From k_metrics.py
 
 ```python
-def get_model_score(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+class MetricType(Enum):
+    """Enumeration of available metric types for model evaluation.
+    
+    Attributes
+    ----------
+    MEAN_ABSOLUTE_ERROR : str
+        Mean absolute error metric.
+    MEAN_ABSOLUTE_PERCENTAGE_ERROR : str
+        Mean absolute percentage error metric.
+    MEAN_SQUARED_ERROR : str
+        Mean squared error metric.
+    MEDIAN_ABSOLUTE_ERROR : str
+        Median absolute error metric.
+    OBJECTIVE : str
+        Model objective function metric.
+    ROOT_MEAN_SQUARED_ERROR : str
+        Root mean squared error metric.
+    """
+    MEAN_ABSOLUTE_ERROR = "mean_absolute_error"
+    MEAN_ABSOLUTE_PERCENTAGE_ERROR = "mean_absolute_percentage_error"
+    MEAN_SQUARED_ERROR = "mean_squared_error"
+    MEDIAN_ABSOLUTE_ERROR = "median_absolute_error"
+    OBJECTIVE = "objective"
+    ROOT_MEAN_SQUARED_ERROR = "root_mean_squared_error"
+
+
+
+@dataclass
+class ErrorMetric:
+    """Container for error scores with validation metadata.
+    
+    Attributes
+    ----------
+    values : float | pd.DataFrame
+        The actual score value(s).
+    metric_type : MetricType
+        The metric used to calculate the score.
+    groupby_columns : list[str] | None
+        The columns used for grouping, if any.
+    """
+    values: float | pd.DataFrame
+    metric_type: MetricType
+    groupby_columns: list[str] | None = None
+    #NOTE: Some sort of size metric to see if they can merge / match?
+    
+    def is_compatible_with(self, other: 'ErrorScore') -> bool:
+        """Check if this score is compatible with another for skill calculation."""
+        return (
+            self.metric_type == other.metric_type and
+            self.groupby_columns == other.groupby_columns
+        )
+
+def _validate_error_compatibility(
+    model_error: ErrorScore,
+    ref_error: ErrorScore,
+) -> None:
+    """Validate that error scores are compatible for comparison operations.
+    
+    Parameters
+    ----------
+    model_error : ErrorScore
+        The model's error score with metadata.
+    ref_error : ErrorScore
+        The reference error score with metadata.
+        
+    Raises
+    ------
+    ValueError
+        If scores are incompatible for the specified operation.
+        
+    Notes
+    -----
+    This function ensures:
+    - Both scores use the same metric type
+    - Both scores have matching groupby column structure
+    - Data shapes? are compatible for comparison
+    """
+    
+    # Validate metric type consistency
+    if model_error.metric_type != ref_error.metric_type:
+        raise ValueError(
+            f"Metric type mismatch in {operation}: "
+            f"model uses {model_error.metric_type.value}, "
+            f"reference uses {ref_error.metric_type.value}"
+        )
+    
+    # Validate groupby column consistency
+    if model_error.groupby_columns != ref_error.groupby_columns:
+        raise ValueError(
+            f"Groupby column mismatch in {operation}: "
+            f"model grouped by {model_error.groupby_columns}, "
+            f"reference grouped by {ref_error.groupby_columns}"
+        )
+    
+    # Validate data structure compatibility
+    model_is_grouped = isinstance(model_error.values, pd.DataFrame)
+    reference_is_grouped = isinstance(ref_error.values, pd.DataFrame)
+    
+    if model_is_grouped != reference_is_grouped:
+        raise ValueError(
+            f"Score structure mismatch in {operation}: "
+            f"model score is {'grouped' if model_is_grouped else 'scalar'}, "
+            f"reference score is {'grouped' if reference_is_grouped else 'scalar'}"
+        )
+    
+    # If both are DataFrames, validate group structure
+    if model_is_grouped and reference_is_grouped:
+        _validate_grouped_score_structure(
+            model_error.values, 
+            ref_error.values, 
+            model_error.groupby_columns
+        )
+
+def _get_error_metric(
+    metric: MetricType,
     data: pd.DataFrame,
     groupby: list[str] | None = None,
     xmodel: XModel | None = None,
@@ -66,15 +172,8 @@ def get_model_score(
 ```
 
 ```python
-def get_model_scores(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+def get_error_metrics(
+    metric: MetricType,
     data: pd.DataFrame,
     groupby: list[str],
     xmodel: XModel | None = None,
@@ -92,15 +191,8 @@ def get_model_scores(
 ```
 
 ```python
-def get_skill_score(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+def _get_skill_score(
+    metric: MetricType,
     data: pd.DataFrame,
     reference: float | pd.DataFrame,
     groupby: list[str] | None = None,
@@ -117,18 +209,9 @@ def get_skill_score(
     data
         DataFrame containing all required columns (obs, pred, weights, score).
     """
-```
-
-```python
+#TODO: Update this so that the error scores that we are getting match one another and that the groupby mathces too
 def get_skill_scores(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+    metric: MetricType,
     data: pd.DataFrame,
     reference: pd.DataFrame,
     groupby: list[str],
@@ -147,51 +230,6 @@ def get_skill_scores(
     """
 ```
 
-```python
-def get_performance(
-    data: pd.DataFrame,
-    skill: str = "skill",
-    avg_by: list[str],
-    desc: bool = False
-    other_cols : list[str] | None = None,
-) -> pd.DataFrame:
-    """Get performance summary by averaging skill scores across specified groups.
-    
-    Parameters
-    ----------
-    data
-        DataFrame containing skill column and grouping columns.
-    skill
-        Column name containing skill scores. Defaults to "skill".
-    avg_by
-        List of column names to group by and average skill scores.
-        Duplicates will be dropped based on these columns.
-    desc
-        If False (default), returns ascending skill scores (worst performers first).
-        If True, returns descending skill scores (best performers first).
-    other_cols
-        List of other columns that the user wants returned in the dataframe for easier diagnosis (e.g location_name)
-        
-    Returns
-    -------
-    pd.DataFrame
-        Filtered copy of input data with avg_by columns, other_cols (if specified), 
-        averaged skill scores, and skill_rank column. Sorted by skill score.
-        Contains only the relevant columns so it can be saved separately 
-        (e.g., as skill_rank.csv) or merged back with original data.
-        Worst performing groups appear first when desc=False.
-    """
-```
-
-```python
-def get_model_objective(
-    data: pd.DataFrame, 
-    xmodel: XModel
-) -> float:
-    """Get model objective score.
-    """
-```
-
 ## TODOs
 
 - TODO: Update so that get_weighted_mean can be used instead of Xmodel
@@ -201,7 +239,7 @@ def get_model_objective(
 
 ```python
 # Step 1: Create reference score using weighted mean
-reference_scores = get_weighted_mean(
+ref_errors = get_weighted_mean(
     data=data_observations,
     val="obs", 
     weights="weights", 
@@ -210,8 +248,8 @@ reference_scores = get_weighted_mean(
 )
 
 # Step 2: Get model scores by sex and age using pred_kreg
-onemod_score = get_model_scores(
-    metric="mean_absolute_error",
+onemod_score = get_error_metric(
+    metric=MetricType.MEAN_ABSOLUTE_ERROR,
     data=data_modeling,  # Contains obs, pred_kreg, weights columns
     groupby=["age_group_id", "sex_id"]
     obs="obs",
@@ -221,88 +259,13 @@ onemod_score = get_model_scores(
 
 # Step 3: Calculate skill scores comparing reference to onemod_score
 onemod_skill = get_skill_scores(
-    metric="mean_absolute_error",
+    metric=MetricType.MEAN_ABSOLUTE_ERROR,
     data=data_modeling,
-    reference=reference_scores,
+    reference=ref_errors,
     groupby=["age_group_id", "sex_id"],
     obs="obs",
     pred="pred_kreg", 
     weights="weights",
     score="wt_mean"  # Reference column from get_weighted_mean
 )
-
-# Step 4: Analyze performance to find worst performing groups
-worst_performers = get_performance(
-    data=onemod_skill,
-    skill="skill",  # Column name from get_skill_scores output
-    avg_by=["sex_id", "age_group_id"],
-    desc=False,  # Worst performers first
-    other_cols=["location_name", "age_group_name"]  # Include descriptive names
-)
-# Returns DataFrame with: sex_id, age_group_id, location_name, age_group_name, skill, skill_rank
-
-# Or find best performers
-best_performers = get_performance(
-    data=onemod_skill,
-    skill="skill",
-    avg_by=["sex_id", "age_group_id"], 
-    desc=True  # Best performers first (rank 1 = best)
-)
-
-# Save performance analysis as separate file
-# worst_performers.to_csv("skill_rank_worst.csv", index=False)
-
-# Or merge back with original data if needed
-# full_data_with_ranks = original_data.merge(worst_performers, on=["sex_id", "age_group_id"])
-
-# Or with custom name
-# reference_scores_custom = get_weighted_mean(
-#     data=data_observations,
-#     val="obs", 
-#     weights="weights", 
-#     by=["age_group_id", "sex_id"], 
-#     name="demographic_baseline"
-# )
-
-# Complete CoD modeling workflow: reference computation + model evaluation
-# Step 1: Compute weighted mean reference at age-sex level (simple demographic baseline)
-reference_by_age_sex = get_weighted_mean(
-    data=data_observations,
-    val="obs",
-    weights="weights", 
-    by=["age_group_id", "sex_id"],
-    name="demographic_baseline"
-)
-
-# Step 2: Evaluate global model score
-global_skill_scores = get_skill_scores(
-    metric="mean_absolute_error",
-    data=data_with_global_preds,  # Contains obs, pred_super_region, weights columns
-    reference=reference_by_age_sex,
-    groupby=["sex_id", "super_region_id"],
-    obs="obs",
-    pred="pred_super_region",
-    weights="weights",
-    score="demographic_baseline"
-)
-
 ```
-
-## Data Flow Summary
-
-**Stage Outputs:**
-- `PreprocessingStage` → `data_observations`, `data_modeling`
-- `FitGlobalStage` → `predictions` (with `pred_super_region`, `pred_region`)
-- `FitNationalStage` → `predictions` (with `pred_national`)
-- `FitLocationStage` → `predictions` (with `pred_kreg`, `pred_kreg_lwr`, `pred_kreg_upr`)
-- `CreateDrawsStage` → `draws` (with `draw_0`, `draw_1`, ..., `draw_n`)
-
-**Key Columns:**
-- `obs`: death rate observations
-- `weights`: sample sizes/effective weights
-- `pred_super_region`: global model predictions
-- `pred_region`: region model predictions  
-- `pred_national`: national model predictions
-- `pred_kreg`: final location model predictions
-- `kreg_soln`: kernel regression solution
-- Standard IDs: `sex_id`, `location_id`, `age_group_id`, `year_id`

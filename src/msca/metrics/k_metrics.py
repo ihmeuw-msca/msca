@@ -5,7 +5,7 @@
 # TODO: Allow skill reference to pass predictions rather than model scores
 # FIXME: line 142 error if metric_groups only one column
 
-from typing import Literal
+from enum import Enum
 
 import numpy as np
 import pandas as pd
@@ -14,15 +14,34 @@ from sklearn import metrics
 from spxmod.model import XModel
 
 
+class MetricType(Enum):
+    """Enumeration of available metric types for model evaluation.
+    
+    Attributes
+    ----------
+    MEAN_ABSOLUTE_ERROR : str
+        Mean absolute error metric.
+    MEAN_ABSOLUTE_PERCENTAGE_ERROR : str
+        Mean absolute percentage error metric.
+    MEAN_SQUARED_ERROR : str
+        Mean squared error metric.
+    MEDIAN_ABSOLUTE_ERROR : str
+        Median absolute error metric.
+    OBJECTIVE : str
+        Model objective function metric.
+    ROOT_MEAN_SQUARED_ERROR : str
+        Root mean squared error metric.
+    """
+    MEAN_ABSOLUTE_ERROR = "mean_absolute_error"
+    MEAN_ABSOLUTE_PERCENTAGE_ERROR = "mean_absolute_percentage_error"
+    MEAN_SQUARED_ERROR = "mean_squared_error"
+    MEDIAN_ABSOLUTE_ERROR = "median_absolute_error"
+    OBJECTIVE = "objective"
+    ROOT_MEAN_SQUARED_ERROR = "root_mean_squared_error"
+
+
 def get_model_score(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+    metric: MetricType,
     data: pd.DataFrame,
     groupby: list[str] | None = None,
     xmodel: XModel | None = None,
@@ -69,18 +88,18 @@ def get_model_score(
             ].mean()
         )
 
-    if metric == "objective":
+    if metric == MetricType.OBJECTIVE:
         if xmodel is None:
             raise ValueError("Must pass xmodel to get objective")
         return get_model_objective(data, xmodel)
-    elif metric not in METRICS:
+    elif metric.value not in METRICS:
         raise ValueError(f"Invalid metric: {metric}")
 
     obs_values = _get_obs(data, obs)
     pred_values = _get_pred(data, xmodel, pred)
     weight_values = _get_weights(data, weights)
 
-    score = METRICS[metric](
+    score = METRICS[metric.value](
         obs_values, pred_values, sample_weight=weight_values
     )
 
@@ -88,14 +107,7 @@ def get_model_score(
 
 
 def get_model_scores(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+    metric: MetricType,
     data: pd.DataFrame,
     groupby: list[str],
     xmodel: XModel | None = None,
@@ -157,14 +169,7 @@ def get_model_scores(
 
 
 def get_skill_score(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+    metric: MetricType,
     data: pd.DataFrame,
     reference: float | pd.DataFrame,
     groupby: list[str] | None = None,
@@ -235,14 +240,7 @@ def get_skill_score(
 
 
 def get_skill_scores(
-    metric: Literal[
-        "mean_absolute_error",
-        "mean_absolute_percentage_error",
-        "mean_squared_error",
-        "median_absolute_error",
-        "objective",
-        "root_mean_squared_error",
-    ],
+    metric: MetricType,
     data: pd.DataFrame,
     reference: pd.DataFrame,
     groupby: list[str],
