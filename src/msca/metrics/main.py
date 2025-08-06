@@ -1,585 +1,475 @@
-"""Generic metrics module for hierarchical model evaluation.
-
-Provides flexible functions to compute metrics at any granular level
-and aggregate them at different levels to identify patterns and
-worst-performing groups.
-
-Combines Kelsey's and Peng's original metrics functions with enhanced
-hierarchical analysis capabilities.
-"""
-
-from typing import Literal
+from typing import Optional, List, Union
+from enum import StrEnum
 import numpy as np
 import pandas as pd
-from numpy.typing import NDArray
-from sklearn import metrics
-from spxmod.model import XModel
 
-METRICS = {
-    "mean_absolute_error": metrics.mean_absolute_error,
-    "mean_absolute_percentage_error": metrics.mean_absolute_percentage_error,
-    "mean_squared_error": metrics.mean_squared_error,
-    "median_absolute_error": metrics.median_absolute_error,
-    "root_mean_squared_error": metrics.root_mean_squared_error,
+from sklearn import metrics
+
+class ErrorMetric(StrEnum):
+    """
+    Examples
+    --------
+    >>> # Simple usage
+    >>> metric = ErrorMetric.MEAN_ABSOLUTE_ERROR
+    >>> score = metric.eval(df, "obs", "pred", "weights")
+    >>> 
+    >>> # Grouped calculation
+    >>> grouped_scores = metric.eval(df, "obs", "pred", "weights", groupby=["region"])
+    """
+    MEAN_ABSOLUTE_ERROR = "mean_absolute_error"
+    MEAN_ABSOLUTE_PERCENTAGE_ERROR = "mean_absolute_percentage_error"
+    MEAN_SQUARED_ERROR = "mean_squared_error"
+    MEDIAN_ABSOLUTE_ERROR = "median_absolute_error"
+    ROOT_MEAN_SQUARED_ERROR = "root_mean_squared_error"
+    
+    def eval(
+        self, 
+        data: pd.DataFrame, 
+        obs: str, 
+        pred: str, 
+        weights: str,
+        groupby: Optional[List[str]] = None
+    ) -> Union[float, pd.DataFrame]:
+        """
+        Evaluate the error metric on the provided data.
+        
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Input DataFrame containing all required columns
+        obs : str
+            Column name for observed/actual values
+        pred : str
+            Column name for predicted values
+        weights : str
+            Column name for sample weights
+        groupby : List[str], optional
+            Column names to group by for grouped calculations
+            
+        Returns
+        -------
+        Union[float, pd.DataFrame]
+            Single metric value if no groupby, DataFrame with grouped results if groupby specified
+        """
+        if groupby is not None:
+            return self._eval_grouped(data, obs, pred, weights, groupby)
+        
+        # Extract arrays from DataFrame columns
+        obs_values = data[obs].values
+        pred_values = data[pred].values
+        weight_values = data[weights].values
+        
+        # Calculate single metric value
+        return self._calculate_single_metric(obs_values, pred_values, weight_values)
+    
+    def _calculate_single_metric(
+        self, 
+        obs_values: np.ndarray, 
+        pred_values: np.ndarray, 
+        weight_values: np.ndarray
+    ) -> float:
+        """
+        Calculate metric for single set of values.
+        
+        Parameters
+        ----------
+        obs_values : np.ndarray
+            Observed values
+        pred_values : np.ndarray
+            Predicted values
+        weight_values : np.ndarray
+            Sample weights
+            
+        Returns
+        -------
+        float
+            Calculated metric value
+        """
+        match self:
+            case ErrorMetric.ROOT_MEAN_SQUARED_ERROR:
+                mse_value = metrics.mean_squared_error(
+                    y_true=obs_values,
+                    y_pred=pred_values,
+                    sample_weight=weight_values
+                )
+                return np.sqrt(mse_value)
+            case ErrorMetric.MEAN_ABSOLUTE_ERROR:
+                return metrics.mean_absolute_error(
+                    y_true=obs_values,
+                    y_pred=pred_values,
+                    sample_weight=weight_values
+                )
+            case ErrorMetric.MEAN_SQUARED_ERROR:
+                return metrics.mean_squared_error(
+                    y_true=obs_values,
+                    y_pred=pred_values,
+                    sample_weight=weight_values
+                )
+            case ErrorMetric.MEAN_ABSOLUTE_PERCENTAGE_ERROR:
+                return metrics.mean_absolute_percentage_error(
+                    y_true=obs_values,
+                    y_pred=pred_values,
+                    sample_weight=weight_values
+                )
+            case ErrorMetric.MEDIAN_ABSOLUTE_ERROR:
+                return metrics.median_absolute_error(
+                    y_true=obs_values,
+                    y_pred=pred_values,
+                    sample_weight=weight_values
+                )
+            case _:
+                raise ValueError(f"Unsupported metric type: {self}")
+    
+    def _eval_grouped(
+        self, 
+        data: pd.DataFrame, 
+        obs: str, 
+        pred: str, 
+        weights: str, 
+        groupby: List[str]
+    ) -> pd.DataFrame:
+        """
+        Calculate error metrics for each group in the DataFrame.
+        
+        Parameters
+        ----------
+        data : pd.DataFrame
+            Input DataFrame
+        obs : str
+            Observed values column name
+        pred : str
+            Predicted values column name
+        weights : str
+            Weights column name
+        groupby : List[str]
+            Grouping column names
+            
+        Returns
+        -------
+        pd.DataFrame
+            DataFrame with groupby columns and calculated metric column
+        """
+        df = data.copy()
+        metric_column_name = f"{self.value}_metric"
+        
+        def calculate_group_metric(group):
+            """Calculate metric for a single group."""
+            try:
+                # Check if required columns exist in the group
+                required_columns = [obs, pred, weights]
+                missing_columns = [col for col in required_columns if col not in group.columns]
+                if missing_columns:
+                    print(f"Missing columns in group: {missing_columns}")
+                    print(f"Available columns: {group.columns.tolist()}")
+                    return np.nan
+                
+                # Extract arrays directly from the group DataFrame
+                obs_values = group[obs].values
+                pred_values = group[pred].values
+                weight_values = group[weights].values
+                
+                # Calculate metric using the single metric calculation method
+                return self._calculate_single_metric(obs_values, pred_values, weight_values)
+                        
+            except Exception as e:
+                print(f"Error in group calculation: {e}")
+                print(f"Group shape: {group.shape if hasattr(group, 'shape') else 'No shape'}")
+                if hasattr(group, 'columns'):
+                    print(f"Group columns: {group.columns.tolist()}")
+                return np.nan
+        
+        # Group by specified columns and calculate metrics
+        grouped_results = df.groupby(groupby).apply(calculate_group_metric, include_groups=False).reset_index()
+        grouped_results.columns = list(groupby) + [metric_column_name]
+        
+        return grouped_results
+
+
+
+
+# String to enum mapping for user-friendly metric names
+METRIC_ALIASES = {
+    # Full names
+    "mean_absolute_error": ErrorMetric.MEAN_ABSOLUTE_ERROR,
+    "mean_absolute_percentage_error": ErrorMetric.MEAN_ABSOLUTE_PERCENTAGE_ERROR,
+    "mean_squared_error": ErrorMetric.MEAN_SQUARED_ERROR,
+    "median_absolute_error": ErrorMetric.MEDIAN_ABSOLUTE_ERROR,
+    "root_mean_squared_error": ErrorMetric.ROOT_MEAN_SQUARED_ERROR,
+    
+    # Common abbreviations
+    "mae": ErrorMetric.MEAN_ABSOLUTE_ERROR,
+    "mape": ErrorMetric.MEAN_ABSOLUTE_PERCENTAGE_ERROR,
+    "mse": ErrorMetric.MEAN_SQUARED_ERROR,
+    "medae": ErrorMetric.MEDIAN_ABSOLUTE_ERROR,
+    "rmse": ErrorMetric.ROOT_MEAN_SQUARED_ERROR,
+    
+    # Uppercase versions
+    "MAE": ErrorMetric.MEAN_ABSOLUTE_ERROR,
+    "MAPE": ErrorMetric.MEAN_ABSOLUTE_PERCENTAGE_ERROR,
+    "MSE": ErrorMetric.MEAN_SQUARED_ERROR,
+    "MEDAE": ErrorMetric.MEDIAN_ABSOLUTE_ERROR,
+    "RMSE": ErrorMetric.ROOT_MEAN_SQUARED_ERROR,
 }
 
-VALID_METRICS = Literal[
-    "mean_absolute_error",
-    "mean_absolute_percentage_error",
-    "mean_squared_error",
-    "median_absolute_error",
-    "objective",
-    "root_mean_squared_error",
-]
 
-class Metric:
-    def __init__(self, name: str) -> None:
-        if not hasattr(self, f"get_{name}"):
-            raise AttributeError(f"'{name}' is not a valid metric")
-        self.name = name
-    
-    def __call__(self, data: pd.DataFrame, obs: str, pred: str, weights: str, xmodel: XModel) -> float:
-        return self.metric_function(data, obs, pred, weights, xmodel)
-
-
-def get_weighted_mean(
-    data: pd.DataFrame, val: str, weights: str, by: list[str], name: str
-) -> pd.DataFrame:
-    """Compute mean average as the reference prediction.
-
-    Parameters
-    ----------
-    data
-        DataFrame containing all required columns. A copy will be made.
-    val
-        Column name for values to compute weighted mean of.
-    weights
-        Column name for weights.
-    by
-        List of column names to group by.
-    name
-        Column name for the computed weighted mean. Defaults to "wt_mean".
-        If column already exists, it will be updated.
-
-    Returns
-    -------
-    pd.DataFrame
-        Copy of input data with weighted mean column added/updated.
+def _resolve_metric_type(metric_input: Union[str, ErrorMetric]) -> ErrorMetric:
     """
-    try:
-        weighted_means = (
-            data.groupby(by, group_keys=False)
-            .apply(
-                lambda group_data: (group_data[val] * group_data[weights]).sum()
-                / group_data[weights].sum(),
-                include_groups=False,
-            )
-            .reset_index(name=name)
-        )
-
-        result_data = data.copy()
-        result_data = result_data.merge(weighted_means, on=by, how="left")
-        return result_data[by + [val, weights, name]]
-
-    except KeyError as e:
-        raise ValueError(f"Required column not found in data: {e}")
-    except Exception as e:
-        raise ValueError(f"Error computing weighted mean: {e}")
-
-
-def get_model_score(
-    metric: VALID_METRICS,
-    data: pd.DataFrame,
-    groupby: list[str] | None = None,
-    xmodel: XModel | None = None,
-    obs: str = "obs",
-    pred: str = "pred",
-    weights: str = "weights",
-) -> float:
-    """Get model score.
-
-    Parameters
-    ----------
-    metric : str
-        Metric function name.
-    data : DataFrame
-        Data frame containing observation column and optional
-        prediction and weights columns.
-    groupby : list of str, optional
-        Column names used to create group model scores. If passed,
-        return mean of group model scores. Default is None.
-    xmodel : XModel or none, optional
-        If ``metric`` is 'objective', ``xmodel`` is used to evaluate the
-        model objective. Otherwise, ``xmodel`` is used to create
-        predictions.
-    obs : str, optional
-        Name of column in ``data`` containing observations. Default is
-        'obs'.
-    pred : str, optional
-        Name of column in ``data`` containing predictions if ``xmodel``
-        is None. Default is 'pred'.
-    weights : str, optional
-        Name of column in ``data`` containing nonnegative weights.
-        Ignored if ``weights`` not in ``data``. Default is 'weights'.
-
-    Returns
-    -------
-    float
-        Model score.
-    """
-    if groupby is not None:
-        group_scores = get_model_scores(
-            metric, data, groupby, xmodel, obs, pred, weights
-        )
-        return float(group_scores["score"].mean())
-
-    if metric == "objective":
-        if xmodel is None:
-            raise ValueError("Must pass xmodel to get objective")
-        return get_model_objective(data, xmodel)
-
-    if metric not in METRICS:
-        raise ValueError(
-            f"Invalid metric: {metric}. Valid options: {list(METRICS.keys())}"
-        )
-
-    try:
-        obs_values = _get_observations(data, obs)
-        pred_values = _get_predictions(data, xmodel, pred)
-        weight_values = _get_weights(data, weights)
-
-        score = METRICS[metric](
-            obs_values, pred_values, sample_weight=weight_values
-        )
-        return float(score)
-
-    except Exception as e:
-        raise ValueError(f"Error computing {metric} score: {e}")
-
-
-def get_model_scores(
-    metric: VALID_METRICS,
-    data: pd.DataFrame,
-    groupby: list[str],
-    xmodel: XModel | None = None,
-    obs: str = "obs",
-    pred: str = "pred",
-    weights: str = "weights",
-) -> pd.DataFrame:
-    """Get group model scores.
-
-    Parameters
-    ----------
-    metric : str
-        Metric function name.
-    data : DataFrame
-        Data frame containing observation column and optional
-        prediction and weights columns.
-    groupby : list of str
-        Column names used to create group scores.
-    xmodel : XModel or none, optional
-        If ``metric`` is 'objective', ``xmodel`` is used to evaluate the
-        model objective. Otherwise, ``xmodel`` is used to create
-        predictions.
-    obs : str, optional
-        Name of column in ``data`` containing observations. Default is
-        'obs'.
-    pred : str, optional
-        Name of column in ``data`` containing predictions if ``xmodel``
-        is None. Default is 'pred'.
-    weights : str, optional
-        Name of column in ``data`` containing nonnegative weights.
-        Ignored if ``weights`` not in ``data``. Default is 'weights'.
-
-    Returns
-    -------
-    DataFrame
-        Group model scores.
-    """
-    _validate_groupby_columns(data, groupby)
-
-    group_scores = []
-    for group_values, group_data in data.groupby(groupby):
-        try:
-            score = get_model_score(
-                metric,
-                group_data,
-                xmodel=xmodel,
-                obs=obs,
-                pred=pred,
-                weights=weights,
-            )
-
-            group_dict = dict(zip(groupby, group_values))
-            group_dict["score"] = score
-            group_scores.append(group_dict)
-
-        except Exception as e:
-            raise ValueError(
-                f"Error computing score for group {group_values}: {e}"
-            )
-
-    return pd.DataFrame(group_scores)
-
-
-def get_skill_score(
-    metric: VALID_METRICS,
-    data: pd.DataFrame,
-    reference: float | pd.DataFrame,
-    groupby: list[str] | None = None,
-    xmodel: XModel | None = None,
-    obs: str = "obs",
-    pred: str = "pred",
-    weights: str = "weights",
-    score: str = "score",
-    handle_zero_reference: str = "error",
-) -> float:
-    """Get skill score.
-
-    Parameters
-    ----------
-    metric : str
-        Metric function name.
-    data : DataFrame
-        Data frame containing observation column and optional
-        prediction, weight, and reference columns.
-    reference : float or DataFrame
-        Reference model score or data frame of reference group model
-        scores.
-    groupby : list of str, optional
-        Column names used to create group skill scores. If passed,
-        return mean of group skill scores. Default is None.
-    xmodel : XModel or none, optional
-        If ``metric`` is 'objective', ``xmodel`` is used to evaluate the
-        model objective. Otherwise, ``xmodel`` is used to create
-        predictions.
-    obs : str, optional
-        Name of column in ``data`` containing observations. Default is
-        'obs'.
-    pred : str, optional
-        Name of column in ``data`` containing predictions if ``xmodel``
-        is None. Default is 'pred'.
-    weights : str, optional
-        Name of column in ``data`` containing nonnegative weights.
-        Ignored if ``weights`` not in ``data``. Default is 'weights'.
-    score : str, optional
-        Name of column in ``reference`` data frame containing reference
-        group model scores.  Default is 'score'. Ignored if
-        ``reference`` is a float.
-    handle_zero_reference : str, optional
-        How to handle zero reference scores. Options:
-        - 'error': Raise an error (default)
-        - 'skip': Return NaN for zero reference scores
-        - 'perfect': Return 1.0 (perfect skill) for zero reference scores
-
-    Returns
-    -------
-    float
-        Skill score.
-    """
-    if groupby is not None:
-        group_skill_scores = get_skill_scores(
-            metric, data, reference, groupby, xmodel, obs, pred, weights, score, handle_zero_reference
-        )
-        # Use nanmean to handle NaN values when handle_zero_reference="skip"
-        return float(group_skill_scores["score"].mean(skipna=True))
-
-    model_score = get_model_score(
-        metric, data, xmodel=xmodel, obs=obs, pred=pred, weights=weights
-    )
-
-    try:
-        if isinstance(reference, (int, float)):
-            reference_score = float(reference)
-        else:
-            reference_score = float(reference)
-
-        return _calculate_skill_score(model_score, reference_score, handle_zero_reference)
-
-    except Exception as e:
-        raise ValueError(f"Error computing skill score: {e}")
-
-
-def get_skill_scores(
-    metric: VALID_METRICS,
-    data: pd.DataFrame,
-    reference: pd.DataFrame,
-    groupby: list[str],
-    xmodel: XModel | None = None,
-    obs: str = "obs",
-    pred: str = "pred",
-    weights: str = "weights",
-    score: str = "score",
-    handle_zero_reference: str = "error",
-) -> pd.DataFrame:
-    """Get group skill scores.
-
-    Parameters
-    ----------
-    metric : str
-        Metric function name.
-    data : DataFrame
-        Data frame containing observation column and optional
-        prediction and weights columns.
-    reference : DataFrame
-        Data frame of reference group model scores.
-    groupby : list of str
-        Column names used to create group scores.
-    xmodel : XModel or none, optional
-        If ``metric`` is 'objective', ``xmodel`` is used to evaluate the
-        model objective. Otherwise, ``xmodel`` is used to create
-        predictions.
-    obs : str, optional
-        Name of column in ``data`` containing observations. Default is
-        'obs'.
-    pred : str, optional
-        Name of column in ``data`` containing predictions if ``xmodel``
-        is None. Default is 'pred'.
-    weights : str, optional
-        Name of column in ``data`` containing nonnegative weights.
-        Ignored if ``weights`` not in ``data``. Default is 'weights'.
-    score : str, optional
-        Name of column in ``reference`` data frame containing reference
-        group model scores.  Default is 'score'.
-    handle_zero_reference : str, optional
-        How to handle zero reference scores. Options:
-        - 'error': Raise an error (default)
-        - 'skip': Return NaN for zero reference scores  
-        - 'perfect': Return 1.0 (perfect skill) for zero reference scores
-
-    Returns
-    -------
-    DataFrame
-        Group skill scores.
-    """
-    skill_scores = []
-    for group_values, group_data in data.groupby(groupby):
-        try:
-            reference_score = _get_reference_score(
-                reference, groupby, group_values, score
-            )
-            skill_score = get_skill_score(
-                metric,
-                group_data,
-                reference_score,
-                xmodel=xmodel,
-                obs=obs,
-                pred=pred,
-                weights=weights,
-                handle_zero_reference=handle_zero_reference,
-            )
-
-            group_dict = dict(zip(groupby, group_values))
-            group_dict["score"] = skill_score
-            skill_scores.append(group_dict)
-
-        except Exception as e:
-            raise ValueError(
-                f"Error computing skill score for group {group_values}: {e}"
-            )
-
-    return pd.DataFrame(skill_scores)
-
-
-def get_model_objective(data: pd.DataFrame, xmodel: XModel) -> float:
-    """Get model objective score."""
-    try:
-        xmodel.core.attach_df(data, xmodel._encode)
-
-        optimal_coefficients = xmodel.core.opt_coefs
-        objective_score = xmodel.core.objective(optimal_coefficients)
-        prior_score = xmodel.core.objective_from_gprior(optimal_coefficients)
-        total_weights = xmodel.core.data.weights.sum()
-
-        normalized_score = (objective_score - prior_score) / total_weights
-
-        return float(normalized_score)
-
-    except Exception as e:
-        raise ValueError(f"Error computing model objective: {e}")
-    finally:
-        try:
-            xmodel.core.detach_df()
-        except Exception:
-            pass  # Ignore errors during cleanup
-
-
-def _get_observations(data: pd.DataFrame, obs_column: str) -> NDArray:
-    """Extract observation values from data."""
-    if obs_column not in data.columns:
-        raise ValueError(f"Observation column '{obs_column}' not found in data")
-    return data[obs_column].values
-
-
-def _get_predictions(
-    data: pd.DataFrame, xmodel: XModel | None, pred_column: str
-) -> NDArray:
-    """Extract prediction values from data or generate using xmodel."""
-    if xmodel is not None:
-        try:
-            return xmodel.predict(data)
-        except Exception as e:
-            raise ValueError(f"Error generating predictions from xmodel: {e}")
-
-    if pred_column not in data.columns:
-        raise ValueError(
-            f"Must provide either xmodel or prediction column '{pred_column}' in data"
-        )
-
-    return data[pred_column].values
-
-
-def _get_weights(data: pd.DataFrame, weights_column: str) -> NDArray:
-    """Extract weights from data or create uniform weights."""
-    if weights_column in data.columns:
-        weight_values = data[weights_column].values
-
-        if np.any(weight_values < 0):
-            raise ValueError("Weights cannot be negative")
-        if np.sum(weight_values) == 0:
-            raise ValueError("Sum of weights cannot be zero")
-
-        return weight_values
-    else:
-        # Create uniform weights when weights column doesn't exist
-        return np.ones(len(data))
-
-
-def _get_reference_score(
-    reference_data: pd.DataFrame,
-    groupby_columns: list[str],
-    group_values: tuple,
-    score_column: str,
-) -> float:
-    """Extract reference score for a specific group."""
-    _validate_groupby_columns(reference_data, groupby_columns)
-
-    if score_column not in reference_data.columns:
-        raise ValueError(
-            f"Score column '{score_column}' not found in reference data"
-        )
-
-    # Create filter conditions for the group
-    group_conditions = []
-    for column, value in zip(groupby_columns, group_values):
-        if isinstance(value, str):
-            group_conditions.append(f"`{column}` == '{value}'")
-        else:
-            group_conditions.append(f"`{column}` == {value}")
-
-    filter_query = " & ".join(group_conditions)
-
-    try:
-        filtered_data = reference_data.query(filter_query)
-        if filtered_data.empty:
-            raise ValueError(
-                f"No reference data found for group {dict(zip(groupby_columns, group_values))}"
-            )
-        return float(filtered_data[score_column].iloc[0])
-
-    except Exception as e:
-        raise ValueError(
-            f"Error getting reference score for group {group_values}: {e}"
-        )
-
-
-def _validate_groupby_columns(
-    data: pd.DataFrame, groupby_columns: list[str]
-) -> None:
-    """Validate that all groupby columns exist in the data."""
-    missing_columns = [
-        col for col in groupby_columns if col not in data.columns
-    ]
-    if missing_columns:
-        raise ValueError(
-            f"Groupby columns not found in data: {missing_columns}"
-        )
-
-
-def _calculate_skill_score(
-    model_score: float, reference_score: float, handle_zero_reference: str
-) -> float:
-    """Calculate skill score with proper handling of zero reference scores.
+    Convert string metric names to ErrorMetric enum.
     
     Parameters
     ----------
-    model_score : float
-        The model score to compare against reference
-    reference_score : float  
-        The reference score to compare against
-    handle_zero_reference : str
-        How to handle zero reference scores:
-        - 'error': Raise an error
-        - 'skip': Return NaN 
-        - 'perfect': Return 1.0 (perfect skill)
+    metric_input : Union[str, ErrorMetric]
+        String metric name or ErrorMetric enum
         
     Returns
     -------
-    float
-        Calculated skill score
+    ErrorMetric
+        Resolved ErrorMetric enum
+        
+    Raises
+    ------
+    ValueError
+        If metric string is not recognized
     """
-    if reference_score == 0:
-        if handle_zero_reference == "error":
-            raise ValueError(
-                "Reference score cannot be zero for skill score calculation"
-            )
-        elif handle_zero_reference == "skip":
-            return float('nan')
-        elif handle_zero_reference == "perfect":
-            return 1.0
-        else:
-            raise ValueError(
-                f"Invalid handle_zero_reference option: {handle_zero_reference}. "
-                f"Valid options: 'error', 'skip', 'perfect'"
-            )
+    if isinstance(metric_input, ErrorMetric):
+        return metric_input
     
-    return 1 - model_score / reference_score
+    if isinstance(metric_input, str):
+        if metric_input in METRIC_ALIASES:
+            return METRIC_ALIASES[metric_input]
+        else:
+            available_metrics = list(METRIC_ALIASES.keys())
+            raise ValueError(f"Unknown metric '{metric_input}'. Available metrics: {available_metrics}")
+    
+    raise ValueError(f"Invalid metric type: {type(metric_input)}. Expected str or ErrorMetric")
 
 
-def filter_zero_reference_scores(
+def calculate_metric(
+    metric: Union[str, ErrorMetric],
+    data: pd.DataFrame,
+    obs: str,
+    pred: str,
+    weights: str,
+    groupby: Optional[List[str]] = None
+) -> Union[float, pd.DataFrame]:
+    """
+    Calculate error metric from DataFrame columns.
+    
+    Parameters
+    ----------
+    metric : Union[str, ErrorMetric]
+        Type of error metric to calculate. Can be:
+        - String: "rmse", "mae", "mse", "mape", "medae" (case insensitive)
+        - Full names: "root_mean_squared_error", "mean_absolute_error", etc.
+        - ErrorMetric enum (for advanced users)
+    data : pd.DataFrame
+        Input DataFrame containing all required columns
+    obs : str
+        Column name for observed/actual values
+    pred : str
+        Column name for predicted values
+    weights : str
+        Column name for sample weights
+    groupby : List[str], optional
+        Column names to group by for grouped calculations
+        
+    Returns
+    -------
+    Union[float, pd.DataFrame]
+        Single metric value if no groupby, DataFrame with grouped results if groupby specified
+        
+    Examples
+    --------
+    >>> # Simple usage with string
+    >>> rmse = calculate_metric("rmse", df, "actual", "predicted", "weights")
+    >>> 
+    >>> # Grouped calculation
+    >>> grouped = calculate_metric("mae", df, "obs", "pred", "weights", groupby=["region"])
+    """
+    resolved_metric_type = _resolve_metric_type(metric)
+    
+    return resolved_metric_type.eval(
+        data=data,
+        obs=obs,
+        pred=pred,
+        weights=weights,
+        groupby=groupby
+    )
+
+
+def calculate_skill(
+    metric: Union[str, ErrorMetric],
+    data: pd.DataFrame,
+    obs: str,
+    pred: str,
+    pred_ref: str,
+    weights: str,
+    groupby: Optional[List[str]] = None
+) -> Union[float, pd.DataFrame]:
+    """
+    Calculate skill score by comparing prediction performance against reference prediction.
+    
+    Skill score is calculated as: 1 - (prediction_score / reference_score)
+    where both scores use the same metric, observations, and weights.
+    
+    Parameters
+    ----------
+    metric : Union[str, ErrorMetric]
+        Type of error metric to calculate. Can be:
+        - String: "rmse", "mae", "mse", "mape", "medae" (case insensitive)
+        - Full names: "root_mean_squared_error", "mean_absolute_error", etc.
+        - ErrorMetric enum (for advanced users)
+    data : pd.DataFrame
+        Input DataFrame containing all required columns
+    obs : str
+        Column name for observed/actual values
+    pred : str
+        Column name for predicted values to evaluate
+    pred_ref : str
+        Column name for reference predicted values to compare against
+    weights : str
+        Column name for sample weights
+    groupby : List[str], optional
+        Column names to group by for grouped calculations
+        
+    Returns
+    -------
+    Union[float, pd.DataFrame]
+        Single skill score if no groupby, DataFrame with grouped skill scores if groupby specified
+        
+    Examples
+    --------
+    >>> # Simple skill score calculation
+    >>> skill = calculate_skill("rmse", df, "actual", "model_pred", "baseline_pred", "weights")
+    >>> 
+    >>> # Grouped skill score calculation
+    >>> grouped_skill = calculate_skill("mae", df, "obs", "pred", "ref_pred", "weights", groupby=["region"])
+    
+    Notes
+    -----
+    A skill score of 1.0 indicates perfect skill (prediction error is 0).
+    A skill score of 0.0 indicates no skill (prediction performs same as reference).
+    Negative skill scores indicate the prediction performs worse than the reference.
+    """
+    
+    prediction_score = calculate_metric(
+        metric=metric,
+        data=data,
+        obs=obs,
+        pred=pred,
+        weights=weights,
+        groupby=groupby
+    )
+    
+    
+    reference_score = calculate_metric(
+        metric=metric,
+        data=data,
+        obs=obs,
+        pred=pred_ref,
+        weights=weights,
+        groupby=groupby
+    )
+    
+    
+    if isinstance(prediction_score, pd.DataFrame) and isinstance(reference_score, pd.DataFrame):
+        # For grouped calculations, merge the DataFrames and calculate skill scores
+        return _calculate_grouped_skill_scores(prediction_score, reference_score, groupby)
+    elif isinstance(prediction_score, (int, float)) and isinstance(reference_score, (int, float)):
+        # For single values, calculate skill score directly
+        if reference_score == 0:
+            raise ZeroDivisionError("Reference score is zero, cannot calculate skill score")
+        return 1.0 - (prediction_score / reference_score)
+    else:
+        # Handle mixed types (should not happen with consistent groupby usage)
+        raise ValueError("Inconsistent return types from metric calculations. "
+                        "Both prediction and reference must have same groupby structure.")
+
+
+def _calculate_grouped_skill_scores(
+    prediction_scores: pd.DataFrame, 
+    reference_scores: pd.DataFrame, 
+    groupby: List[str]
+) -> pd.DataFrame:
+    """
+    Calculate skill scores for grouped metric results.
+    
+    Parameters
+    ----------
+    prediction_scores : pd.DataFrame
+        DataFrame with group columns and prediction metric scores
+    reference_scores : pd.DataFrame
+        DataFrame with group columns and reference metric scores
+    groupby : List[str]
+        Column names used for grouping
+        
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with group columns and calculated skill scores
+    """
+    pred_metric_col = prediction_scores.columns[-1]
+    ref_metric_col = reference_scores.columns[-1]
+    
+    pred_scores = prediction_scores[pred_metric_col].values
+    ref_scores = reference_scores[ref_metric_col].values
+    
+    # Check for zero division and calculate skill scores
+    if np.any(ref_scores == 0):
+        zero_indices = np.where(ref_scores == 0)[0]
+        zero_groups = prediction_scores.iloc[zero_indices][groupby].to_dict('records')
+        raise ZeroDivisionError(f"Reference score is zero for groups {zero_groups}, cannot calculate skill score")
+    
+    skill_scores = 1.0 - (pred_scores / ref_scores)
+    
+    # Create result DataFrame with group columns and skill scores
+    result = prediction_scores[groupby].copy()
+    result['skill_score'] = skill_scores
+    
+    return result
+
+
+def get_weighted_mean(
     data: pd.DataFrame, 
-    reference: pd.DataFrame,
-    groupby_columns: list[str],
-    score_column: str = "score"
-) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Filter out groups with zero reference scores from both data and reference.
+    obs: str, 
+    weights: str, 
+    groupby: List[str], 
+    name: str = "wt_mean"
+) -> pd.DataFrame:
+    """
+    Compute weighted mean as reference prediction.
     
     Parameters
     ----------
     data : pd.DataFrame
-        Analysis data to filter
-    reference : pd.DataFrame  
-        Reference data containing scores
-    groupby_columns : list[str]
-        Columns to group by
-    score_column : str
-        Column name containing reference scores
+        DataFrame containing all required columns. A copy will be made.
+    obs : str
+        Column name for values to compute weighted mean of.
+    weights : str
+        Column name for weights.
+    groupby : List[str]
+        List of column names to group groupby.
+    name : str
+        Column name for the computed weighted mean. Defaults to "wt_mean".
         
     Returns
     -------
-    tuple[pd.DataFrame, pd.DataFrame]
-        Filtered data and reference DataFrames with zero reference scores removed
+    pd.DataFrame
+        Copy of input data with weighted mean column added/updated.
+        
+    Examples
+    --------
+    >>> # Calculate weighted mean of sales by region
+    >>> weighted_means = get_weighted_mean(
+    ...     data=df,
+    ...     obs="sales", 
+    ...     weights="sample_weights",
+    ...     groupby=["region"],
+    ...     name="avg_sales"
+    ... )
     """
-    # Find groups with zero reference scores
-    zero_mask = reference[score_column] == 0
-    zero_groups = reference[zero_mask][groupby_columns]
-    
-    if len(zero_groups) > 0:
-        print(f"Filtering out {len(zero_groups)} groups with zero reference scores...")
-        
-        # Create a merge key to identify groups to exclude
-        merge_cols = groupby_columns
-        filtered_reference = reference[~zero_mask].copy()
-        
-        # Filter data to exclude groups with zero reference scores
-        filtered_data = data.merge(
-            zero_groups, 
-            on=merge_cols, 
-            how='left', 
-            indicator=True
-        )
-        filtered_data = filtered_data[filtered_data['_merge'] == 'left_only'].drop('_merge', axis=1)
-        
-        return filtered_data, filtered_reference
-    
-    return data.copy(), reference.copy()
+    data_copy = data[groupby + [obs, weights]].copy()
+    data_copy[name] = data_copy[obs] * data_copy[weights]
+    result = data_copy.groupby(groupby)[[name, weights]].sum().reset_index()
+    result[name] = result[name] / result[weights]
+    return result.drop(columns=weights)
