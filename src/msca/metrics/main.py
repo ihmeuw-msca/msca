@@ -109,6 +109,10 @@ class Metric(StrEnum):
             raise ZeroDivisionError(
                 "Reference score is zero, cannot calculate skill score"
             )
+        if alt_score == 0:
+            raise ValueError(
+                "Alternative score is zero, skill score calculation may be unreliable"
+            )
 
         return 1.0 - (alt_score / ref_score)
 
@@ -248,8 +252,14 @@ class Metric(StrEnum):
             )
 
             if (ref_scores.iloc[:, -1] == 0).any():
+                zero_ref_groups = ref_scores[ref_scores.iloc[:, -1] == 0][groupby].to_dict('records')
                 raise ZeroDivisionError(
-                    "Reference score is zero, cannot calculate skill score"
+                    f"Reference score is zero for groups {zero_ref_groups}, cannot calculate skill score"
+                )
+            if (alt_scores.iloc[:, -1] == 0).any():
+                zero_alt_groups = alt_scores[alt_scores.iloc[:, -1] == 0][groupby].to_dict('records')
+                raise ValueError(
+                    f"Alternative score is zero for groups {zero_alt_groups}, skill score calculation may be unreliable"
                 )
 
             grouped_results = ref_scores.copy()
