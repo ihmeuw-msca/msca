@@ -22,7 +22,6 @@ dependencies = [
     "scipy",
     "pydantic",
     "scikit-learn",
-    "spxmod @ git+https://github.com/ihmeuw-msca/spxmod.git@v0.3.2"
 ]
 
 [project.optional-dependencies]
