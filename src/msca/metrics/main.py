@@ -11,17 +11,17 @@ class Metric(StrEnum):
 
     Examples
     --------
-    >>> # Simple usage
+    >>> # Simple error metric calculation
     >>> metric = Metric("mean_absolute_error")
     >>> score = metric.eval(df, "obs", "pred", "weights")
-    >>> # Grouped calculation
+    >>> # Grouped error calculation
     >>> grouped_scores = metric.eval(
     ...     df, "obs", "pred", "weights", groupby=["region"]
     ... )
     >>>
     >>> # Skill calculation
-    >>> skill_score = metric.eval(
-    ...     df, "obs", "pred_ref", "weights", pred_alt="pred_alt"
+    >>> skill_score = metric.eval_skill(
+    ...     df, "obs", "pred_alt", "pred_ref", "weights"
     ... )
     """
 
@@ -35,13 +35,12 @@ class Metric(StrEnum):
         self,
         data: pd.DataFrame,
         obs: str,
-        pred_ref: str,
+        pred: str,
         weights: str,
-        pred_alt: str | None = None,
         groupby: list[str] | None = None,
     ) -> float | pd.DataFrame:
         """
-        Evaluate the error metric or skill score on the provided data.
+        Evaluate the error metric on the provided data.
 
         Parameters
         ----------
@@ -49,78 +48,97 @@ class Metric(StrEnum):
             Input DataFrame containing all required columns
         obs : str
             Column name for observed/actual values
-        pred_ref : str
-            Column name for reference predicted values (used as "pred" for error calculation)
+        pred : str
+            Column name for predicted values
         weights : str
             Column name for sample weights
-        pred_alt : str, optional
-            Column name for alternative predicted values. If provided, calculates skill score
-            comparing pred_alt vs pred_ref. If None, calculates error metric for pred_ref.
         groupby : list[str], optional
             Column names to group by for grouped calculations
 
         Returns
         -------
         Union[float, pd.DataFrame]
-            Single metric/skill value if no groupby, DataFrame with grouped results if groupby specified
+            Single metric value if no groupby, DataFrame with grouped results if groupby specified
         """
         if groupby is not None:
-            return self._eval_grouped(
-                data, obs, pred_ref, weights, groupby, pred_alt
-            )
+            return self._eval_grouped(data, obs, pred, weights, groupby)
 
-        if pred_alt is None:
-            # Error calculation mode
-            obs_values = data[obs].to_numpy()
-            pred_values = data[pred_ref].to_numpy()
-            weight_values = data[weights].to_numpy()
+        return self._eval_single(data, obs, pred, weights)
 
-            # Calculate single metric value
-            return self._eval_single(obs_values, pred_values, weight_values)
-        else:
-            # Skill calculation mode
-            obs_values = data[obs].to_numpy()
-            pred_ref_values = data[pred_ref].to_numpy()
-            pred_alt_values = data[pred_alt].to_numpy()
-            weight_values = data[weights].to_numpy()
-
-            ref_score = self._eval_single(
-                obs_values, pred_ref_values, weight_values
-            )
-            alt_score = self._eval_single(
-                obs_values, pred_alt_values, weight_values
-            )
-
-            if ref_score == 0:
-                raise ZeroDivisionError(
-                    "Reference score is zero, cannot calculate skill score"
-                )
-
-            return 1.0 - (alt_score / ref_score)
-
-    def _eval_single(
+    def eval_skill(
         self,
-        obs_values: np.ndarray,
-        pred_values: np.ndarray,
-        weight_values: np.ndarray,
-    ) -> float:
+        data: pd.DataFrame,
+        obs: str,
+        pred_alt: str,
+        pred_ref: str,
+        weights: str,
+        groupby: list[str] | None = None,
+    ) -> float | pd.DataFrame:
         """
-        Calculate metric for single set of values.
+        Calculate skill score by comparing pred_alt performance against pred_ref.
 
         Parameters
         ----------
-        obs_values : np.ndarray
-            Observed values
-        pred_values : np.ndarray
-            Predicted values
-        weight_values : np.ndarray
-            Sample weights
+        data : pd.DataFrame
+            Input DataFrame containing all required columns
+        obs : str
+            Column name for observed/actual values
+        pred_alt : str
+            Column name for alternative predicted values to evaluate
+        pred_ref : str
+            Column name for reference predicted values to compare against
+        weights : str
+            Column name for sample weights
+        groupby : list[str], optional
+            Column names to group by for grouped calculations
+
+        Returns
+        -------
+        Union[float, pd.DataFrame]
+            Single skill score if no groupby, DataFrame with grouped skill scores if groupby specified
+        """
+        if groupby is not None:
+            return self._eval_grouped(data, obs, pred_ref, weights, groupby, pred_alt)
+
+        ref_score = self._eval_single(data, obs, pred_ref, weights)
+        alt_score = self._eval_single(data, obs, pred_alt, weights)
+
+        if ref_score == 0:
+            raise ZeroDivisionError(
+                "Reference score is zero, cannot calculate skill score"
+            )
+
+        return 1.0 - (alt_score / ref_score)
+
+    def _eval_single(
+        self, 
+        data: pd.DataFrame, 
+        obs: str, 
+        pred: str, 
+        weights: str
+    ) -> float:
+        """
+        Calculate metric for single DataFrame or group.
+
+        Parameters
+        ----------
+        data : pd.DataFrame
+            DataFrame containing the data
+        obs : str
+            Column name for observed values
+        pred : str
+            Column name for predicted values
+        weights : str
+            Column name for sample weights
 
         Returns
         -------
         float
             Calculated metric value
         """
+        obs_values = data[obs].to_numpy()
+        pred_values = data[pred].to_numpy()
+        weight_values = data[weights].to_numpy()
         match self:
             case Metric.ROOT_MEAN_SQUARED_ERROR:
                 mse_value = metrics.mean_squared_error(
@@ -175,7 +193,7 @@ class Metric(StrEnum):
         obs : str
             Observed values column name
         pred_ref : str
-            Reference predicted values column name
+            Predicted values column name (pred_ref for skill calculations)
         weights : str
             Weights column name
         groupby : list[str]
@@ -189,61 +207,35 @@ class Metric(StrEnum):
             DataFrame with groupby columns and calculated metric/skill column
         """
         df = data.copy()
-
+        
         if pred_alt is None:
+            # Error calculation
             result_column_name = f"{pred_ref}_{self.value}"
-        else:
-            result_column_name = f"{pred_alt}_{self.value}_skill"
-
-        grouped_results = (
-            df.groupby(groupby)
-            .apply(
-                self._calculate_group_result,
-                obs,
-                pred_ref,
-                weights,
-                pred_alt,
-                include_groups=False,
+            grouped_results = (
+                df.groupby(groupby)
+                .apply(self._eval_single, obs, pred_ref, weights, include_groups=False)
+                .reset_index()
             )
-            .reset_index()
-        )
+        else:
+            # Skill calculation
+            result_column_name = f"{pred_alt}_{self.value}_skill"
+            
+            ref_scores = df.groupby(groupby).apply(
+                self._eval_single, obs, pred_ref, weights, include_groups=False
+            ).reset_index()
+            alt_scores = df.groupby(groupby).apply(
+                self._eval_single, obs, pred_alt, weights, include_groups=False
+            ).reset_index()
+        
+            if (ref_scores.iloc[:, -1] == 0).any():
+                raise ZeroDivisionError("Reference score is zero, cannot calculate skill score")
+            
+            grouped_results = ref_scores.copy()
+            grouped_results.iloc[:, -1] = 1.0 - (alt_scores.iloc[:, -1] / ref_scores.iloc[:, -1])
         grouped_results = grouped_results.rename(
             columns={grouped_results.columns[-1]: result_column_name}
         )
 
         return grouped_results
 
-    def _calculate_group_result(
-        self,
-        group: pd.DataFrame,
-        obs: str,
-        pred_ref: str,
-        weights: str,
-        pred_alt: str | None = None,
-    ) -> float:
-        """Calculate metric or skill score for a single group."""
-        obs_values = group[obs].to_numpy()
-        weight_values = group[weights].to_numpy()
 
-        if pred_alt is None:
-            # Error calculation mode
-            pred_values = group[pred_ref].to_numpy()
-            return self._eval_single(obs_values, pred_values, weight_values)
-        else:
-            # Skill calculation mode
-            pred_ref_values = group[pred_ref].to_numpy()
-            pred_alt_values = group[pred_alt].to_numpy()
-
-            ref_score = self._eval_single(
-                obs_values, pred_ref_values, weight_values
-            )
-            alt_score = self._eval_single(
-                obs_values, pred_alt_values, weight_values
-            )
-
-            if ref_score == 0:
-                raise ZeroDivisionError(
-                    "Reference score is zero, cannot calculate skill score"
-                )
-
-            return 1.0 - (alt_score / ref_score)

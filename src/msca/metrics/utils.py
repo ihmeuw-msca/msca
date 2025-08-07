@@ -1,12 +1,11 @@
 import pandas as pd
-from typing import List
 
 
 def get_weighted_mean(
     data: pd.DataFrame,
     obs: str,
     weights: str,
-    groupby: List[str],
+    groupby: list[str],
     name: str = "wt_mean",
 ) -> pd.DataFrame:
     """
