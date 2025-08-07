@@ -98,7 +98,9 @@ class Metric(StrEnum):
             Single skill score if no groupby, DataFrame with grouped skill scores if groupby specified
         """
         if groupby is not None:
-            return self._eval_grouped(data, obs, pred_ref, weights, groupby, pred_alt)
+            return self._eval_grouped(
+                data, obs, pred_ref, weights, groupby, pred_alt
+            )
 
         ref_score = self._eval_single(data, obs, pred_ref, weights)
         alt_score = self._eval_single(data, obs, pred_alt, weights)
@@ -111,11 +113,7 @@ class Metric(StrEnum):
         return 1.0 - (alt_score / ref_score)
 
     def _eval_single(
-        self, 
-        data: pd.DataFrame, 
-        obs: str, 
-        pred: str, 
-        weights: str
+        self, data: pd.DataFrame, obs: str, pred: str, weights: str
     ) -> float:
         """
         Calculate metric for single DataFrame or group.
@@ -207,35 +205,59 @@ class Metric(StrEnum):
             DataFrame with groupby columns and calculated metric/skill column
         """
         df = data.copy()
-        
+
         if pred_alt is None:
             # Error calculation
             result_column_name = f"{pred_ref}_{self.value}"
             grouped_results = (
                 df.groupby(groupby)
-                .apply(self._eval_single, obs, pred_ref, weights, include_groups=False)
+                .apply(
+                    self._eval_single,
+                    obs,
+                    pred_ref,
+                    weights,
+                    include_groups=False,
+                )
                 .reset_index()
             )
         else:
             # Skill calculation
             result_column_name = f"{pred_alt}_{self.value}_skill"
-            
-            ref_scores = df.groupby(groupby).apply(
-                self._eval_single, obs, pred_ref, weights, include_groups=False
-            ).reset_index()
-            alt_scores = df.groupby(groupby).apply(
-                self._eval_single, obs, pred_alt, weights, include_groups=False
-            ).reset_index()
-        
+
+            ref_scores = (
+                df.groupby(groupby)
+                .apply(
+                    self._eval_single,
+                    obs,
+                    pred_ref,
+                    weights,
+                    include_groups=False,
+                )
+                .reset_index()
+            )
+            alt_scores = (
+                df.groupby(groupby)
+                .apply(
+                    self._eval_single,
+                    obs,
+                    pred_alt,
+                    weights,
+                    include_groups=False,
+                )
+                .reset_index()
+            )
+
             if (ref_scores.iloc[:, -1] == 0).any():
-                raise ZeroDivisionError("Reference score is zero, cannot calculate skill score")
-            
+                raise ZeroDivisionError(
+                    "Reference score is zero, cannot calculate skill score"
+                )
+
             grouped_results = ref_scores.copy()
-            grouped_results.iloc[:, -1] = 1.0 - (alt_scores.iloc[:, -1] / ref_scores.iloc[:, -1])
+            grouped_results.iloc[:, -1] = 1.0 - (
+                alt_scores.iloc[:, -1] / ref_scores.iloc[:, -1]
+            )
         grouped_results = grouped_results.rename(
             columns={grouped_results.columns[-1]: result_column_name}
         )
 
         return grouped_results
-
-
