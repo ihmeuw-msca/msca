@@ -1,7 +1,7 @@
 from enum import StrEnum, auto
+
 import numpy as np
 import pandas as pd
-
 from sklearn import metrics
 
 
@@ -246,7 +246,6 @@ class Metric(StrEnum):
                 obs,
                 pred,
                 weights,
-                include_groups=False,
             )
             .reset_index()
         )

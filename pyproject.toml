@@ -22,6 +22,7 @@ dependencies = [
     "scipy",
     "pydantic",
     "scikit-learn",
+    "pandas",
 ]
 
 [project.optional-dependencies]
