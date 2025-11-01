@@ -52,25 +52,26 @@ def test_eval_grouped(metric_enum, sample_data):
     assert len(result_df) == sample_data["region"].nunique()
 
 
-@pytest.mark.parametrize(
-    "groupby",
-    [
-        None,
-        ["region"],
-    ],
-)
-def test_rmse_eval_empty_data(groupby, sample_data):
-    """Test that eval runs when data is empty with or without groupby."""
+def test_rmse_eval_single_empty_data_fail(sample_data):
+    """Test that eval raises a clear error when data is empty without groupby."""
+    with pytest.raises(ValueError, match="dataframe is empty"):
+        Metric.ROOT_MEAN_SQUARED_ERROR.eval(
+            sample_data[0:0], "obs", "pred", "weights"
+        )
+
+
+def test_rmse_eval_grouped_empty_data_success(sample_data):
+    """Test that eval runs when data is empty with groupby."""
     metric = Metric.ROOT_MEAN_SQUARED_ERROR
     sample_data_empty = sample_data[0:0]
-    result_df = metric.eval(
-        sample_data_empty, "obs", "pred", "weights", groupby=groupby
+    result = metric.eval(
+        sample_data_empty, "obs", "pred", "weights", groupby=["region"]
     )
-    assert isinstance(result_df, pd.DataFrame)
-    assert "region" in result_df.columns
+    assert isinstance(result, pd.DataFrame)
+    assert "region" in result.columns
     metric_col = f"pred_{metric.value}"
-    assert metric_col in result_df.columns
-    assert len(result_df) == sample_data["region"].nunique()
+    assert metric_col in result.columns
+    assert result.empty
 
 
 def test_eval_skill_single(sample_data):
