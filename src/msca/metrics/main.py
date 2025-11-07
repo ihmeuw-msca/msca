@@ -113,9 +113,9 @@ class Metric(StrEnum):
                 groupby=groupby,
             )
 
-            ref_score_col = f"{pred_ref}_{self.value}"
-            alt_score_col = f"{pred_alt}_{self.value}"
-            result_column_name = f"{pred_alt}_{self.value}_skill"
+            ref_score_col = self._get_metric_column_name(pred_ref)
+            alt_score_col = self._get_metric_column_name(pred_alt)
+            result_column_name = f"{alt_score_col}_skill"
 
             if (ref_scores[ref_score_col] == 0).any():
                 zero_ref_groups = ref_scores[ref_scores[ref_score_col] == 0][
@@ -166,11 +166,17 @@ class Metric(StrEnum):
         pd.Series
             Series with named metric value: f"{pred}_{self.value}"
         """
+        if data.empty:
+            raise ValueError(
+                "Input dataframe is empty, at least one row is required "
+                "to calculate single metrics."
+            )
+
         obs_values = data[obs].to_numpy()
         pred_values = data[pred].to_numpy()
         weight_values = data[weights].to_numpy()
 
-        column_name = f"{pred}_{self.value}"
+        column_name = self._get_metric_column_name(pred)
 
         match self:
             case Metric.ROOT_MEAN_SQUARED_ERROR:
@@ -238,6 +244,12 @@ class Metric(StrEnum):
         pd.DataFrame
             DataFrame with groupby columns and calculated metric/skill column
         """
+        if data.empty:
+            raise ValueError(
+                "Input dataframe is empty, at least one row is required "
+                "to calculate metrics by group."
+            )
+
         df = data.copy()
         grouped_results = (
             df.groupby(groupby)
@@ -251,3 +263,20 @@ class Metric(StrEnum):
         )
 
         return grouped_results
+
+    def _get_metric_column_name(self, pred: str) -> str:
+        """
+        Template the metric column name from the predicted values
+        column name and the Metric's string representation.
+
+        Parameters
+        ----------
+        pred : str
+            Predicted values column name
+
+        Returns
+        -------
+        str
+            Name of the metric value column, formatted as "{pred}_{self.value}"
+        """
+        return f"{pred}_{self.value}"

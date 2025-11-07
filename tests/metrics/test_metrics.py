@@ -1,7 +1,5 @@
-import numpy as np
 import pandas as pd
 import pytest
-from sklearn import metrics
 
 from msca.metrics import Metric  # Replace with actual import path
 
@@ -52,6 +50,15 @@ def test_eval_grouped(metric_enum, sample_data):
     metric_col = f"pred_{metric_enum.value}"
     assert metric_col in result_df.columns
     assert len(result_df) == sample_data["region"].nunique()
+
+
+@pytest.mark.parametrize("groupby", [None, ["region"]])
+def test_rmse_eval_empty_data_fail(sample_data, groupby):
+    """Test that eval raises a clear error when data is empty without groupby."""
+    with pytest.raises(ValueError, match="dataframe is empty"):
+        Metric.ROOT_MEAN_SQUARED_ERROR.eval(
+            sample_data[0:0], "obs", "pred", "weights", groupby=groupby
+        )
 
 
 def test_eval_skill_single(sample_data):
