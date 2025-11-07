@@ -244,23 +244,23 @@ class Metric(StrEnum):
         pd.DataFrame
             DataFrame with groupby columns and calculated metric/skill column
         """
-
         if data.empty:
-            grouped_results = pd.DataFrame(
-                columns=groupby + [self._get_metric_column_name(pred)]
+            raise ValueError(
+                "Input dataframe is empty, at least one row is required "
+                "to calculate metrics by group."
             )
-        else:
-            df = data.copy()
-            grouped_results = (
-                df.groupby(groupby)
-                .apply(
-                    self._eval_single,
-                    obs,
-                    pred,
-                    weights,
-                )
-                .reset_index()
+
+        df = data.copy()
+        grouped_results = (
+            df.groupby(groupby)
+            .apply(
+                self._eval_single,
+                obs,
+                pred,
+                weights,
             )
+            .reset_index()
+        )
 
         return grouped_results
 
