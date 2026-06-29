@@ -56,14 +56,9 @@ class Metric(StrEnum):
         groupby : list[str], optional
             Column names to group by for grouped calculations
         winsorize : tuple[float, float], optional
-            Lower and upper quantiles (each in [0, 1], lower <= upper) used to
-            clip the per-observation error contributions before aggregating.
-            For example, ``(0.0, 0.95)`` caps each observation's error term at
-            the 95th percentile of the (group's) error distribution, limiting
-            the influence of blowup observations. Quantiles are computed
-            unweighted; when ``groupby`` is given, they are computed
-            independently within each group. ``None`` (default) disables
-            winsorization and reproduces the standard metric.
+            Lower/upper quantiles in [0, 1] for clipping per-observation error
+            contributions before aggregating, computed per group; None uses
+            the standard metric
 
         Returns
         -------
@@ -75,7 +70,7 @@ class Metric(StrEnum):
 
         if groupby is not None:
             return self._eval_grouped(
-                data, obs, pred, weights, groupby, winsorize=winsorize
+                data, obs, pred, weights, groupby=groupby, winsorize=winsorize
             )
 
         return self._eval_single(
@@ -110,11 +105,8 @@ class Metric(StrEnum):
         groupby : list[str], optional
             Column names to group by for grouped calculations
         winsorize : tuple[float, float], optional
-            Lower and upper quantiles used to clip the per-observation error
-            contributions of both the reference and alternative metrics before
-            aggregating. See :meth:`eval` for details. The same clipping is
-            applied independently when computing the reference and alternative
-            scores. ``None`` (default) disables winsorization.
+            Quantiles for clipping per-observation error contributions; see
+            :meth:`eval`. None uses the standard metric
 
         Returns
         -------
@@ -200,7 +192,7 @@ class Metric(StrEnum):
             Column name for sample weights
         winsorize : tuple[float, float], optional
             Quantiles for clipping per-observation error contributions; see
-            :meth:`eval`. ``None`` (default) uses the standard metric.
+            :meth:`eval`. None uses the standard metric
 
         Returns
         -------
@@ -221,7 +213,7 @@ class Metric(StrEnum):
 
         if winsorize is not None:
             result = self._eval_winsorized(
-                obs_values, pred_values, weight_values, winsorize
+                obs_values, pred_values, weight_values, winsorize=winsorize
             )
             return pd.Series({column_name: result})
 
@@ -287,9 +279,8 @@ class Metric(StrEnum):
         groupby : list[str]
             Grouping column names
         winsorize : tuple[float, float], optional
-            Quantiles for clipping per-observation error contributions, applied
-            independently within each group; see :meth:`eval`. ``None``
-            (default) uses the standard metric.
+            Quantiles for clipping per-observation error contributions; see
+            :meth:`eval`. None uses the standard metric
 
         Returns
         -------
@@ -310,7 +301,7 @@ class Metric(StrEnum):
                 obs,
                 pred,
                 weights,
-                winsorize,
+                winsorize=winsorize,
             )
             .reset_index()
         )
@@ -326,11 +317,7 @@ class Metric(StrEnum):
     ) -> float:
         """
         Compute the metric after clipping per-observation error contributions
-        to the ``winsorize`` quantiles.
-
-        Each metric is a (weighted) aggregation of a per-observation error
-        term; clipping those terms before aggregating limits the influence of
-        blowup observations. See :meth:`eval` for the user-facing description.
+        to the winsorize quantiles. See :meth:`eval` for details.
         """
         lower_q, upper_q = winsorize
         residuals = obs_values - pred_values
