@@ -244,10 +244,8 @@ class Metric(StrEnum):
                     sample_weight=weight_values,
                 )
             case Metric.MEDIAN_ABSOLUTE_ERROR:
-                result = metrics.median_absolute_error(
-                    y_true=obs_values,
-                    y_pred=pred_values,
-                    sample_weight=weight_values,
+                result = self._weighted_median(
+                    np.abs(obs_values - pred_values), weight_values
                 )
             case _:
                 raise ValueError(f"Unsupported metric type: {self}")
@@ -348,17 +346,24 @@ class Metric(StrEnum):
                     np.sqrt(np.average(contributions, weights=weight_values))
                 )
             case Metric.MEDIAN_ABSOLUTE_ERROR:
-                # Contributions are clipped |residuals| >= 0, so the weighted
-                # median of |contribution - 0| is their weighted median.
-                return float(
-                    metrics.median_absolute_error(
-                        y_true=contributions,
-                        y_pred=np.zeros_like(contributions),
-                        sample_weight=weight_values,
-                    )
-                )
+                return self._weighted_median(contributions, weight_values)
             case _:
                 return float(np.average(contributions, weights=weight_values))
+
+    @staticmethod
+    def _weighted_median(values: np.ndarray, weights: np.ndarray) -> float:
+        """
+        Weighted median of ``values``.
+
+        Sorts the values and reads off the point where the cumulative weight
+        crosses half of the total, interpolating between neighbours. With
+        equal weights this reduces to :func:`numpy.median`.
+        """
+        order = np.argsort(values)
+        values = values[order]
+        weights = weights[order]
+        cdf = (np.cumsum(weights) - 0.5 * weights) / np.sum(weights)
+        return float(np.interp(0.5, cdf, values))
 
     @staticmethod
     def _validate_winsorize(winsorize: tuple[float, float]) -> None:
