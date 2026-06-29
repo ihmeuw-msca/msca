@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -14,6 +15,24 @@ def sample_data():
             "pred_ref": [1.1, 2.0, 3.1, 4.0],
             "weights": [1.0, 1.0, 1.0, 1.0],
             "region": ["A", "A", "B", "B"],
+        }
+    )
+
+
+@pytest.fixture
+def blowup_data():
+    """Many well-behaved rows plus a few blowup observations per region."""
+    rng = np.random.RandomState(0)
+    n = 200
+    obs = rng.normal(loc=10.0, size=n)
+    pred = obs + rng.normal(scale=0.5, size=n)
+    pred[:5] += 50.0  # blowup holdouts
+    return pd.DataFrame(
+        {
+            "obs": obs,
+            "pred": pred,
+            "weights": np.ones(n),
+            "region": np.where(np.arange(n) < n // 2, "A", "B"),
         }
     )
 
@@ -115,3 +134,67 @@ def test_eval_single_unsupported_metric(sample_data):
     with pytest.raises(ValueError):
         fake = Metric("fake")
         fake._eval_single(sample_data, "obs", "pred", "weights")
+
+
+@pytest.mark.parametrize("metric", list(Metric))
+def test_winsorize_full_range_matches_standard(metric, blowup_data):
+    """Winsorizing at (0, 1) clips nothing, reproducing the standard metric."""
+    standard = metric.eval(blowup_data, "obs", "pred", "weights")
+    winsorized = metric.eval(
+        blowup_data, "obs", "pred", "weights", winsorize=(0.0, 1.0)
+    )
+    assert winsorized == pytest.approx(standard)
+
+
+# Median is excluded: winsorizing the tails leaves the median essentially
+# unchanged, so the metric does not strictly decrease.
+@pytest.mark.parametrize(
+    "metric",
+    [m for m in Metric if m is not Metric.MEDIAN_ABSOLUTE_ERROR],
+)
+def test_winsorize_reduces_blowup_influence(metric, blowup_data):
+    """Clipping the upper tail lowers metrics inflated by blowup observations."""
+    standard = metric.eval(blowup_data, "obs", "pred", "weights")
+    winsorized = metric.eval(
+        blowup_data, "obs", "pred", "weights", winsorize=(0.0, 0.95)
+    )
+    assert winsorized < standard
+
+
+def test_winsorize_grouped(blowup_data):
+    metric = Metric.ROOT_MEAN_SQUARED_ERROR
+    result_df = metric.eval(
+        blowup_data,
+        "obs",
+        "pred",
+        "weights",
+        groupby=["region"],
+        winsorize=(0.0, 0.95),
+    )
+    assert isinstance(result_df, pd.DataFrame)
+    metric_col = f"pred_{metric.value}"
+    assert metric_col in result_df.columns
+    assert len(result_df) == blowup_data["region"].nunique()
+
+
+def test_winsorize_skill_single(blowup_data):
+    blowup_data["pred_alt"] = blowup_data["pred"]
+    blowup_data["pred_ref"] = blowup_data["obs"] + 1.0
+    metric = Metric.ROOT_MEAN_SQUARED_ERROR
+    score = metric.eval_skill(
+        blowup_data,
+        "obs",
+        "pred_alt",
+        "pred_ref",
+        "weights",
+        winsorize=(0.0, 0.95),
+    )
+    assert isinstance(score, float)
+
+
+@pytest.mark.parametrize("winsorize", [(-0.1, 0.95), (0.5, 0.4), (0.0, 1.1)])
+def test_winsorize_invalid_quantiles(sample_data, winsorize):
+    with pytest.raises(ValueError, match="winsorize quantiles"):
+        Metric.ROOT_MEAN_SQUARED_ERROR.eval(
+            sample_data, "obs", "pred", "weights", winsorize=winsorize
+        )
