@@ -358,9 +358,7 @@ class Metric(StrEnum):
                     )
                 )
             case _:
-                return float(
-                    np.average(contributions, weights=weight_values)
-                )
+                return float(np.average(contributions, weights=weight_values))
 
     @staticmethod
     def _validate_winsorize(winsorize: tuple[float, float]) -> None:
