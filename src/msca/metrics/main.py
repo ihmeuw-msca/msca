@@ -70,6 +70,9 @@ class Metric(StrEnum):
         Union[float, pd.DataFrame]
             Single metric value if no groupby, DataFrame with grouped results if groupby specified
         """
+        if winsorize is not None:
+            self._validate_winsorize(winsorize)
+
         if groupby is not None:
             return self._eval_grouped(
                 data, obs, pred, weights, groupby, winsorize=winsorize
@@ -118,6 +121,9 @@ class Metric(StrEnum):
         Union[float, pd.DataFrame]
             Single skill score if no groupby, DataFrame with grouped skill scores if groupby specified
         """
+        if winsorize is not None:
+            self._validate_winsorize(winsorize)
+
         if groupby is not None:
             ref_scores = self._eval_grouped(
                 data=data,
@@ -327,12 +333,6 @@ class Metric(StrEnum):
         blowup observations. See :meth:`eval` for the user-facing description.
         """
         lower_q, upper_q = winsorize
-        if not 0.0 <= lower_q <= upper_q <= 1.0:
-            raise ValueError(
-                "winsorize quantiles must satisfy 0 <= lower <= upper <= 1, "
-                f"got {winsorize}."
-            )
-
         residuals = obs_values - pred_values
 
         # Per-observation error term that the metric aggregates.
@@ -374,6 +374,23 @@ class Metric(StrEnum):
                 return float(
                     np.average(contributions, weights=weight_values)
                 )
+
+    @staticmethod
+    def _validate_winsorize(winsorize: tuple[float, float]) -> None:
+        """
+        Validate the winsorize quantile bounds, failing fast with a clear message.
+
+        Parameters
+        ----------
+        winsorize : tuple[float, float]
+            Lower and upper quantiles; must satisfy 0 <= lower <= upper <= 1
+        """
+        lower_q, upper_q = winsorize
+        if not 0.0 <= lower_q <= upper_q <= 1.0:
+            raise ValueError(
+                "winsorize quantiles must satisfy 0 <= lower <= upper <= 1, "
+                f"got {winsorize}."
+            )
 
     def _get_metric_column_name(self, pred: str) -> str:
         """
