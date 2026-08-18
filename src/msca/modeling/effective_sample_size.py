@@ -17,7 +17,37 @@ def _vr_effective_sample_size(
     logit_pct_garbage_sd: pd.Series,
     envelope_ub: float,
 ) -> pd.Series:
-    """VR effective binomial sample size."""
+    """Effective binomial sample size for vital registration rows.
+
+    Parameters
+    ----------
+    cause_fraction
+        Fraction of all-cause deaths assigned to the cause.
+    all_cause_death_rate
+        All-cause death rate, ``envelope / population``.
+    all_cause_death_rate_sd
+        Standard deviation of ``all_cause_death_rate``.
+    population
+        Population at risk.
+    completeness
+        Fraction of deaths captured by the registration system. The
+        registered death count ``completeness * population`` is the
+        upper limit that the variance terms shrink towards.
+    pct_garbage
+        Fraction of the cause's deaths that came from redistributed
+        garbage codes.
+    logit_pct_garbage_sd
+        Standard deviation of ``pct_garbage`` on the logit scale.
+    envelope_ub
+        Upper bound of the all-cause death rate. See
+        :func:`effective_sample_size`.
+
+    Returns
+    -------
+    Series
+        Effective binomial sample size for each row.
+
+    """
     n = completeness * population
     a = all_cause_death_rate * (
         envelope_ub - cause_fraction * all_cause_death_rate
@@ -43,12 +73,47 @@ def _non_vr_effective_sample_size(
     logit_pct_garbage_sd: pd.Series,
     envelope_ub: float,
 ) -> pd.Series:
-    """VA effective binomial sample size."""
-    # A cause's VA count can't exceed the all-cause envelope; capping there also keeps the
-    # effective all-cause population env_nonvr / all_cause_death_rate <= n_pop, no separate population cap is needed.
+    """Effective binomial sample size for non-registration rows.
+
+    Unlike the vital registration form, the population at risk is not
+    taken from the data. It is implied by the reported sample size,
+    which stands in for the source's all-cause death count.
+
+    Parameters
+    ----------
+    cause_fraction
+        Fraction of all-cause deaths assigned to the cause.
+    sample_size
+        Deaths reported by the source, capped at ``envelope``.
+    all_cause_death_rate
+        All-cause death rate, ``envelope / population``.
+    all_cause_death_rate_sd
+        Standard deviation of ``all_cause_death_rate``.
+    envelope
+        All-cause deaths, used to cap ``sample_size``.
+    pct_garbage
+        Fraction of the cause's deaths that came from redistributed
+        garbage codes.
+    logit_pct_garbage_sd
+        Standard deviation of ``pct_garbage`` on the logit scale.
+    envelope_ub
+        Upper bound of the all-cause death rate. See
+        :func:`effective_sample_size`.
+
+    Returns
+    -------
+    Series
+        Effective binomial sample size for each row.
+
+    """
+    # A cause's death count can't exceed the all-cause envelope. Capping
+    # there also bounds the implied all-cause population, because
+    # env_nonvr / all_cause_death_rate <= envelope / all_cause_death_rate,
+    # which is the population itself, so no separate population cap is
+    # needed.
     env_nonvr = sample_size.clip(upper=envelope)
     pop_nonvr = env_nonvr / all_cause_death_rate
-    # All-cause variance on the effective population implied by the VA sample.
+    # All-cause variance on the effective population implied by the sample.
     var_ra_nonvr = (
         all_cause_death_rate * (envelope_ub - all_cause_death_rate) / pop_nonvr
         + (pop_nonvr - 1.0).clip(lower=0.0)
@@ -87,6 +152,14 @@ def _validate_data(
     logit_pct_garbage_mad: str,
     envelope_ub: float,
 ) -> None:
+    """Check the inputs of :func:`effective_sample_size`.
+
+    Raises
+    ------
+    ValueError
+        If any input is missing, of the wrong dtype, or out of range.
+
+    """
     nona_columns = [
         is_vr,
         cause_fraction,
@@ -104,6 +177,7 @@ def _validate_data(
     if not pd.api.types.is_bool_dtype(data[is_vr]):
         raise ValueError(f"{is_vr} must be in boolean type")
 
+    # completeness only feeds the VR form, so it is unconstrained elsewhere
     vr_mask = data[is_vr].to_numpy()
     if not data.loc[vr_mask, completeness].between(0.0, 1.0).all():
         raise ValueError(f"{completeness} must be in [0, 1] for VR rows")
@@ -135,7 +209,96 @@ def effective_sample_size(
     logit_pct_garbage_mad: str,
     envelope_ub: float,
 ) -> pd.Series:
-    """Per-row effective binomial sample size: VR where ``is_vr`` else VA."""
+    """Effective binomial sample size of a cause-specific death rate.
+
+    The cause-specific death rate is treated as a binomial proportion on
+    ``[0, envelope_ub]``. The value returned for a row is the binomial
+    sample size whose sampling variance matches that row's total
+    variance, which combines uncertainty in the all-cause envelope with
+    uncertainty from garbage-code redistribution. It is intended for use
+    as an observation weight, and is always at most the row's nominal
+    sample size.
+
+    Registration and non-registration rows are computed differently:
+    the former take their population at risk from the data, the latter
+    infer it from the reported sample size. ``is_vr`` selects between
+    them.
+
+    Parameters
+    ----------
+    data
+        Observation rows. Every argument below other than ``envelope_ub``
+        names a column to read from it.
+    is_vr
+        Column flagging vital registration rows. Must be a boolean
+        dtype; 0/1 integer columns are rejected rather than coerced.
+    cause_fraction
+        Column of the fraction of all-cause deaths assigned to the
+        cause, in ``[0, 1]``.
+    sample_size
+        Column of deaths reported by the source. Only the non-VR form
+        reads it, where it is capped at ``envelope``, but it must be
+        present and positive on every row.
+    population
+        Column of population at risk. Must be positive.
+    envelope
+        Column of all-cause deaths. Must be positive.
+    envelope_sd
+        Column of the standard deviation of ``envelope``. Must be
+        positive.
+    completeness
+        Column of the fraction of deaths captured by the registration
+        system, in ``[0, 1]``. Only the VR form reads it, and it is only
+        validated on VR rows, so it may be missing on the others.
+    pct_garbage
+        Column of the fraction of the cause's deaths that came from
+        redistributed garbage codes, in ``[0, 1]``.
+    logit_pct_garbage_mad
+        Column of the median absolute deviation of ``pct_garbage`` on
+        the logit scale. Converted to a standard deviation with the
+        normal-consistency factor 1.4826.
+    envelope_ub
+        Upper bound of the all-cause death rate, on the same scale as
+        ``envelope / population``, which must not exceed it.
+
+    Returns
+    -------
+    Series
+        Effective binomial sample size for each row of ``data``, sharing
+        its index. Zero is a valid result and means the row carries no
+        information, as happens when ``completeness`` is zero.
+
+    Raises
+    ------
+    ValueError
+        If a required column has missing values, ``is_vr`` is not a
+        boolean dtype, a proportion falls outside ``[0, 1]``, a
+        quantity required to be positive is not, ``envelope /
+        population`` exceeds ``envelope_ub``, or a computed sample size
+        comes out non-finite or negative.
+
+    Notes
+    -----
+    ``envelope`` and ``envelope_sd`` are given on the death-count scale
+    and are converted to rates here by dividing by ``population``.
+
+    Examples
+    --------
+    >>> weights = effective_sample_size(
+    ...     data,
+    ...     is_vr="is_vr",
+    ...     cause_fraction="cause_fraction",
+    ...     sample_size="sample_size",
+    ...     population="population",
+    ...     envelope="envelope",
+    ...     envelope_sd="envelope_sd",
+    ...     completeness="completeness",
+    ...     pct_garbage="pct_garbage",
+    ...     logit_pct_garbage_mad="variance_rd_logit_cf",
+    ...     envelope_ub=4.0,
+    ... )
+
+    """
     _validate_data(
         data,
         is_vr,
