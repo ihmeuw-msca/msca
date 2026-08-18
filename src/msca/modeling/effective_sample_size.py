@@ -1,12 +1,13 @@
 """Effective binomial sample size of a cause-specific death rate."""
 
+import numpy as np
 import pandas as pd
 
 # Normal-consistency factor from median absolute deviation to SD.
 _MAD_TO_SD = 1.4826
 
 
-def vr_effective_sample_size(
+def _vr_effective_sample_size(
     cause_fraction: pd.Series,
     all_cause_death_rate: pd.Series,
     all_cause_death_rate_sd: pd.Series,
@@ -32,7 +33,7 @@ def vr_effective_sample_size(
     return numerator / denominator
 
 
-def nonvr_effective_sample_size(
+def _non_vr_effective_sample_size(
     cause_fraction: pd.Series,
     sample_size: pd.Series,
     all_cause_death_rate: pd.Series,
@@ -73,44 +74,113 @@ def nonvr_effective_sample_size(
     return numerator / denominator
 
 
+def _validate_data(
+    data: pd.DataFrame,
+    is_vr: str,
+    cause_fraction: str,
+    sample_size: str,
+    population: str,
+    envelope: str,
+    envelope_sd: str,
+    completeness: str,
+    pct_garbage: str,
+    logit_pct_garbage_mad: str,
+    envelope_ub: float,
+) -> None:
+    nona_columns = [
+        is_vr,
+        cause_fraction,
+        sample_size,
+        population,
+        envelope,
+        envelope_sd,
+        pct_garbage,
+        logit_pct_garbage_mad,
+    ]
+    na_cols = [col for col in nona_columns if data[col].isna().any()]
+    if len(na_cols) > 0:
+        raise ValueError(f"Columns contain missing values: {na_cols}")
+
+    if not pd.api.types.is_bool_dtype(data[is_vr]):
+        raise ValueError(f"{is_vr} must be in boolean type")
+
+    if data.loc[data[is_vr].to_numpy(), completeness].isna().any():
+        raise ValueError(f"{completeness} must not be missing for VR rows")
+
+    for col in (cause_fraction, completeness, pct_garbage):
+        if not data[col].between(0.0, 1.0).all():
+            raise ValueError(f"{col} must be in [0, 1]")
+
+    for col in (sample_size, population, envelope, envelope_sd):
+        if (data[col] <= 0).any():
+            raise ValueError(f"{col} must be positive")
+
+    if (data[envelope] / data[population] > envelope_ub).any():
+        raise ValueError(
+            f"{envelope} / {population} must be less than or equal to envelope_ub ({envelope_ub})"
+        )
+
+
 def effective_sample_size(
-    is_vr: pd.Series,
-    cause_fraction: pd.Series,
-    sample_size: pd.Series,
-    population: pd.Series,
-    envelope: pd.Series,
-    envelope_sd: pd.Series,
-    completeness: pd.Series,
-    pct_garbage: pd.Series,
-    logit_pct_garbage_mad: pd.Series,
+    data: pd.DataFrame,
+    is_vr: str,
+    cause_fraction: str,
+    sample_size: str,
+    population: str,
+    envelope: str,
+    envelope_sd: str,
+    completeness: str,
+    pct_garbage: str,
+    logit_pct_garbage_mad: str,
     envelope_ub: float,
 ) -> pd.Series:
     """Per-row effective binomial sample size: VR where ``is_vr`` else VA."""
-    # Compute the all-cause death rate and convert SD from death-count to rate scale
-    all_cause_death_rate = envelope / population
-    all_cause_death_rate_sd = envelope_sd / population
-    # Derive the redistribution SD from the logit-pct-garbage MAD (source is a MAD)
-    logit_pct_garbage_sd = _MAD_TO_SD * logit_pct_garbage_mad
+    _validate_data(
+        data,
+        is_vr,
+        cause_fraction,
+        sample_size,
+        population,
+        envelope,
+        envelope_sd,
+        completeness,
+        pct_garbage,
+        logit_pct_garbage_mad,
+        envelope_ub,
+    )
 
-    weights = pd.Series(index=is_vr.index, dtype="float64")
-    weights[is_vr] = vr_effective_sample_size(
-        cause_fraction=cause_fraction[is_vr],
-        all_cause_death_rate=all_cause_death_rate[is_vr],
-        all_cause_death_rate_sd=all_cause_death_rate_sd[is_vr],
-        population=population[is_vr],
-        completeness=completeness[is_vr],
-        pct_garbage=pct_garbage[is_vr],
-        logit_pct_garbage_sd=logit_pct_garbage_sd[is_vr],
+    # Compute the all-cause death rate and convert SD from death-count to rate scale
+    all_cause_death_rate = data[envelope] / data[population]
+    all_cause_death_rate_sd = data[envelope_sd] / data[population]
+    # Derive the redistribution SD from the logit-pct-garbage MAD (source is a MAD)
+    logit_pct_garbage_sd = _MAD_TO_SD * data[logit_pct_garbage_mad]
+
+    weights = pd.Series(index=data.index, dtype="float64")
+    vr_mask = data[is_vr].to_numpy()
+    weights[vr_mask] = _vr_effective_sample_size(
+        cause_fraction=data.loc[vr_mask, cause_fraction],
+        all_cause_death_rate=all_cause_death_rate[vr_mask],
+        all_cause_death_rate_sd=all_cause_death_rate_sd[vr_mask],
+        population=data.loc[vr_mask, population],
+        completeness=data.loc[vr_mask, completeness],
+        pct_garbage=data.loc[vr_mask, pct_garbage],
+        logit_pct_garbage_sd=logit_pct_garbage_sd[vr_mask],
         envelope_ub=envelope_ub,
     )
-    weights[~is_vr] = nonvr_effective_sample_size(
-        cause_fraction=cause_fraction[~is_vr],
-        sample_size=sample_size[~is_vr],
-        all_cause_death_rate=all_cause_death_rate[~is_vr],
-        all_cause_death_rate_sd=all_cause_death_rate_sd[~is_vr],
-        envelope=envelope[~is_vr],
-        pct_garbage=pct_garbage[~is_vr],
-        logit_pct_garbage_sd=logit_pct_garbage_sd[~is_vr],
+    weights[~vr_mask] = _non_vr_effective_sample_size(
+        cause_fraction=data.loc[~vr_mask, cause_fraction],
+        sample_size=data.loc[~vr_mask, sample_size],
+        all_cause_death_rate=all_cause_death_rate[~vr_mask],
+        all_cause_death_rate_sd=all_cause_death_rate_sd[~vr_mask],
+        envelope=data.loc[~vr_mask, envelope],
+        pct_garbage=data.loc[~vr_mask, pct_garbage],
+        logit_pct_garbage_sd=logit_pct_garbage_sd[~vr_mask],
         envelope_ub=envelope_ub,
     )
+
+    not_valid = ~np.isfinite(weights) | (weights < 0)
+    if not_valid.any():
+        raise ValueError(
+            f"Invalid effective sample size for rows: {list(data.index[not_valid])}"
+        )
     return weights
