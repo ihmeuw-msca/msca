@@ -104,10 +104,11 @@ def _validate_data(
     if not pd.api.types.is_bool_dtype(data[is_vr]):
         raise ValueError(f"{is_vr} must be in boolean type")
 
-    if data.loc[data[is_vr].to_numpy(), completeness].isna().any():
-        raise ValueError(f"{completeness} must not be missing for VR rows")
+    vr_mask = data[is_vr].to_numpy()
+    if not data.loc[vr_mask, completeness].between(0.0, 1.0).all():
+        raise ValueError(f"{completeness} must be in [0, 1] for VR rows")
 
-    for col in (cause_fraction, completeness, pct_garbage):
+    for col in (cause_fraction, pct_garbage):
         if not data[col].between(0.0, 1.0).all():
             raise ValueError(f"{col} must be in [0, 1]")
 
