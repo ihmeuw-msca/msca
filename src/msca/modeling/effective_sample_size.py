@@ -3,9 +3,6 @@
 import numpy as np
 import pandas as pd
 
-# Normal-consistency factor from median absolute deviation to SD.
-_MAD_TO_SD = 1.4826
-
 
 def _vr_effective_sample_size(
     cause_fraction: pd.Series,
@@ -151,7 +148,7 @@ def _validate_data(
     envelope_sd: str,
     completeness: str,
     pct_garbage: str,
-    logit_pct_garbage_mad: str,
+    logit_pct_garbage_sd: str,
     all_cause_death_rate_ub: float,
 ) -> None:
     """Check the inputs of :func:`effective_sample_size`.
@@ -170,7 +167,7 @@ def _validate_data(
         envelope,
         envelope_sd,
         pct_garbage,
-        logit_pct_garbage_mad,
+        logit_pct_garbage_sd,
     ]
     na_cols = [col for col in nona_columns if data[col].isna().any()]
     if len(na_cols) > 0:
@@ -209,7 +206,7 @@ def effective_sample_size(
     envelope_sd: str,
     completeness: str,
     pct_garbage: str,
-    logit_pct_garbage_mad: str,
+    logit_pct_garbage_sd: str,
     all_cause_death_rate_ub: float,
 ) -> pd.Series:
     """Effective binomial sample size of a cause-specific death rate.
@@ -256,10 +253,11 @@ def effective_sample_size(
     pct_garbage
         Column of the fraction of the cause's deaths that came from
         redistributed garbage codes, in ``[0, 1]``.
-    logit_pct_garbage_mad
-        Column of the median absolute deviation of ``pct_garbage`` on
-        the logit scale. Converted to a standard deviation with the
-        normal-consistency factor 1.4826.
+    logit_pct_garbage_sd
+        Column of the standard deviation of ``pct_garbage`` on the logit
+        scale. If the source quantity is a median absolute deviation,
+        scale it by the normal-consistency factor 1.4826 before passing
+        it; this function no longer does that conversion.
     all_cause_death_rate_ub
         Upper bound of the all-cause death rate, on the same scale as
         ``envelope / population``, which must not exceed it.
@@ -300,7 +298,7 @@ def effective_sample_size(
     ...     envelope_sd="envelope_sd",
     ...     completeness="completeness",
     ...     pct_garbage="pct_garbage",
-    ...     logit_pct_garbage_mad="variance_rd_logit_cf",
+    ...     logit_pct_garbage_sd="logit_pct_garbage_sd",
     ...     all_cause_death_rate_ub=4.0,
     ... )
 
@@ -315,15 +313,13 @@ def effective_sample_size(
         envelope_sd,
         completeness,
         pct_garbage,
-        logit_pct_garbage_mad,
+        logit_pct_garbage_sd,
         all_cause_death_rate_ub,
     )
 
     # Compute the all-cause death rate and convert SD from death-count to rate scale
     all_cause_death_rate = data[envelope] / data[population]
     all_cause_death_rate_sd = data[envelope_sd] / data[population]
-    # Derive the redistribution SD from the logit-pct-garbage MAD (source is a MAD)
-    logit_pct_garbage_sd = _MAD_TO_SD * data[logit_pct_garbage_mad]
 
     weights = pd.Series(index=data.index, dtype="float64")
     vr_mask = data[is_vr].to_numpy()
@@ -334,7 +330,7 @@ def effective_sample_size(
         population=data.loc[vr_mask, population],
         completeness=data.loc[vr_mask, completeness],
         pct_garbage=data.loc[vr_mask, pct_garbage],
-        logit_pct_garbage_sd=logit_pct_garbage_sd[vr_mask],
+        logit_pct_garbage_sd=data.loc[vr_mask, logit_pct_garbage_sd],
         all_cause_death_rate_ub=all_cause_death_rate_ub,
     )
     weights[~vr_mask] = _non_vr_effective_sample_size(
@@ -344,7 +340,7 @@ def effective_sample_size(
         all_cause_death_rate_sd=all_cause_death_rate_sd[~vr_mask],
         envelope=data.loc[~vr_mask, envelope],
         pct_garbage=data.loc[~vr_mask, pct_garbage],
-        logit_pct_garbage_sd=logit_pct_garbage_sd[~vr_mask],
+        logit_pct_garbage_sd=data.loc[~vr_mask, logit_pct_garbage_sd],
         all_cause_death_rate_ub=all_cause_death_rate_ub,
     )
 

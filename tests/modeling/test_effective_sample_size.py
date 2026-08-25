@@ -15,6 +15,12 @@ from msca.modeling import effective_sample_size
 
 ALL_CAUSE_DEATH_RATE_UB = 4.0
 
+# The reference implementation took a median absolute deviation and scaled
+# it internally; this function takes the standard deviation directly. The
+# fixtures pre-apply the factor so REFERENCE_WEIGHTS stays comparable to
+# the values onemod_cod v1.19 produced from the same underlying data.
+MAD_TO_SD = 1.4826
+
 # Maps each parameter of effective_sample_size to a column of `data`.
 COLUMNS = {
     "is_vr": "is_vr",
@@ -25,7 +31,7 @@ COLUMNS = {
     "envelope_sd": "envelope_sd",
     "completeness": "completeness",
     "pct_garbage": "pct_garbage",
-    "logit_pct_garbage_mad": "logit_pct_garbage_mad",
+    "logit_pct_garbage_sd": "logit_pct_garbage_sd",
 }
 
 REFERENCE_WEIGHTS = [
@@ -46,7 +52,7 @@ REQUIRED_COLUMNS = [
     "envelope",
     "envelope_sd",
     "pct_garbage",
-    "logit_pct_garbage_mad",
+    "logit_pct_garbage_sd",
 ]
 
 POSITIVE_COLUMNS = ["sample_size", "population", "envelope", "envelope_sd"]
@@ -65,7 +71,9 @@ def data():
             "envelope_sd": [20.0, 80.0, 6.0, 20.0, 80.0, 6.0],
             "completeness": [0.95, 0.80, 0.60, 0.90, 0.90, 0.90],
             "pct_garbage": [0.10, 0.25, 0.05, 0.10, 0.25, 0.05],
-            "logit_pct_garbage_mad": [0.5, 0.3, 0.8, 0.5, 0.3, 0.8],
+            "logit_pct_garbage_sd": [
+                MAD_TO_SD * mad for mad in (0.5, 0.3, 0.8, 0.5, 0.3, 0.8)
+            ],
         }
     )
 
@@ -174,7 +182,7 @@ def sub_unit_data():
             "envelope_sd": [0.1, 0.1],
             "completeness": [0.5, 0.5],
             "pct_garbage": [0.1, 0.1],
-            "logit_pct_garbage_mad": [0.5, 0.5],
+            "logit_pct_garbage_sd": [MAD_TO_SD * 0.5, MAD_TO_SD * 0.5],
         }
     )
 
