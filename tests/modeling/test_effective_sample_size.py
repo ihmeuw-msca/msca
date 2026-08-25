@@ -13,7 +13,7 @@ import pytest
 
 from msca.modeling import effective_sample_size
 
-ENVELOPE_UB = 4.0
+ALL_CAUSE_DEATH_RATE_UB = 4.0
 
 # Maps each parameter of effective_sample_size to a column of `data`.
 COLUMNS = {
@@ -70,10 +70,12 @@ def data():
     )
 
 
-def ess(data, envelope_ub=ENVELOPE_UB, **columns):
+def ess(data, all_cause_death_rate_ub=ALL_CAUSE_DEATH_RATE_UB, **columns):
     """Call effective_sample_size with the default column mapping."""
     return effective_sample_size(
-        data, envelope_ub=envelope_ub, **{**COLUMNS, **columns}
+        data,
+        all_cause_death_rate_ub=all_cause_death_rate_ub,
+        **{**COLUMNS, **columns},
     )
 
 
@@ -279,9 +281,11 @@ def test_non_positive_raises(data, column, value):
         ess(data)
 
 
-def test_death_rate_above_envelope_ub_raises(data):
-    data.loc[0, "envelope"] = data.loc[0, "population"] * (ENVELOPE_UB + 1.0)
-    with pytest.raises(ValueError, match="envelope_ub"):
+def test_death_rate_above_all_cause_death_rate_ub_raises(data):
+    data.loc[0, "envelope"] = data.loc[0, "population"] * (
+        ALL_CAUSE_DEATH_RATE_UB + 1.0
+    )
+    with pytest.raises(AssertionError, match="all_cause_death_rate_ub"):
         ess(data)
 
 

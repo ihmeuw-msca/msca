@@ -15,7 +15,7 @@ def _vr_effective_sample_size(
     completeness: pd.Series,
     pct_garbage: pd.Series,
     logit_pct_garbage_sd: pd.Series,
-    envelope_ub: float,
+    all_cause_death_rate_ub: float,
 ) -> pd.Series:
     """Effective binomial sample size for vital registration rows.
 
@@ -38,7 +38,7 @@ def _vr_effective_sample_size(
         garbage codes.
     logit_pct_garbage_sd
         Standard deviation of ``pct_garbage`` on the logit scale.
-    envelope_ub
+    all_cause_death_rate_ub
         Upper bound of the all-cause death rate. See
         :func:`effective_sample_size`.
 
@@ -50,7 +50,7 @@ def _vr_effective_sample_size(
     """
     n = completeness * population
     a = all_cause_death_rate * (
-        envelope_ub - cause_fraction * all_cause_death_rate
+        all_cause_death_rate_ub - cause_fraction * all_cause_death_rate
     )
     b = cause_fraction * (
         all_cause_death_rate_sd**2
@@ -71,7 +71,7 @@ def _non_vr_effective_sample_size(
     envelope: pd.Series,
     pct_garbage: pd.Series,
     logit_pct_garbage_sd: pd.Series,
-    envelope_ub: float,
+    all_cause_death_rate_ub: float,
 ) -> pd.Series:
     """Effective binomial sample size for non-registration rows.
 
@@ -96,7 +96,7 @@ def _non_vr_effective_sample_size(
         garbage codes.
     logit_pct_garbage_sd
         Standard deviation of ``pct_garbage`` on the logit scale.
-    envelope_ub
+    all_cause_death_rate_ub
         Upper bound of the all-cause death rate. See
         :func:`effective_sample_size`.
 
@@ -115,13 +115,15 @@ def _non_vr_effective_sample_size(
     pop_nonvr = env_nonvr / all_cause_death_rate
     # All-cause variance on the effective population implied by the sample.
     var_ra_nonvr = (
-        all_cause_death_rate * (envelope_ub - all_cause_death_rate) / pop_nonvr
+        all_cause_death_rate
+        * (all_cause_death_rate_ub - all_cause_death_rate)
+        / pop_nonvr
         + (pop_nonvr - 1.0).clip(lower=0.0)
         / pop_nonvr
         * all_cause_death_rate_sd**2
     )
     v = var_ra_nonvr + all_cause_death_rate**2
-    a = (envelope_ub - cause_fraction) * v
+    a = (all_cause_death_rate_ub - cause_fraction) * v
     b = (
         (env_nonvr - 1.0).clip(lower=0.0)
         * cause_fraction
@@ -133,7 +135,7 @@ def _non_vr_effective_sample_size(
     numerator = (
         env_nonvr
         * all_cause_death_rate
-        * (envelope_ub - cause_fraction * all_cause_death_rate)
+        * (all_cause_death_rate_ub - cause_fraction * all_cause_death_rate)
     )
     denominator = a + b + c
     return numerator / denominator
@@ -150,7 +152,7 @@ def _validate_data(
     completeness: str,
     pct_garbage: str,
     logit_pct_garbage_mad: str,
-    envelope_ub: float,
+    all_cause_death_rate_ub: float,
 ) -> None:
     """Check the inputs of :func:`effective_sample_size`.
 
@@ -190,10 +192,11 @@ def _validate_data(
         if (data[col] <= 0).any():
             raise ValueError(f"{col} must be positive")
 
-    if (data[envelope] / data[population] > envelope_ub).any():
-        raise ValueError(
-            f"{envelope} / {population} must be less than or equal to envelope_ub ({envelope_ub})"
-        )
+    assert not (
+        data[envelope] / data[population] > all_cause_death_rate_ub
+    ).any(), (
+        f"{envelope} / {population} must be less than or equal to all_cause_death_rate_ub ({all_cause_death_rate_ub})"
+    )
 
 
 def effective_sample_size(
@@ -207,17 +210,17 @@ def effective_sample_size(
     completeness: str,
     pct_garbage: str,
     logit_pct_garbage_mad: str,
-    envelope_ub: float,
+    all_cause_death_rate_ub: float,
 ) -> pd.Series:
     """Effective binomial sample size of a cause-specific death rate.
 
-    The cause-specific death rate is treated as a binomial proportion on
-    ``[0, envelope_ub]``. The value returned for a row is the binomial
-    sample size whose sampling variance matches that row's total
-    variance, which combines uncertainty in the all-cause envelope with
-    uncertainty from garbage-code redistribution. It is intended for use
-    as an observation weight, and is always at most the row's nominal
-    sample size.
+    The cause-specific death rate is treated as a binomial proportion
+    on ``[0, all_cause_death_rate_ub]``. The value returned for a row is
+    the binomial sample size whose sampling variance matches that row's
+    total variance, which combines uncertainty in the all-cause envelope
+    with uncertainty from garbage-code redistribution. It is intended for
+    use as an observation weight, and is always at most the row's
+    nominal sample size.
 
     Registration and non-registration rows are computed differently:
     the former take their population at risk from the data, the latter
@@ -227,8 +230,8 @@ def effective_sample_size(
     Parameters
     ----------
     data
-        Observation rows. Every argument below other than ``envelope_ub``
-        names a column to read from it.
+        Observation rows. Every argument below other than
+        ``all_cause_death_rate_ub`` names a column to read from it.
     is_vr
         Column flagging vital registration rows. Must be a boolean
         dtype; 0/1 integer columns are rejected rather than coerced.
@@ -257,7 +260,7 @@ def effective_sample_size(
         Column of the median absolute deviation of ``pct_garbage`` on
         the logit scale. Converted to a standard deviation with the
         normal-consistency factor 1.4826.
-    envelope_ub
+    all_cause_death_rate_ub
         Upper bound of the all-cause death rate, on the same scale as
         ``envelope / population``, which must not exceed it.
 
@@ -273,9 +276,12 @@ def effective_sample_size(
     ValueError
         If a required column has missing values, ``is_vr`` is not a
         boolean dtype, a proportion falls outside ``[0, 1]``, a
-        quantity required to be positive is not, ``envelope /
-        population`` exceeds ``envelope_ub``, or a computed sample size
-        comes out non-finite or negative.
+        quantity required to be positive is not, or a computed sample
+        size comes out non-finite or negative.
+    AssertionError
+        If ``envelope / population`` exceeds
+        ``all_cause_death_rate_ub``. This check is an assertion, so it
+        is removed when Python is run with ``-O``.
 
     Notes
     -----
@@ -295,7 +301,7 @@ def effective_sample_size(
     ...     completeness="completeness",
     ...     pct_garbage="pct_garbage",
     ...     logit_pct_garbage_mad="variance_rd_logit_cf",
-    ...     envelope_ub=4.0,
+    ...     all_cause_death_rate_ub=4.0,
     ... )
 
     """
@@ -310,7 +316,7 @@ def effective_sample_size(
         completeness,
         pct_garbage,
         logit_pct_garbage_mad,
-        envelope_ub,
+        all_cause_death_rate_ub,
     )
 
     # Compute the all-cause death rate and convert SD from death-count to rate scale
@@ -329,7 +335,7 @@ def effective_sample_size(
         completeness=data.loc[vr_mask, completeness],
         pct_garbage=data.loc[vr_mask, pct_garbage],
         logit_pct_garbage_sd=logit_pct_garbage_sd[vr_mask],
-        envelope_ub=envelope_ub,
+        all_cause_death_rate_ub=all_cause_death_rate_ub,
     )
     weights[~vr_mask] = _non_vr_effective_sample_size(
         cause_fraction=data.loc[~vr_mask, cause_fraction],
@@ -339,7 +345,7 @@ def effective_sample_size(
         envelope=data.loc[~vr_mask, envelope],
         pct_garbage=data.loc[~vr_mask, pct_garbage],
         logit_pct_garbage_sd=logit_pct_garbage_sd[~vr_mask],
-        envelope_ub=envelope_ub,
+        all_cause_death_rate_ub=all_cause_death_rate_ub,
     )
 
     not_valid = ~np.isfinite(weights) | (weights < 0)
