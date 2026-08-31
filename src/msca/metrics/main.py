@@ -38,6 +38,7 @@ class Metric(StrEnum):
         pred: str,
         weights: str,
         groupby: list[str] | None = None,
+        winsorize: tuple[float, float] | None = None,
     ) -> float | pd.DataFrame:
         """
         Evaluate the error metric on the provided data.
@@ -54,16 +55,27 @@ class Metric(StrEnum):
             Column name for sample weights
         groupby : list[str], optional
             Column names to group by for grouped calculations
+        winsorize : tuple[float, float], optional
+            Lower/upper quantiles in [0, 1] for clipping per-observation error
+            contributions before aggregating, computed per group; None uses
+            the standard metric
 
         Returns
         -------
         Union[float, pd.DataFrame]
             Single metric value if no groupby, DataFrame with grouped results if groupby specified
         """
-        if groupby is not None:
-            return self._eval_grouped(data, obs, pred, weights, groupby)
+        if winsorize is not None:
+            self._validate_winsorize(winsorize)
 
-        return self._eval_single(data, obs, pred, weights).iloc[0]
+        if groupby is not None:
+            return self._eval_grouped(
+                data, obs, pred, weights, groupby=groupby, winsorize=winsorize
+            )
+
+        return self._eval_single(
+            data, obs, pred, weights, winsorize=winsorize
+        ).iloc[0]
 
     def eval_skill(
         self,
@@ -73,6 +85,7 @@ class Metric(StrEnum):
         pred_ref: str,
         weights: str,
         groupby: list[str] | None = None,
+        winsorize: tuple[float, float] | None = None,
     ) -> float | pd.DataFrame:
         """
         Calculate skill score by comparing pred_alt performance against pred_ref.
@@ -91,13 +104,27 @@ class Metric(StrEnum):
             Column name for sample weights
         groupby : list[str], optional
             Column names to group by for grouped calculations
+        winsorize : tuple[float, float], optional
+            Lower/upper quantiles in [0, 1] for clipping the per-group skill
+            scores; the underlying error scores stay unwinsorized. Requires
+            ``groupby``. None uses the standard skill score
 
         Returns
         -------
         Union[float, pd.DataFrame]
             Single skill score if no groupby, DataFrame with grouped skill scores if groupby specified
         """
+        if winsorize is not None:
+            self._validate_winsorize(winsorize)
+            if groupby is None:
+                raise ValueError(
+                    "winsorize on skill scores requires groupby; a single "
+                    "skill value has no distribution to winsorize."
+                )
+
         if groupby is not None:
+            # Clip the per-group skill scores below, not the ref/alt error
+            # scores: winsorizing those independently drives skill negative.
             ref_scores = self._eval_grouped(
                 data=data,
                 obs=obs,
@@ -126,10 +153,18 @@ class Metric(StrEnum):
                 )
 
             grouped_results = ref_scores.copy()
-            grouped_results[result_column_name] = 1.0 - (
+            skill_scores = 1.0 - (
                 alt_scores[alt_score_col] / ref_scores[ref_score_col]
             )
 
+            if winsorize is not None:
+                lower_q, upper_q = winsorize
+                skill_scores = skill_scores.clip(
+                    lower=skill_scores.quantile(lower_q),
+                    upper=skill_scores.quantile(upper_q),
+                )
+
+            grouped_results[result_column_name] = skill_scores
             grouped_results = grouped_results.drop(columns=[ref_score_col])
 
             return grouped_results
@@ -145,7 +180,12 @@ class Metric(StrEnum):
         return 1.0 - (alt_score / ref_score)
 
     def _eval_single(
-        self, data: pd.DataFrame, obs: str, pred: str, weights: str
+        self,
+        data: pd.DataFrame,
+        obs: str,
+        pred: str,
+        weights: str,
+        winsorize: tuple[float, float] | None = None,
     ) -> pd.Series:
         """
         Calculate metric for single DataFrame or group.
@@ -160,6 +200,9 @@ class Metric(StrEnum):
             Column name for predicted values
         weights : str
             Column name for sample weights
+        winsorize : tuple[float, float], optional
+            Quantiles for clipping per-observation error contributions; see
+            :meth:`eval`. None uses the standard metric
 
         Returns
         -------
@@ -177,6 +220,12 @@ class Metric(StrEnum):
         weight_values = data[weights].to_numpy()
 
         column_name = self._get_metric_column_name(pred)
+
+        if winsorize is not None:
+            result = self._eval_winsorized(
+                obs_values, pred_values, weight_values, winsorize=winsorize
+            )
+            return pd.Series({column_name: result})
 
         match self:
             case Metric.ROOT_MEAN_SQUARED_ERROR:
@@ -205,10 +254,8 @@ class Metric(StrEnum):
                     sample_weight=weight_values,
                 )
             case Metric.MEDIAN_ABSOLUTE_ERROR:
-                result = metrics.median_absolute_error(
-                    y_true=obs_values,
-                    y_pred=pred_values,
-                    sample_weight=weight_values,
+                result = self._weighted_quantile(
+                    np.abs(obs_values - pred_values), weight_values, q=0.5
                 )
             case _:
                 raise ValueError(f"Unsupported metric type: {self}")
@@ -222,6 +269,7 @@ class Metric(StrEnum):
         pred: str,
         weights: str,
         groupby: list[str],
+        winsorize: tuple[float, float] | None = None,
     ) -> pd.DataFrame:
         """
         Calculate error metrics or skill scores for each group in the DataFrame.
@@ -238,6 +286,9 @@ class Metric(StrEnum):
             Weights column name
         groupby : list[str]
             Grouping column names
+        winsorize : tuple[float, float], optional
+            Quantiles for clipping per-observation error contributions; see
+            :meth:`eval`. None uses the standard metric
 
         Returns
         -------
@@ -258,11 +309,96 @@ class Metric(StrEnum):
                 obs,
                 pred,
                 weights,
+                winsorize=winsorize,
             )
             .reset_index()
         )
 
         return grouped_results
+
+    def _eval_winsorized(
+        self,
+        obs_values: np.ndarray,
+        pred_values: np.ndarray,
+        weight_values: np.ndarray,
+        winsorize: tuple[float, float],
+    ) -> float:
+        """
+        Compute the metric after clipping per-observation error contributions
+        to the winsorize quantiles. See :meth:`eval` for details.
+        """
+        lower_q, upper_q = winsorize
+        residuals = obs_values - pred_values
+
+        # Per-observation error contribution that the metric aggregates.
+        match self:
+            case Metric.ROOT_MEAN_SQUARED_ERROR | Metric.MEAN_SQUARED_ERROR:
+                contributions = residuals**2
+            case Metric.MEAN_ABSOLUTE_ERROR | Metric.MEDIAN_ABSOLUTE_ERROR:
+                contributions = np.abs(residuals)
+            case Metric.MEAN_ABSOLUTE_PERCENTAGE_ERROR:
+                # Mirror scikit-learn's guard against division by zero.
+                epsilon = np.finfo(np.float64).eps
+                contributions = np.abs(residuals) / np.maximum(
+                    np.abs(obs_values), epsilon
+                )
+            case _:
+                raise ValueError(f"Unsupported metric type: {self}")
+
+        lower_bound = self._weighted_quantile(
+            contributions, weight_values, q=lower_q
+        )
+        upper_bound = self._weighted_quantile(
+            contributions, weight_values, q=upper_q
+        )
+        contributions = np.clip(contributions, lower_bound, upper_bound)
+
+        # Aggregate the clipped contributions the same way the metric does.
+        match self:
+            case Metric.ROOT_MEAN_SQUARED_ERROR:
+                return float(
+                    np.sqrt(np.average(contributions, weights=weight_values))
+                )
+            case Metric.MEDIAN_ABSOLUTE_ERROR:
+                return self._weighted_quantile(
+                    contributions, weight_values, q=0.5
+                )
+            case _:
+                return float(np.average(contributions, weights=weight_values))
+
+    @staticmethod
+    def _weighted_quantile(
+        values: np.ndarray, weights: np.ndarray, q: float
+    ) -> float:
+        """
+        Weighted ``q``-quantile of ``values``.
+
+        Sorts the values and reads off the point where the cumulative weight
+        crosses ``q`` of the total, interpolating between neighbours. With
+        equal weights this reduces to :func:`numpy.quantile`.
+        """
+        order = np.argsort(values)
+        values = values[order]
+        weights = weights[order]
+        cdf = (np.cumsum(weights) - 0.5 * weights) / np.sum(weights)
+        return float(np.interp(q, cdf, values))
+
+    @staticmethod
+    def _validate_winsorize(winsorize: tuple[float, float]) -> None:
+        """
+        Validate the winsorize quantile bounds, failing fast with a clear message.
+
+        Parameters
+        ----------
+        winsorize : tuple[float, float]
+            Lower and upper quantiles; must satisfy 0 <= lower <= upper <= 1
+        """
+        lower_q, upper_q = winsorize
+        if not 0.0 <= lower_q <= upper_q <= 1.0:
+            raise ValueError(
+                "winsorize quantiles must satisfy 0 <= lower <= upper <= 1, "
+                f"got {winsorize}."
+            )
 
     def _get_metric_column_name(self, pred: str) -> str:
         """

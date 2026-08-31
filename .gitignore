@@ -133,3 +133,6 @@ notebooks/*
 
 # cython
 *.c
+
+# Claude Code local settings
+.claude/
