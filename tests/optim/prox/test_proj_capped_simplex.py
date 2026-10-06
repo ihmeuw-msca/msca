@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+
 from msca.optim.prox import proj_capped_simplex
 
 s = 2.0

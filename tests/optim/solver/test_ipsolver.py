@@ -1,4 +1,5 @@
 import numpy as np
+
 from msca.linalg.matrix import asmatrix
 from msca.optim.solver import IPSolver
 

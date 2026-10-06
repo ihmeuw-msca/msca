@@ -34,7 +34,6 @@ model-level variable :data:`c2fun_dict`.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Dict
 
 import numpy as np
 from numpy.typing import NDArray
@@ -57,7 +56,6 @@ class C2Fun(ABC):
     @abstractmethod
     def inv(self) -> C2Fun:
         """The inverse of the function such that :code:`x = fun.inv(fun(x))`."""
-        pass
 
     @staticmethod
     @abstractmethod
@@ -70,7 +68,6 @@ class C2Fun(ABC):
             Provided independent variable.
 
         """
-        pass
 
     @staticmethod
     @abstractmethod
@@ -83,7 +80,6 @@ class C2Fun(ABC):
             Provided independent variable.
 
         """
-        pass
 
     @staticmethod
     @abstractmethod
@@ -96,7 +92,6 @@ class C2Fun(ABC):
             Provided independent variable.
 
         """
-        pass
 
     def __call__(self, x: NDArray, order: int = 0) -> NDArray:
         """
@@ -564,7 +559,7 @@ expit: C2Fun = Expit()
 logit: C2Fun = Logit()
 logerfc: C2Fun = Logerfc()
 
-c2fun_dict: Dict[str, C2Fun] = {
+c2fun_dict: dict[str, C2Fun] = {
     "identity": identity,
     "exp": exp,
     "log": log,

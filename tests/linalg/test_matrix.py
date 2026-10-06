@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
-from msca.linalg.matrix import Matrix, asmatrix, matrix_classes
 from scipy.sparse import csc_matrix, csr_matrix
+
+from msca.linalg.matrix import Matrix, asmatrix, matrix_classes
 
 
 @pytest.fixture
