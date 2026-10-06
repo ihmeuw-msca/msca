@@ -2,6 +2,7 @@ from functools import partial
 
 import numpy as np
 import pytest
+
 from msca.c2fun import c2fun_dict
 
 

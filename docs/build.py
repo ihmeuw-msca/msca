@@ -1,6 +1,5 @@
 import functools
 import subprocess
-
 import tomllib
 
 run = functools.partial(subprocess.run, shell=True)

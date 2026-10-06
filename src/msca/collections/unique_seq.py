@@ -20,9 +20,7 @@ def unique_everseen(
 
 def _unsupported_operand_type_error(operand: str, x: Any, y: Any) -> TypeError:
     return TypeError(
-        "unsupported operand type(s) for {}: '{}' and '{}'".format(
-            operand, type(x).__name__, type(y).__name__
-        )
+        f"unsupported operand type(s) for {operand}: '{type(x).__name__}' and '{type(y).__name__}'"
     )
 
 

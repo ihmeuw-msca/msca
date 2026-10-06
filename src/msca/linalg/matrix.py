@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Type
+from typing import Any
 
 import numpy as np
 import scipy as sp
@@ -39,7 +39,6 @@ class Matrix(ABC):
             The scaled matrix.
 
         """
-        pass
 
     @abstractmethod
     def scale_cols(self, x: ArrayLike) -> Matrix:
@@ -57,7 +56,6 @@ class Matrix(ABC):
             The scaled matrix.
 
         """
-        pass
 
     @abstractmethod
     def solve(self, x: ArrayLike) -> NDArray:
@@ -76,7 +74,6 @@ class Matrix(ABC):
             The solution of the linear system.
 
         """
-        pass
 
     @abstractmethod
     def to_numpy(self) -> NDArray:
@@ -88,7 +85,6 @@ class Matrix(ABC):
             A numpy representation of the matrix.
 
         """
-        pass
 
 
 class NumpyMatrix(np.ndarray, Matrix):
@@ -273,7 +269,7 @@ class CSCMatrix(sp.sparse.csc_matrix, Matrix):
         return f"{type(self).__name__}(shape={self.shape})"
 
 
-matrix_classes: tuple[Type, ...] = (
+matrix_classes: tuple[type, ...] = (
     NumpyMatrix,
     CSCMatrix,
     CSRMatrix,
@@ -284,7 +280,7 @@ matrix_classes: tuple[Type, ...] = (
 
 """
 
-matrix_class_dict: dict[Type, Type] = {
+matrix_class_dict: dict[type, type] = {
     matrix_class.__base__: matrix_class for matrix_class in matrix_classes
 }
 """Matrix classes organize in a dictionary, with key as their parent class and
@@ -318,6 +314,6 @@ def asmatrix(data: Any) -> Matrix:
     """
     if isinstance(data, matrix_classes):
         return data
-    if type(data) not in matrix_class_dict.keys():
+    if type(data) not in matrix_class_dict:
         raise TypeError(f"Cannot convert {type(data)} to a matrix.")
     return matrix_class_dict[type(data)](data)

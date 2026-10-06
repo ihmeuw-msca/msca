@@ -40,12 +40,14 @@ def build_integration_weights(
 def _build_integration_weights_midpoint(
     lb: NDArray, ub: NDArray, grid_points: NDArray
 ) -> tuple[NDArray, tuple[NDArray, NDArray]]:
-    lb_index = np.searchsorted(grid_points, lb, side="right") - 1
-    ub_index = np.searchsorted(grid_points, ub, side="left")
+    lb_index = (
+        np.searchsorted(grid_points, lb, side="right").astype(np.int64) - 1
+    )
+    ub_index = np.searchsorted(grid_points, ub, side="left").astype(np.int64)
     sizes = ub_index - lb_index
     diffs = np.diff(grid_points)
     row_index, col_index = build_indices_midpoint(
-        lb_index, ub_index, sizes.sum()
+        lb_index, ub_index, int(sizes.sum())
     )
 
     val = diffs[col_index]
