@@ -118,20 +118,20 @@ def _build_integration_weights_midpoint(
         np.searchsorted(grid_points, lb, side="right").astype(np.int64) - 1
     )
     cell_ui = np.searchsorted(grid_points, ub, side="left").astype(np.int64)
-    # an empty interval overlaps no cell, even when it sits inside one
-    cell_ui = np.where(lb == ub, cell_li, cell_ui)
+
+    is_empty = lb == ub
+    nonempty = ~is_empty
+    cell_ui[is_empty] = cell_li[is_empty]
+
     ncells = cell_ui - cell_li
-    cell_widths = np.diff(grid_points)
+    offsets = np.hstack([0, np.cumsum(ncells)])
     row_index, col_index = build_indices_midpoint(
-        cell_li, cell_ui, int(ncells.sum())
+        cell_li, cell_ui, int(offsets[-1])
     )
 
+    cell_widths = np.diff(grid_points)
     val = cell_widths[col_index]
-    # rewrite the end cell weights for the non-empty intervals
-    nonempty = ncells > 0
-    offsets = np.hstack([0, np.cumsum(ncells)])
-    first = offsets[:-1][nonempty]
-    last = (offsets[1:] - 1)[nonempty]
+    first, last = offsets[:-1][nonempty], (offsets[1:] - 1)[nonempty]
     lb_ne, ub_ne = lb[nonempty], ub[nonempty]
     val[first] = np.minimum(grid_points[cell_li[nonempty] + 1], ub_ne) - lb_ne
     val[last] = ub_ne - np.maximum(lb_ne, grid_points[cell_ui[nonempty] - 1])
